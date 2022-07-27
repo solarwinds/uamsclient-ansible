@@ -1,0 +1,47 @@
+---
+
+- hosts: <group_name>
+  remote_user: root
+  vars_files:
+    - vars.yaml
+
+  vars:
+    - script_path: "{{ script_dir | default('/tmp/uams') }}"
+  environment:
+    UAMS_ACCESS_TOKEN: "{{ uams_access_token }}"
+    UAMS_METADATA: "{{ uams_metadata }}"
+
+  tasks:
+    - name: Setup UAMS_ACCESS_TOKEN variable
+      command: 'echo $UAMS_ACCESS_TOKEN'
+      register: output1
+    - debug:
+        msg:
+          - "variable UAMS_ACCESS_TOKEN: {{ output1.stdout }}"
+
+
+    - name: Setup UAMS_METADATA variable
+      command: 'echo $UAMS_METADATA'
+      register: output2
+    - debug:
+        msg:
+          - "variable UAMS_METADATA: {{ output2.stdout }}"
+
+    - name: Create installation script directory -> {{ script_path }}
+      file:
+        path: "{{ script_path }}"
+        state: directory
+        mode: 0755
+
+    - name: Download uamsclient_install.sh using get_url
+      get_url:
+        url: https://agent-binaries.cloud.solarwinds.com/uams/latest/uamsclient_install.sh
+        dest: "{{ script_path }}"
+        mode: 0755
+
+    - name: Execute the script
+      command: sh "{{ script_path }}"/uamsclient_install.sh
+      register: output3
+    - debug:
+        msg:
+          - "{{ output3.stdout }}"
