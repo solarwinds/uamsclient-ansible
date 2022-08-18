@@ -16,8 +16,8 @@ jobs:
       - checkout
       - run: |
           apt update
-          apt install pip
-          apt install curl
+          apt install pip -y
+          apt install curl -y
           pip intall ansible
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
