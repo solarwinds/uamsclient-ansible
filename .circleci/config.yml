@@ -18,7 +18,7 @@ commands:
     steps:
       - checkout
       - run: |
-          yum -y install epel-repo
+          yum -y install epel-release
           yum -y update
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
