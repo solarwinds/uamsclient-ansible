@@ -6,7 +6,7 @@ commands:
       - checkout
       - run: |
           apt update
-          apt install pip -y
+          apt install python3-pip -y
           apt install curl -y
           pip install ansible
           sed -i 's/<group_name>/test/' playbook.yaml
