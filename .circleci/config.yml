@@ -7,7 +7,8 @@ jobs:
     steps:
       - checkout
       - run: pip install ansible-lint
-      - run: cd project && ansible-lint -v playbook.yml
+      - run: ls
+      - run: ansible-lint -v playbook.yml
 
 workflows:
   test-uamsclient-role:
