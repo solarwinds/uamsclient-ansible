@@ -24,11 +24,11 @@
         mode: 0755
 
     - name: Execute the script
-      command: sh "{{ script_path }}"/uamsclient_install.sh
+      ansible.builtin.command: sh "{{ script_path }}"/uamsclient_install.sh
       changed_when: false
       register: installation_output
 
     - name: Display script output
-      debug:
+      ansible.builtin.debug:
         msg:
           - "{{ installation_output.stdout }}"
