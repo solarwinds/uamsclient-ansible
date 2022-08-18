@@ -8,7 +8,7 @@ commands:
           apt update
           apt install python3-pip -y
           apt install curl -y
-          pip install ansible
+          pip3 install ansible
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
