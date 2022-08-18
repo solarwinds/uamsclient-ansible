@@ -12,20 +12,23 @@
 
   tasks:
     - name: Create installation script directory -> {{ script_path }}
-      file:
+      ansible.builtin.file:
         path: "{{ script_path }}"
         state: directory
         mode: 0755
 
     - name: Download uamsclient_install.sh
-      get_url:
+      ansible.builtin.get_url:
         url: https://agent-binaries.cloud.solarwinds.com/uams/latest/uamsclient_install.sh
         dest: "{{ script_path }}"
         mode: 0755
 
     - name: Execute the script
       command: sh "{{ script_path }}"/uamsclient_install.sh
-      register: output3
-    - debug:
+      changed: false
+      register: installation_output
+
+    - name: Display script output
+      debug:
         msg:
-          - "{{ output3.stdout }}"
+          - "{{ installation_output.stdout }}"
