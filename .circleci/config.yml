@@ -19,7 +19,7 @@ commands:
       - checkout
       - run: |
           yum -y install epel-release
-          yum -y update
+          yum -y install ansible
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
