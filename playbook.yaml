@@ -1,6 +1,6 @@
 ---
-
-- hosts: group_name
+- name: Install UAMS client
+  hosts: <group_name>
   remote_user: root
   vars_files:
     - vars.yaml
