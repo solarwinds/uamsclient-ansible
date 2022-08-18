@@ -6,7 +6,7 @@
     - vars.yaml
 
   vars:
-    - script_path: "{{ script_dir | default('/tmp/uams') }}"
+    script_path: "{{ script_dir | default('/tmp/uams') }}"
   environment:
     UAMS_ACCESS_TOKEN: "{{ uams_access_token }}"
 
