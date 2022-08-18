@@ -1,7 +1,7 @@
 version: 2.1
 
 commands:
-  install-client-ubuntu:
+  install-client-ubuntu-debian:
     steps:
       - checkout
       - run: |
@@ -11,6 +11,15 @@ commands:
           apt install python3-pip -y
           apt install curl -y
           pip3 install ansible
+          sed -i 's/<group_name>/test/' playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -i hosts
+  install-client-redhat:
+    steps:
+      - checkout
+      - run: |
+          yum -y install epel-repo
+          yum -y update
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
@@ -28,37 +37,49 @@ jobs:
     docker:
       - image: ubuntu:focal
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
 
   test-install-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
 
   test-install-ubuntu-bionic:
     docker:
       - image: ubuntu:bionic
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
 
   test-install-debian-stretch:
     docker:
       - image: debian:stretch
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
 
   test-install-debian-buster:
     docker:
       - image: debian:buster
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
 
   test-install-debian-bullseye:
     docker:
       - image: debian:bullseye
     steps:
-      - install-client-ubuntu
+      - install-client-ubuntu-debian
+
+  test-install-centos-7:
+    docker:
+      - image: centos:centos7
+    steps:
+      - install-client-redhat
+
+  test-install-centos-8:
+    docker:
+      - image: centos:centos8
+    steps:
+      - install-client-redhat
 
 workflows:
   test-uamsclient-role:
@@ -67,6 +88,8 @@ workflows:
       # - test-install-ubuntu-focal
       # - test-install-ubuntu-jammy
       # - test-install-ubuntu-bionic
-      - test-install-debian-stretch
-      - test-install-debian-buster
-      - test-install-debian-bullseye
+      # - test-install-debian-stretch
+      # - test-install-debian-buster
+      # - test-install-debian-bullseye
+      - test-install-centos-7
+      - test-install-centos-8
