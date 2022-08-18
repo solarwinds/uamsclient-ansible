@@ -5,6 +5,8 @@ commands:
     steps:
       - checkout
       - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
           apt update
           apt install python3-pip -y
           apt install curl -y
