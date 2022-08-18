@@ -9,7 +9,19 @@ jobs:
       - run: pip install ansible-lint
       - run: ansible-lint -v playbook.yaml
 
+  test-install:
+    docker:
+      - image: ubuntu:focal
+    steps:
+      - checkout
+      - run: |
+          pip intall ansible
+          sed -i 's/<group_name>/test/' playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -i hosts
+
 workflows:
   test-uamsclient-role:
     jobs:
       - ansible-lint
+      - test-install
