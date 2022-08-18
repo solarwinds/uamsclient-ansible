@@ -1,17 +1,7 @@
 version: 2.1
 
-jobs:
-  ansible-lint:
-    docker:
-      - image: python:bullseye
-    steps:
-      - checkout
-      - run: pip install ansible-lint
-      - run: ansible-lint -v playbook.yaml
-
-  test-install:
-    docker:
-      - image: ubuntu:focal
+commands:
+  install-client-ubuntu:
     steps:
       - checkout
       - run: |
@@ -23,8 +13,37 @@ jobs:
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
 
+jobs:
+  ansible-lint:
+    docker:
+      - image: python:bullseye
+    steps:
+      - checkout
+      - run: pip install ansible-lint
+      - run: ansible-lint -v playbook.yaml
+
+  test-install-ubuntu-focal:
+    docker:
+      - image: ubuntu:focal
+    steps:
+      - install-client-ubuntu
+
+  test-install-ubuntu-jammy:
+    docker:
+      - image: ubuntu:jammy
+    steps:
+      - install-client-ubuntu
+
+  test-install-ubuntu-bionic:
+    docker:
+      - image: ubuntu:bionic
+    steps:
+      - install-client-ubuntu
+
 workflows:
   test-uamsclient-role:
     jobs:
       - ansible-lint
-      - test-install
+      - test-install-ubuntu-focal
+      - test-install-ubuntu-jammy
+      - test-install-ubuntu-bionic
