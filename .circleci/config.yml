@@ -96,6 +96,12 @@ jobs:
     steps:
       - install-client-fedora
 
+  test-install-kali:
+    docker:
+      - image: kalilinux/kali-rolling
+    steps:
+      - install-client-ubuntu-debian
+
 
 
 workflows:
@@ -109,5 +115,6 @@ workflows:
       # - test-install-debian-buster
       # - test-install-debian-bullseye
       # - test-install-centos-7
-      - test-install-fedora-32
-      - test-install-fedora-36
+      # - test-install-fedora-32
+      # - test-install-fedora-36
+      - test-install-kali
