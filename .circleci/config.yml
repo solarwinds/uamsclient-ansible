@@ -1,6 +1,12 @@
 version: 2.1
 
 commands:
+  verify-install-container:
+    steps:
+      - run: /opt/solarwinds/uamsclient/sbin/uamsclient version
+  verify-install-vm:
+    steps:
+      - run: ps -aux | grep "uamsclient start" | grep -v grep
   install-client:
     steps:
       - checkout
@@ -8,7 +14,6 @@ commands:
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
-      - run: ps -aux | grep "uamsclient start" | grep -v grep
 
   install-ansible-deb:
     steps:      
@@ -54,6 +59,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-ubuntu-jammy:
     docker:
@@ -61,6 +67,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-ubuntu-bionic:
     docker:
@@ -68,6 +75,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-debian-stretch:
     docker:
@@ -75,6 +83,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-debian-buster:
     docker:
@@ -82,6 +91,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-debian-bullseye:
     docker:
@@ -89,6 +99,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-centos-7:
     docker:
@@ -96,6 +107,7 @@ jobs:
     steps:
       - install-ansible-redhat
       - install-client
+      - verify-install-container
 
   test-install-fedora-32:
     docker:
@@ -103,6 +115,7 @@ jobs:
     steps:
       - install-ansible-fedora
       - install-client
+      - verify-install-container
 
   test-install-fedora-36:
     docker:
@@ -110,6 +123,7 @@ jobs:
     steps:
       - install-ansible-fedora
       - install-client
+      - verify-install-container
 
   test-install-kali:
     docker:
@@ -117,6 +131,7 @@ jobs:
     steps:
       - install-ansible-deb
       - install-client
+      - verify-install-container
 
   test-install-oracle-8:
     docker:
@@ -124,6 +139,7 @@ jobs:
     steps:
       - install-ansible-oraclelinux
       - install-client
+      - verify-install-container
 
   test-install-oracle-9:
     docker:
@@ -131,6 +147,7 @@ jobs:
     steps:
       - install-ansible-oraclelinux
       - install-client
+      - verify-install-container
 
 workflows:
   test-uamsclient-role:
