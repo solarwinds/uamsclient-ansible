@@ -27,6 +27,7 @@
       ansible.builtin.command: sh "{{ script_path }}"/uamsclient_install.sh
       changed_when: false
       register: installation_output
+      become: true
 
     - name: Display script output
       ansible.builtin.debug:

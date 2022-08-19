@@ -25,6 +25,16 @@ commands:
           sudo apt install curl -y
           pip3 install ansible
 
+  install-ansible-deb-vm:
+    steps:      
+      - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          sudo apt update
+          sudo apt install python3-pip -y
+          sudo apt install curl -y
+          pip3 install ansible
+
   install-ansible-redhat:
     steps:
       - run: |
@@ -65,7 +75,7 @@ jobs:
     machine:
       image: ubuntu-2004:current
     steps:
-      - install-ansible-deb
+      - install-ansible-deb-vm
       - install-client
       - verify-install-vm
 
