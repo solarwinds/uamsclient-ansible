@@ -1,9 +1,16 @@
 version: 2.1
 
 commands:
-  install-client-ubuntu-debian:
+  install-client:
     steps:
       - checkout
+      - run: |
+          sed -i 's/<group_name>/test/' playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -i hosts
+
+  install-ansible-ubuntu-debian:
+    steps:      
       - run: |
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
@@ -11,37 +18,25 @@ commands:
           apt install python3-pip -y
           apt install curl -y
           pip3 install ansible
-          sed -i 's/<group_name>/test/' playbook.yaml
-          cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts
-  install-client-redhat:
+
+  install-ansible-redhat:
     steps:
-      - checkout
       - run: |
           yum -y install epel-release
           yum -y install ansible
-          sed -i 's/<group_name>/test/' playbook.yaml
-          cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts
 
-  install-client-fedora:
+  install-ansible-fedora:
     steps:
-      - checkout
       - run: |
           dnf -y install ansible
-          sed -i 's/<group_name>/test/' playbook.yaml
-          cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts
 
-  install-client-oraclelinux:
+  install-ansible-oraclelinux:
     steps:
       - checkout
       - run: |
-          yum -y install oracle-epel-release-el8
+          release=$(cat /etc/oracle-release | cut -d' ' -f5 | cut -d. -f1)
+          yum -y install "oracle-epel-release-el$release"
           yum -y install ansible
-          sed -i 's/<group_name>/test/' playbook.yaml
-          cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts
 
 jobs:
   ansible-lint:
@@ -56,73 +51,85 @@ jobs:
     docker:
       - image: ubuntu:focal
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-ubuntu-bionic:
     docker:
       - image: ubuntu:bionic
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-debian-stretch:
     docker:
       - image: debian:stretch
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-debian-buster:
     docker:
       - image: debian:buster
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-debian-bullseye:
     docker:
       - image: debian:bullseye
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-centos-7:
     docker:
       - image: centos:centos7
     steps:
-      - install-client-redhat
+      - install-ansible-redhat
+      - install-client
 
   test-install-fedora-32:
     docker:
       - image: fedora:32
     steps:
-      - install-client-fedora
+      - install-ansible-fedora
+      - install-client
 
   test-install-fedora-36:
     docker:
       - image: fedora:36
     steps:
-      - install-client-fedora
+      - install-ansible-fedora
+      - install-client
 
   test-install-kali:
     docker:
       - image: kalilinux/kali-rolling
     steps:
-      - install-client-ubuntu-debian
+      - install-ansible-ubuntu-debian
+      - install-client
 
   test-install-oracle-8:
     docker:
       - image: oraclelinux:8
     steps:
-      - install-client-oraclelinux
+      - install-ansible-oraclelinux
+      - install-client
 
   test-install-oracle-9:
     docker:
       - image: oraclelinux:9
     steps:
-      - install-client-oraclelinux
+      - install-ansible-oraclelinux
+      - install-client
 
 
 
