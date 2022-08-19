@@ -63,7 +63,7 @@ jobs:
 
   test-install-ubuntu-focal-vm:
     machine:
-      image: ubuntu-2004
+      image: ubuntu-2004:current
     steps:
       - install-ansible-deb
       - install-client
