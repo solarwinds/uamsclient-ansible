@@ -37,8 +37,8 @@ commands:
     steps:
       - checkout
       - run: |
-          yum install oracle-epel-release-el8
-          yum install ansible
+          yum -y install oracle-epel-release-el8
+          yum -y install ansible
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
