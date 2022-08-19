@@ -61,6 +61,14 @@ jobs:
       - install-client
       - verify-install-container
 
+  test-install-ubuntu-focal-vm:
+    machine:
+      image: ubuntu-2004
+    steps:
+      - install-ansible-deb
+      - install-client
+      - verify-install-vm
+
   test-install-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
