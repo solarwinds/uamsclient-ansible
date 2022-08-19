@@ -33,6 +33,16 @@ commands:
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
 
+  install-client-oraclelinux:
+    steps:
+      - checkout
+      - run: |
+          yum install oracle-epel-release-el8
+          yum install ansible
+          sed -i 's/<group_name>/test/' playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -i hosts
+
 jobs:
   ansible-lint:
     docker:
@@ -102,6 +112,18 @@ jobs:
     steps:
       - install-client-ubuntu-debian
 
+  test-install-oracle-8:
+    docker:
+      - image: oraclelinux:8
+    steps:
+      - install-client-oraclelinux
+
+  test-install-oracle-9:
+    docker:
+      - image: oraclelinux:9
+    steps:
+      - install-client-oraclelinux
+
 
 
 workflows:
@@ -117,4 +139,6 @@ workflows:
       # - test-install-centos-7
       # - test-install-fedora-32
       # - test-install-fedora-36
-      - test-install-kali
+      # - test-install-kali
+      - test-install-oracle-8
+      - test-install-oracle-9
