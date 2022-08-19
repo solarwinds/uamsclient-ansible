@@ -20,9 +20,9 @@ commands:
       - run: |
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
-          apt update
-          apt install python3-pip -y
-          apt install curl -y
+          sudo apt update
+          sudo apt install python3-pip -y
+          sudo apt install curl -y
           pip3 install ansible
 
   install-ansible-redhat:
