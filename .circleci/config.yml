@@ -131,8 +131,6 @@ jobs:
       - install-ansible-oraclelinux
       - install-client
 
-
-
 workflows:
   test-uamsclient-role:
     jobs:
