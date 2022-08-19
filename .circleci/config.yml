@@ -24,13 +24,15 @@ commands:
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
 
-  install-client-redhat8:
+  install-client-fedora:
     steps:
       - checkout
       - run: |
-          subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
-          dnf upgrade
-          dnf install ansible
+          dnf -y install ansible
+          sed -i 's/<group_name>/test/' playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -i hosts
+
 jobs:
   ansible-lint:
     docker:
@@ -82,11 +84,19 @@ jobs:
     steps:
       - install-client-redhat
 
-  test-install-centos-8:
+  test-install-fedora-32:
     docker:
-      - image: centos:centos8
+      - image: fedora:32
     steps:
-      - install-client-redhat8
+      - install-client-fedora
+
+  test-install-fedora-36:
+    docker:
+      - image: fedora:36
+    steps:
+      - install-client-fedora
+
+
 
 workflows:
   test-uamsclient-role:
@@ -98,5 +108,6 @@ workflows:
       # - test-install-debian-stretch
       # - test-install-debian-buster
       # - test-install-debian-bullseye
-      - test-install-centos-7
-      - test-install-centos-8
+      # - test-install-centos-7
+      - test-install-fedora-32
+      - test-install-fedora-36
