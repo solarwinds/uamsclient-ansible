@@ -28,13 +28,9 @@ commands:
     steps:
       - checkout
       - run: |
-          cd /etc/yum.repos.d/
-          sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-          sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-          dnf makecache
-          dnf -y install epel-release
-          dnf makecache
-          dnf -y install ansible
+          subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
+          dnf upgrade
+          dnf install ansible
 jobs:
   ansible-lint:
     docker:
