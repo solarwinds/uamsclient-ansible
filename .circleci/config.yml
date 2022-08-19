@@ -162,6 +162,7 @@ workflows:
     jobs:
       - ansible-lint
       - test-install-ubuntu-focal
+      - test-install-ubuntu-focal-vm
       - test-install-ubuntu-jammy
       - test-install-ubuntu-bionic
       - test-install-debian-stretch
