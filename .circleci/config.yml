@@ -11,12 +11,13 @@ commands:
     steps:
       - checkout
       - run: |
+          cp ci_test/playbook.yaml ./playbook.yaml
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts
 
   install-ansible-deb:
-    steps:      
+    steps:
       - run: |
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
@@ -26,7 +27,7 @@ commands:
           pip3 install ansible
 
   install-ansible-deb-vm:
-    steps:      
+    steps:
       - run: |
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
@@ -61,7 +62,7 @@ jobs:
     steps:
       - checkout
       - run: pip install ansible-lint
-      - run: ansible-lint -v playbook.yaml
+      - run: ansible-lint
 
   test-install-ubuntu-focal:
     docker:

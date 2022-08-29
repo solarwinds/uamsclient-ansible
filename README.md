@@ -1,22 +1,29 @@
-# Ansible UAMS Client installer
+# Ansible UAMS Client Role
 
-Ansible is a radically simple IT automation system. 
-Use this sample playbook to download and execute the UAMS Client installation script on a remote host.
+The Ansible UAMS Client Role installs and configures UAMS Client.
 
-### Directory structure 
-<pre>
-.
-├── README.md
-├── ansible.cfg
-├── inventory
-├── playbook.yaml
-└── vars.yaml
-</pre>
+# Setup
+## Installation
 
-- ansible.cfg - defines the inventory file and the private key
-- inventory - keeps remote host IP addresses
-- playbook.yaml - defines the tasks to execute on a remote machine
-- vars.yaml - paramaters for the ansible playbook
+Clone `uamsclient-ansible` repository to the path of your choice. Possibility to install role via Ansible Galaxy will be provided soon.
 
-### Ansible execution
-command: ```ansible-playbook  playbook.yaml```
+To deploy UAMS Client on hosts, add access token and role to your playbook under the `environment` key.
+
+```
+  environment:
+    UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
+    UAMS_METADATA: "ROLE"
+```
+
+Set the path where this role is located
+
+```
+  roles:
+    - role: '/path/to/the/role'
+```
+
+## Role variables
+
+| Variable | Description |
+| -------------------- | ----------------------------------------------------------- |
+| `script_path`        | Override the location where installation script is stored |
