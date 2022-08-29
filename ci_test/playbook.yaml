@@ -9,5 +9,3 @@
 
   roles:
     - role: "{{ lookup('env', 'HOME') }}/project/"
-      vars:
-        script_path: script_path

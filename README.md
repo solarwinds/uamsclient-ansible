@@ -26,4 +26,4 @@ Set the path where this role is located
 
 | Variable | Description |
 | -------------------- | ----------------------------------------------------------- |
-| `script_path`        | Override the location where installation script is stored |
+| `local_pkg_path`        | Override the location where installation package is stored |

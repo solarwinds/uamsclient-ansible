@@ -1,1 +1,4 @@
-script_path: '/tmp/uams'
+local_pkg_path: '/tmp/uams'
+product_name: 'SolarWinds UAMS Client'
+install_pkg_url: 'https://agent-binaries.cloud.solarwinds.com/uams/latest'
+dev_container_test: false
