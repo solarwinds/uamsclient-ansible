@@ -9,7 +9,6 @@
     script_path: "{{ script_dir | default('/tmp/uams') }}"
   environment:
     UAMS_ACCESS_TOKEN: "{{ uams_access_token }}"
-    UAMS_METADATA: "{{ uams_metadata }}"
 
   tasks:
     - name: Create installation script directory -> {{ script_path }}
@@ -28,6 +27,7 @@
       ansible.builtin.command: sh "{{ script_path }}"/uamsclient_install.sh
       changed_when: false
       register: installation_output
+      become: true
 
     - name: Display script output
       ansible.builtin.debug:
