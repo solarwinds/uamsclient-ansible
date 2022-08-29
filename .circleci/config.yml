@@ -1,0 +1,15 @@
+version: 2.1
+
+jobs:
+  ansible-lint:
+    docker:
+      - image: python:bullseye
+    steps:
+      - checkout
+      - run: pip install ansible-lint
+      - run: ansible-lint -v playbook.yaml
+
+workflows:
+  test-uamsclient-role:
+    jobs:
+      - ansible-lint
