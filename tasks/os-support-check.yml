@@ -1,54 +1,54 @@
 ---
 - name: Check if OS is supported
   ansible.builtin.fail:
-    msg: "The {{ product_name }} is not supporting your OS"
-  when: ansible_os_family not in ["RedHat", "Debian", "Windows"]
+    msg: 'The {{ product_name }} is not supporting your OS'
+  when: ansible_os_family not in ['RedHat', 'Debian', 'Windows']
 
 - name: Check RedHat version
   ansible.builtin.fail:
-    msg: "Your RedHat version is not supported. The {{ product_name }} is supported on RHEL 7 and above."
+    msg: 'Your RedHat version is not supported. The {{ product_name }} is supported on RHEL 7 and above.'
   when:
-    - ansible_facts.distribution == "RedHat"
+    - ansible_facts.distribution == 'RedHat'
     - ansible_facts.distribution_major_version|int < 7
 
 - name: Check CentOS version
   ansible.builtin.fail:
-    msg: "Your CentOS version is not supported. The {{ product_name }} is supported on Centos 7 and above."
+    msg: 'Your CentOS version is not supported. The {{ product_name }} is supported on Centos 7 and above.'
   when:
-    - ansible_facts.distribution == "CentOS"
+    - ansible_facts.distribution == 'CentOS'
     - ansible_facts.distribution_major_version|int < 7
 
 - name: Check Debian version
   ansible.builtin.fail:
-    msg: "Your Debian version is not supported. The {{ product_name }} is supported on Debian 9 and above."
+    msg: 'Your Debian version is not supported. The {{ product_name }} is supported on Debian 9 and above.'
   when:
-    - ansible_facts.distribution == "Debian"
+    - ansible_facts.distribution == 'Debian'
     - ansible_facts.distribution_major_version|int < 9
 
 - name: Check Fedora version
   ansible.builtin.fail:
-    msg: "Your Fedora version is not supported. The {{ product_name }} is supported on Fedora 32 and above."
+    msg: 'Your Fedora version is not supported. The {{ product_name }} is supported on Fedora 32 and above.'
   when:
-    - ansible_facts.distribution == "Fedora"
+    - ansible_facts.distribution == 'Fedora'
     - ansible_facts.distribution_major_version|int < 32
 
 - name: Check Ubuntu version
   ansible.builtin.fail:
-    msg: "Your Ubuntu version is not supported. The {{ product_name }} is supported on Ubuntu 18 and above."
+    msg: 'Your Ubuntu version is not supported. The {{ product_name }} is supported on Ubuntu 18 and above.'
   when:
-    - ansible_facts.distribution == "Ubuntu"
+    - ansible_facts.distribution == 'Ubuntu'
     - ansible_facts.distribution_major_version|int < 18
 
 - name: Check Oracle Linux version
   ansible.builtin.fail:
-    msg: "Your Oracle Linux version is not supported. The {{ product_name }} is supported on Oracle Linux 8 and above."
+    msg: 'Your Oracle Linux version is not supported. The {{ product_name }} is supported on Oracle Linux 8 and above.'
   when:
-    - ansible_facts.distribution == "OracleLinux"
+    - ansible_facts.distribution == 'OracleLinux'
     - ansible_facts.distribution_major_version|int < 8
 
 - name: Check Kali version
   ansible.builtin.fail:
-    msg: "Your Kali version is not supported. The {{ product_name }} is supported on Kali 2021 and above."
+    msg: 'Your Kali version is not supported. The {{ product_name }} is supported on Kali 2021 and above.'
   when:
-    - ansible_facts.distribution == "Kali"
+    - ansible_facts.distribution == 'Kali'
     - ansible_facts.distribution_major_version|int < 2021

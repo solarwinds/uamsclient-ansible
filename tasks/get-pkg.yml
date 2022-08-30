@@ -1,14 +1,14 @@
 ---
 - name: Check if package type is rpm
   ansible.builtin.set_fact:
-    pkg_type: "rpm"
-  when: ansible_facts.distribution in ["RedHat", "CentOS", "Fedora", "OracleLinux"]
+    pkg_type: 'rpm'
+  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
 
 - name: Check if package type is deb
   ansible.builtin.set_fact:
-    pkg_type: "deb"
-    pkg_manager: "apt"
-  when: ansible_facts.distribution in ["Debian", "Ubuntu", "Kali"]
+    pkg_type: 'deb'
+    pkg_manager: 'apt'
+  when: ansible_facts.distribution in ['Debian', 'Ubuntu', 'Kali']
 
 - name: Fail if package type is not defined
   ansible.builtin.fail:
