@@ -32,7 +32,7 @@ galaxy_info:
         - '34'
         - '35'
         - '36'
-    # FIXME: NH-13207 Ansible schema isn't consistent and is missing Kali
+    # FIXME: NH-20369 Ansible schema isn't consistent and is missing Kali
     # - name: OracleLinux
     #   versions:
     #     - all
