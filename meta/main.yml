@@ -1,0 +1,42 @@
+---
+galaxy_info:
+  role_name: uamsclient
+  author: "support@solarwinds.com"
+  description: SolarWinds UAMS Client Installer
+  company: SolarWinds Inc.
+  namespace: solarwinds
+  license: MIT
+  min_ansible_version: "2.1"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - groovy
+        - hirsute
+        - impish
+        - jammy
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+        - bullseye
+    - name: EL
+      versions:
+        - '7'
+        - '8'
+    - name: Fedora
+      versions:
+        - '32'
+        - '33'
+        - '34'
+        - '35'
+        - '36'
+    # FIXME: NH-13207 Ansible schema isn't consistent and is missing Kali
+    # - name: OracleLinux
+    #   versions:
+    #     - all
+  galaxy_tags:
+    - monitoring
+
+dependencies: []
