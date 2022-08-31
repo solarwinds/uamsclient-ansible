@@ -8,13 +8,17 @@ commands:
     steps:
       - run: ps -aux | grep "uamsclient start" | grep -v grep
   install-client:
+    parameters:
+      in_container:
+        type: boolean
+        default: true
     steps:
       - checkout
       - run: |
           cp ci_test/playbook.yaml ./playbook.yaml
           sed -i 's/<group_name>/test/' playbook.yaml
           cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts
+          ansible-playbook playbook.yaml -i hosts -e '{ "dev_container_test": << parameters.in_container >> }'
 
   install-ansible-deb:
     steps:
@@ -77,7 +81,8 @@ jobs:
       image: ubuntu-2004:current
     steps:
       - install-ansible-deb-vm
-      - install-client
+      - install-client:
+          in_container: false
       - verify-install-vm
 
   test-install-ubuntu-jammy:

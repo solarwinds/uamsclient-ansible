@@ -1,0 +1,7 @@
+---
+- name: Ensure UAMS Client is running
+  ansible.builtin.service:
+    name: uamsclient
+    state: started
+    enabled: true
+  when: not dev_container_test
