@@ -15,8 +15,15 @@ commands:
     steps:
       - checkout
       - run: |
-          cp ci_test/playbook.yaml ./playbook.yaml
-          sed -i 's/<group_name>/test/' playbook.yaml
+          if [[ "<< parameters.galaxy >>" == "true" ]]; then
+            echo "Installing uamsclient role from Ansible Galaxy"
+            ansible-galaxy install solarwinds.uamsclient
+            test_playbook="ci_test/playbook_galaxy.yaml"
+          else
+            echo "Using uamsclient role from github"
+            test_playbook="ci_test/playbook_github.yaml"
+          fi
+          cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -i hosts -e '{ "dev_container_test": << parameters.in_container >> }'
 
@@ -79,6 +86,10 @@ jobs:
   test-install-ubuntu-focal-vm:
     machine:
       image: ubuntu-2004:current
+    parameters:
+      galaxy:
+        type: boolean
+        default: false
     steps:
       - install-ansible-deb-vm
       - install-client:
@@ -190,3 +201,7 @@ workflows:
       - test-install-kali
       - test-install-oracle-8
       - test-install-oracle-9
+  test-galaxy-nightly:
+    jobs:
+      - test-install-ubuntu-focal-vm:
+          galaxy: true

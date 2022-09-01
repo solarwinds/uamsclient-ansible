@@ -5,7 +5,10 @@ The Ansible UAMS Client Role installs and configures UAMS Client.
 # Setup
 ## Installation
 
-Clone `uamsclient-ansible` repository to the path of your choice. Possibility to install role via Ansible Galaxy will be provided soon.
+Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role from Ansible Galaxy
+```
+ansible-galaxy install solarwinds.uamsclient
+```
 
 To deploy UAMS Client on hosts, add access token and role to your playbook under the `environment` key.
 
@@ -13,13 +16,6 @@ To deploy UAMS Client on hosts, add access token and role to your playbook under
   environment:
     UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
     UAMS_METADATA: "ROLE"
-```
-
-Set the path where this role is located
-
-```
-  roles:
-    - role: '/path/to/the/role'
 ```
 
 ## Role variables
