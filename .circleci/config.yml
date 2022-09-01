@@ -12,6 +12,9 @@ commands:
       in_container:
         type: boolean
         default: true
+      galaxy:
+        type: boolean
+        default: false        
     steps:
       - checkout
       - run: |
@@ -94,6 +97,7 @@ jobs:
       - install-ansible-deb-vm
       - install-client:
           in_container: false
+          galaxy: << parameters.galaxy >>
       - verify-install-vm
 
   test-install-ubuntu-jammy:
