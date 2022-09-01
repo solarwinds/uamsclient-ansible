@@ -205,7 +205,15 @@ workflows:
       - test-install-kali
       - test-install-oracle-8
       - test-install-oracle-9
+
   test-galaxy-nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - test-install-ubuntu-focal-vm:
           galaxy: true
