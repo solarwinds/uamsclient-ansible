@@ -14,7 +14,7 @@ commands:
         default: true
       galaxy:
         type: boolean
-        default: false        
+        default: false   
     steps:
       - checkout
       - run: |
