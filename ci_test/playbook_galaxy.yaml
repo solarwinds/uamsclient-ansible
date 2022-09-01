@@ -1,0 +1,11 @@
+---
+- name: Install UAMS client
+  hosts: test-servers
+  remote_user: root
+
+  environment:
+    UAMS_ACCESS_TOKEN: "<uams_access_token>"
+    UAMS_METADATA: "role:host-monitoring"
+
+  roles:
+    - role: solarwinds.uamsclient
