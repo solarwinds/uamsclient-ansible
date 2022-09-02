@@ -80,8 +80,8 @@ jobs:
       - run: ansible-lint
 
   release-to-ansible-galaxy:
-    machine:
-      image: ubuntu-2004:current
+    docker:
+      - image: ubuntu:jammy
     steps:
       - install-ansible-deb
       - run: |
