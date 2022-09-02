@@ -79,6 +79,14 @@ jobs:
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
+  release-to-ansible-galaxy:
+    docker:
+      - image: ubuntu:jammy
+    steps:
+      - install-ansible-deb
+      - run: |
+          ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient solarwinds uamsclient
+
   test-install-ubuntu-focal:
     docker:
       - image: ubuntu:focal
@@ -104,14 +112,6 @@ jobs:
   test-install-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
-    steps:
-      - install-ansible-deb
-      - install-client
-      - verify-install-container
-
-  test-install-ubuntu-bionic:
-    docker:
-      - image: ubuntu:bionic
     steps:
       - install-ansible-deb
       - install-client
@@ -190,13 +190,12 @@ jobs:
       - verify-install-container
 
 workflows:
-  test-uamsclient-role:
+  test-and-release-uamsclient-role:
     jobs:
       - ansible-lint
       - test-install-ubuntu-focal
       - test-install-ubuntu-focal-vm
       - test-install-ubuntu-jammy
-      - test-install-ubuntu-bionic
       - test-install-debian-stretch
       - test-install-debian-buster
       - test-install-debian-bullseye
@@ -206,6 +205,28 @@ workflows:
       - test-install-kali
       - test-install-oracle-8
       - test-install-oracle-9
+      - release-to-ansible-galaxy:
+          requires:
+            - ansible-lint
+            - test-install-ubuntu-focal
+            - test-install-ubuntu-focal-vm
+            - test-install-ubuntu-jammy
+            - test-install-debian-stretch
+            - test-install-debian-buster
+            - test-install-debian-bullseye
+            - test-install-centos-7
+            - test-install-fedora-32
+            - test-install-fedora-36
+            - test-install-kali
+            - test-install-oracle-8
+            - test-install-oracle-9
+          context:
+            - uams-ansible-galaxy
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+\.[0-9]+\.[0-9]+$/
 
   test-galaxy-nightly:
     triggers:
