@@ -216,20 +216,20 @@ workflows:
       - test-install-oracle-9
       - release-to-ansible-galaxy:
           requires:
-          - ansible-lint
-          - test-install-ubuntu-focal
-          - test-install-ubuntu-focal-vm
-          - test-install-ubuntu-jammy
-          - test-install-ubuntu-bionic
-          - test-install-debian-stretch
-          - test-install-debian-buster
-          - test-install-debian-bullseye
-          - test-install-centos-7
-          - test-install-fedora-32
-          - test-install-fedora-36
-          - test-install-kali
-          - test-install-oracle-8
-          - test-install-oracle-9
+            - ansible-lint
+            - test-install-ubuntu-focal
+            - test-install-ubuntu-focal-vm
+            - test-install-ubuntu-jammy
+            - test-install-ubuntu-bionic
+            - test-install-debian-stretch
+            - test-install-debian-buster
+            - test-install-debian-bullseye
+            - test-install-centos-7
+            - test-install-fedora-32
+            - test-install-fedora-36
+            - test-install-kali
+            - test-install-oracle-8
+            - test-install-oracle-9
           context:
             - uams-ansible-galaxy
           # filters:
