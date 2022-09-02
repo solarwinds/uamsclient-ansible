@@ -85,7 +85,7 @@ jobs:
     steps:
       - install-ansible-deb
       - run: |
-          ansible-galaxy role import --branch master --role-name  solarwinds.uamsclient
+          ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient
 
   test-install-ubuntu-focal:
     docker:
