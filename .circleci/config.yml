@@ -79,6 +79,14 @@ jobs:
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
+  release-to-ansible-galaxy:
+    machine:
+      image: ubuntu-2004:current
+    steps:
+      - install-ansible-deb
+      - run: |
+          ansible-galaxy role import --branch master --role-name  solarwinds.uamsclient
+
   test-install-ubuntu-focal:
     docker:
       - image: ubuntu:focal
@@ -190,7 +198,7 @@ jobs:
       - verify-install-container
 
 workflows:
-  test-uamsclient-role:
+  test-and-release-uamsclient-role:
     jobs:
       - ansible-lint
       - test-install-ubuntu-focal
@@ -206,6 +214,29 @@ workflows:
       - test-install-kali
       - test-install-oracle-8
       - test-install-oracle-9
+      - release-to-ansible-galaxy:
+          requires:
+          - ansible-lint
+          - test-install-ubuntu-focal
+          - test-install-ubuntu-focal-vm
+          - test-install-ubuntu-jammy
+          - test-install-ubuntu-bionic
+          - test-install-debian-stretch
+          - test-install-debian-buster
+          - test-install-debian-bullseye
+          - test-install-centos-7
+          - test-install-fedora-32
+          - test-install-fedora-36
+          - test-install-kali
+          - test-install-oracle-8
+          - test-install-oracle-9
+          context:
+            - uams-ansible-galaxy
+          # filters:
+          #   branches:
+          #     ignore: /.*/
+          #   tags:
+          #     only: /^[0-9]+\.[0-9]+\.[0-9]+$/
 
   test-galaxy-nightly:
     triggers:
