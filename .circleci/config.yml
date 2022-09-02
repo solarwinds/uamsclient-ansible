@@ -117,14 +117,6 @@ jobs:
       - install-client
       - verify-install-container
 
-  test-install-ubuntu-bionic:
-    docker:
-      - image: ubuntu:bionic
-    steps:
-      - install-ansible-deb
-      - install-client
-      - verify-install-container
-
   test-install-debian-stretch:
     docker:
       - image: debian:stretch
@@ -204,7 +196,6 @@ workflows:
       - test-install-ubuntu-focal
       - test-install-ubuntu-focal-vm
       - test-install-ubuntu-jammy
-      - test-install-ubuntu-bionic
       - test-install-debian-stretch
       - test-install-debian-buster
       - test-install-debian-bullseye
@@ -220,7 +211,6 @@ workflows:
             - test-install-ubuntu-focal
             - test-install-ubuntu-focal-vm
             - test-install-ubuntu-jammy
-            - test-install-ubuntu-bionic
             - test-install-debian-stretch
             - test-install-debian-buster
             - test-install-debian-bullseye
