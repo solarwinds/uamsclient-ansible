@@ -1,11 +1,29 @@
+- name: Validate inputs
+  include_tasks: validate-inputs.yml
+
 - name: Check OS support
   include_tasks: os-support-check.yml
 
 - name: Retrieve installation package
   include_tasks: get-pkg.yml
+  when: ansible_facts.os_family != 'Windows'
 
 - name: Install UAMS Client package
   include_tasks: install-pkg.yml
+  when: ansible_facts.os_family != 'Windows'
 
 - name: Validate installation
   include_tasks: check-status.yml
+  when: ansible_facts.os_family != 'Windows'
+
+- name: Prechecks for UAMS Client installation on Windows
+  include_tasks: install-windows-precheck.yml
+  when: ansible_facts.os_family == 'Windows'
+
+- name: Install UAMS Client on Windows
+  include_tasks: install-windows.yml
+  when: ansible_facts.os_family == 'Windows' and client_installed == ""
+
+- name: Postcheck for UAMS Client installation on Windows
+  include_tasks: install-windows-check-status.yml
+  when: ansible_facts.os_family == 'Windows'

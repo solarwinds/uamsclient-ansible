@@ -21,5 +21,7 @@ To deploy UAMS Client on hosts, add access token and role to your playbook under
 ## Role variables
 
 | Variable | Description |
-| -------------------- | ----------------------------------------------------------- |
-| `local_pkg_path`        | Override the location where installation package is stored |
+| -------------------- | --------------------------------------------------------------- |
+| `uams_local_pkg_path` | Override the location where installation package is stored (default: /tmp/uams) |
+| `uams_local_pkg_path_windows` | Override the location where installation package is stored on Windows (default: value of TEMP env variable) |
+| `uams_remove_installer` | If installation package should be removed (default: true) |
