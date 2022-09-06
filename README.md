@@ -3,6 +3,11 @@
 The Ansible UAMS Client Role installs and configures UAMS Client.
 
 # Setup
+## Requirements
+- When using with Windows hosts the ansible.windows collection is required. Please install it on the controller host with the following command:
+```
+ansible-galaxy collection install ansible.windows
+```
 ## Installation
 
 Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role from Ansible Galaxy
