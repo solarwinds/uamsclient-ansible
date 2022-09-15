@@ -1,5 +1,9 @@
 version: 2.1
 
+filters: &filters-test-jobs
+  tags:
+    only: /.*/
+
 commands:
   verify-install-container:
     steps:
@@ -192,19 +196,32 @@ jobs:
 workflows:
   test-and-release-uamsclient-role:
     jobs:
-      - ansible-lint
-      - test-install-ubuntu-focal
-      - test-install-ubuntu-focal-vm
-      - test-install-ubuntu-jammy
-      - test-install-debian-stretch
-      - test-install-debian-buster
-      - test-install-debian-bullseye
-      - test-install-centos-7
-      - test-install-fedora-32
-      - test-install-fedora-36
-      - test-install-kali
-      - test-install-oracle-8
-      - test-install-oracle-9
+      - ansible-lint:
+          filters: *filters-test-jobs
+      - test-install-ubuntu-focal:
+          filters: *filters-test-jobs
+      - test-install-ubuntu-focal-vm:
+          filters: *filters-test-jobs
+      - test-install-ubuntu-jammy:
+          filters: *filters-test-jobs
+      - test-install-debian-stretch:
+          filters: *filters-test-jobs
+      - test-install-debian-buster:
+          filters: *filters-test-jobs
+      - test-install-debian-bullseye:
+          filters: *filters-test-jobs
+      - test-install-centos-7:
+          filters: *filters-test-jobs
+      - test-install-fedora-32:
+          filters: *filters-test-jobs
+      - test-install-fedora-36:
+          filters: *filters-test-jobs
+      - test-install-kali:
+          filters: *filters-test-jobs
+      - test-install-oracle-8:
+          filters: *filters-test-jobs
+      - test-install-oracle-9:
+          filters: *filters-test-jobs
       - release-to-ansible-galaxy:
           requires:
             - ansible-lint
