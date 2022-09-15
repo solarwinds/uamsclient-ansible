@@ -10,6 +10,11 @@
     pkg_manager: 'apt'
   when: ansible_facts.distribution in ['Debian', 'Ubuntu', 'Kali']
 
+- name: Check if package type is rpm
+  ansible.builtin.set_fact:
+    pkg_type: 'rpm'
+  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
+
 - name: Fail if package type is not defined
   ansible.builtin.fail:
     msg: Coult not determin installation package type.
@@ -38,12 +43,12 @@
 
 - name: Create destination directory
   ansible.builtin.file:
-    path: '{{ local_pkg_path }}'
+    path: '{{ uams_local_pkg_path }}'
     mode: '0755'
     state: directory
 
 - name: Download installation package
   ansible.builtin.get_url:
     url: '{{ install_pkg_url }}/uamsclient.{{ pkg_type }}'
-    dest: '{{ local_pkg_path }}/uamsclient.{{ pkg_type }}'
+    dest: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
     mode: '440'

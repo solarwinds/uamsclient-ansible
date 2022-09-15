@@ -1,0 +1,5 @@
+---
+- name: Validate 'UAMS_ACCESS_TOKEN' environment variable
+  ansible.builtin.fail:
+    msg: Environment variable 'UAMS_ACCESS_TOKEN' is not set.
+  when: ansible_env.UAMS_ACCESS_TOKEN == ""

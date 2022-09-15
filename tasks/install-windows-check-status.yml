@@ -1,0 +1,8 @@
+---
+- name: Check after UAMS Client installation (Windows)
+  include_tasks: install-windows-precheck.yml
+
+- name: Verify installation result (Windows)
+  ansible.builtin.fail:
+    msg: "UAMS Client service is not installed."
+  when: client_installed == ""
