@@ -40,4 +40,7 @@
     installed_version: "{{ installed_version_raw.stdout | trim  }}"
   when: not install_new_version
 
-
+- name: "Set fact if installation/upgrade is needed"
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: not install_new_version and installed_version is version(available_version, '<')
