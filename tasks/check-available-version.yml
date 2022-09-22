@@ -15,20 +15,20 @@
     validate_certs: false
   delegate_to: localhost
 
-- name: "Parse available uamsclient version from file"
+- name: Parse available uamsclient version from file
   ansible.builtin.set_fact:
     available_version: "{{ metadata['version']|string }}"
   vars:
     metadata: "{{ lookup('file', tempfile_metadata.path) | from_yaml }}"
   delegate_to: localhost
 
-- name: "Remove temporary file"
+- name: Remove temporary file
   ansible.builtin.file:
     path: "{{ tempfile_metadata.path }}"
     state: absent
   delegate_to: localhost
 
-- name: "Print available version:"
+- name: Print available version
   ansible.builtin.debug:
-    msg: "Available version: {{ available_version  }}"
+    msg: 'Available version: {{ available_version  }}'
   delegate_to: localhost
