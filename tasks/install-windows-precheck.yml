@@ -7,4 +7,18 @@
 
 - name: Evaluate UAMS Client installed fact (Windows)
   ansible.builtin.set_fact:
-    client_installed: "{{ client_installed_result.stdout | trim }}"
+    client_installed: '{{ client_installed_result.stdout | trim }}'
+
+- name: Set new version to be installed if uamsclient is not installed
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: client_installed == ''
+
+- name: Retrieve service details if uamsclient is installed
+  ansible.windows.win_service_info:
+    name: WinRM
+  register: service_info
+
+- name: "Display"
+  debug:
+    msg: "{{ service_info }}"

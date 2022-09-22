@@ -1,7 +1,3 @@
-# - name: Check existing installation (Windows)
-#   include_tasks: check-existing-installation-windows.yml
-#   when: ansible_facts.os_family == 'Windows'
-
 - name: Validate inputs
   include_tasks: validate-inputs.yml
 
@@ -15,6 +11,10 @@
 - name: Check existing installation (Linux)
   include_tasks: check-existing-installation-linux.yml
   when: ansible_facts.os_family != 'Windows'
+
+- name: Check existing installation (Windows)
+  include_tasks: check-existing-installation-windows.yml
+  when: ansible_facts.os_family == 'Windows'
 
 - name: Retrieve installation package
   include_tasks: get-pkg.yml
