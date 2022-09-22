@@ -16,9 +16,28 @@
 
 - name: Retrieve service details if uamsclient is installed
   ansible.windows.win_service_info:
-    name: WinRM
+    name: swiuamsclientd
   register: service_info
+  when: not install_new_version
 
 - name: "Display"
-  debug:
-    msg: "{{ service_info }}"
+  set_fact:
+    service_command: "{{ service_info.services[0].path }}"
+
+- name: 'Extract uamsclient binary path'
+  shell: echo {{service_command}} | egrep -o ".*uamsclient.exe"
+  delegate_to: localhost
+  register: uamsclient_binary_path
+  when: not install_new_version
+
+- name: 'Get raw installed uamsclient version'
+  ansible.windows.win_command: "\"{{uamsclient_binary_path.stdout}}\" version"
+  register: installed_version_raw
+  when: not install_new_version
+
+- name: 'Parse installed uamscliect version'
+  set_fact:
+    installed_version: "{{ installed_version_raw.stdout | trim  }}"
+  when: not install_new_version
+
+
