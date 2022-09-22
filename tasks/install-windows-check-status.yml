@@ -1,6 +1,13 @@
 ---
-- name: Check after UAMS Client installation (Windows)
-  include_tasks: install-windows-precheck.yml
+- name: Check if UAMS Client is installed (Windows)
+  ansible.windows.win_shell: |
+    (get-wmiobject win32_product -Filter "Name LIKE '%uams client%'").IdentifyingNumber
+  register: client_installed_result
+  changed_when: false
+
+- name: Evaluate UAMS Client installed fact (Windows)
+  ansible.builtin.set_fact:
+    client_installed: '{{ client_installed_result.stdout | trim }}'
 
 - name: Verify installation result (Windows)
   ansible.builtin.fail:
