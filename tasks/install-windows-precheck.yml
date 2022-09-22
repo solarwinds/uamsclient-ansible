@@ -21,22 +21,24 @@
   when: not install_new_version
 
 - name: "Display"
-  set_fact:
+  ansible.builtin.set_fact:
     service_command: "{{ service_info.services[0].path }}"
 
 - name: 'Extract uamsclient binary path'
-  shell: echo {{service_command}} | egrep -o ".*uamsclient.exe"
+  ansible.builtin.shell: echo {{service_command}} | egrep -o ".*uamsclient.exe"
   delegate_to: localhost
   register: uamsclient_binary_path
+  changed_when: false
   when: not install_new_version
 
 - name: 'Get raw installed uamsclient version'
   ansible.windows.win_command: "\"{{uamsclient_binary_path.stdout}}\" version"
   register: installed_version_raw
+  changed_when: false
   when: not install_new_version
 
 - name: 'Parse installed uamscliect version'
-  set_fact:
+  ansible.builtin.set_fact:
     installed_version: "{{ installed_version_raw.stdout | trim  }}"
   when: not install_new_version
 
