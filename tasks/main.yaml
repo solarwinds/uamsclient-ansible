@@ -30,7 +30,7 @@
 
 - name: Prechecks for UAMS Client installation on Windows
   include_tasks: install-windows-precheck.yml
-  when: install_new_version and ansible_facts.os_family == 'Windows'
+  when: ansible_facts.os_family == 'Windows'
 
 - name: Install UAMS Client on Windows
   include_tasks: install-windows.yml
