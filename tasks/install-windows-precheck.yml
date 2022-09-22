@@ -7,4 +7,38 @@
 
 - name: Evaluate UAMS Client installed fact (Windows)
   ansible.builtin.set_fact:
-    client_installed: "{{ client_installed_result.stdout | trim }}"
+    client_installed: '{{ client_installed_result.stdout | trim }}'
+
+- name: Set new version to be installed if uamsclient is not installed
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: client_installed == ''
+
+- name: Retrieve service details if uamsclient is installed
+  ansible.windows.win_service_info:
+    name: swiuamsclientd
+  register: service_info
+  when: not install_new_version
+
+- name: Extract uamsclient binary path
+  ansible.builtin.shell: egrep -o ".*uamsclient.exe" <<< {{ service_command }}
+  delegate_to: localhost
+  register: uamsclient_binary_path
+  changed_when: false
+  when: not install_new_version
+
+- name: Get raw installed uamsclient version
+  ansible.windows.win_command: "\"{{uamsclient_binary_path.stdout}}\" version"
+  register: installed_version_raw
+  changed_when: false
+  when: not install_new_version
+
+- name: Parse installed uamscliect version
+  ansible.builtin.set_fact:
+    installed_version: '{{ installed_version_raw.stdout | trim  }}'
+  when: not install_new_version
+
+- name: Set fact if installation/upgrade is needed
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: not install_new_version and installed_version is version(available_version, '<')

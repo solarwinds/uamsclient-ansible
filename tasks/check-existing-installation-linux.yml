@@ -1,63 +1,26 @@
 ---
-- name: "Check installed uamsclient version"
-  ansible.builtin.shell: "{{ command_if_uams_installed }}"
+- name: Check installed uamsclient version
+  ansible.builtin.shell: '{{ command_if_uams_installed }}'
   changed_when: false
   ignore_errors: true
   register: installed_version
 
-- name: "Evaluate installation as needed if uamsclient is not installed"
+- name: Evaluate installation as needed if uamsclient is not installed
   ansible.builtin.set_fact:
     install_new_version: true
   when: installed_version.stdout == ''
 
-- name: "Evaluate installed uamsclient version as string"
+- name: Evaluate installed uamsclient version as string
   ansible.builtin.set_fact:
-    installed_version_str: "{{ installed_version.stdout_lines[0] }}"
+    installed_version_str: '{{ installed_version.stdout_lines[0] }}'
   when: not install_new_version
 
-- name: Create temporary file to be overwritten with metadata.yml content
-  ansible.builtin.tempfile:
-    state: file
-    suffix: temp
-  register: tempfile_metadata
-  when: not install_new_version
-
-- name: Download metadata.yml to check available uamsclient version
-  ansible.builtin.get_url:
-    url: "{{ install_pkg_url }}/metadata.yml"
-    dest: "{{ tempfile_metadata.path  }}"
-    mode: '0440'
-    force: true
-    validate_certs: false
-  delegate_to: localhost
-  when: not install_new_version
-
-
-- name: "Parse available uamsclient version from file"
-  ansible.builtin.set_fact:
-    available_version: "{{ metadata['version']|string }}"
-  vars:
-    metadata: "{{ lookup('file', tempfile_metadata.path) | from_yaml }}"
-  delegate_to: localhost
-  when: not install_new_version
-
-- name: "Remove temporary file"
-  ansible.builtin.file:
-    path: "{{ tempfile_metadata.path }}"
-    state: absent
-  when: not install_new_version
-
-- name: "Print available version:"
+- name: Print installed version
   ansible.builtin.debug:
-    msg: "Available version: {{ available_version  }}"
+    msg: 'Installed version: {{ available_version  }}'
   when: not install_new_version
 
-- name: "Print installed version:"
-  ansible.builtin.debug:
-    msg: "Installed version: {{ available_version  }}"
-  when: not install_new_version
-
-- name: "Set fact if installation/upgrade is needed"
+- name: Set fact if installation/upgrade is needed
   ansible.builtin.set_fact:
     install_new_version: true
   when: not install_new_version and installed_version_str is version(available_version, '<')
