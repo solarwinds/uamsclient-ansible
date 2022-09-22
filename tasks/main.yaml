@@ -33,7 +33,7 @@
 
 - name: Install UAMS Client on Windows
   include_tasks: install-windows.yml
-  when: install_new_version and ansible_facts.os_family == 'Windows' and client_installed == ""
+  when: install_new_version and ansible_facts.os_family == 'Windows'
 
 - name: Postcheck for UAMS Client installation on Windows
   include_tasks: install-windows-check-status.yml
