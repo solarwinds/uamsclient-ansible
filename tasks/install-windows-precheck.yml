@@ -25,7 +25,7 @@
     service_command: "{{ service_info.services[0].path }}"
 
 - name: 'Extract uamsclient binary path'
-  ansible.builtin.shell: echo {{service_command}} | egrep -o ".*uamsclient.exe"
+  ansible.builtin.shell: egrep -o ".*uamsclient.exe" <<< {{ service_command }}
   delegate_to: localhost
   register: uamsclient_binary_path
   changed_when: false
