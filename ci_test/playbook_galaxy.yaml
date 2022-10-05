@@ -6,6 +6,7 @@
   environment:
     UAMS_ACCESS_TOKEN: "<uams_access_token>"
     UAMS_METADATA: "role:host-monitoring"
+    SWO_URL: "https://swo-url"
 
   roles:
     - role: solarwinds.uamsclient

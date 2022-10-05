@@ -15,12 +15,13 @@ Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role
 ansible-galaxy install solarwinds.uamsclient
 ```
 
-To deploy UAMS Client on hosts, add access token and role to your playbook under the `environment` key.
+To deploy UAMS Client on hosts, add `access token`, `role` and `swo url` to your playbook under the `environment` key.
 
 ```
   environment:
     UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
     UAMS_METADATA: "ROLE"
+    SWO_URL: "https://swo-url"
 ```
 
 ## Role variables
