@@ -1,0 +1,29 @@
+---
+- name: Install UAMS Client package (with DNF)
+  ansible.builtin.dnf:
+    name: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
+    disable_gpg_check: true
+  become: true
+  ignore_errors: true
+  when: pkg_manager == 'dnf'
+
+- name: Install UAMS Client package (with YUM)
+  ansible.builtin.yum:
+    name: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
+    disable_gpg_check: true
+  become: true
+  ignore_errors: true
+  when: pkg_manager == 'yum'
+
+- name: Install UAMS Client package (with APT)
+  ansible.builtin.apt:
+    deb: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
+  become: true
+  ignore_errors: true
+  when: pkg_manager == 'apt'
+
+- name: Remove installation package
+  ansible.builtin.file:
+    path: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
+    state: absent
+  when: uams_remove_installer
