@@ -171,7 +171,7 @@ jobs:
 
   test-install-kali:
     docker:
-      - image: kalilinux/kali-rolling
+      - image: kalilinux/kali-last-release
     steps:
       - install-ansible-deb
       - install-client
