@@ -6,7 +6,7 @@
   environment:
     UAMS_ACCESS_TOKEN: "<uams_access_token>"
     UAMS_METADATA: "role:host-monitoring"
-    SWO_URL: "dc-01.dev-ssp.solarwinds.com"
+    SWO_URL: "dc-01.cloud.solarwinds.com"
 
   roles:
     - role: "{{ lookup('env', 'HOME') }}/project/"
