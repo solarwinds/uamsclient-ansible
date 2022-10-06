@@ -81,7 +81,7 @@ jobs:
       - checkout
       - run: pip install ansible-lint
       - run: ansible-galaxy install solarwinds.uamsclient
-      - run: ansible-lint
+      - run: env ANSIBLE_ROLES_PATH="/root/.ansible/roles" ansible-lint
 
   release-to-ansible-galaxy:
     docker:
