@@ -32,7 +32,7 @@ commands:
           fi
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -i hosts -e '{ "dev_container_test": << parameters.in_container >> }'
+          ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e '{ "dev_container_test": << parameters.in_container >> }'
 
   install-ansible-deb:
     steps:

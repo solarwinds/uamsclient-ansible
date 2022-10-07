@@ -17,7 +17,14 @@
   ansible.builtin.apt:
     deb: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
   become: true
-  when: pkg_manager == 'apt'
+  when: pkg_manager == 'apt' and not dev_container_test
+
+- name: Install UAMS Client package (with APT)
+  ansible.builtin.apt:
+    deb: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
+  become: true
+  ignore_errors: true
+  when: pkg_manager == 'apt' and dev_container_test
 
 - name: Remove installation package
   ansible.builtin.file:
