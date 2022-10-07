@@ -21,7 +21,11 @@
 
 - name: Install UAMS Client package
   include_tasks: install-pkg.yml
-  when: install_new_version and ansible_facts.os_family != 'Windows'
+  when: install_new_version and ansible_facts.os_family != 'Windows' and not dev_container_test
+
+- name: Install UAMS Client package (test in container)
+  include_tasks: install-pkg-in-container.yml
+  when: install_new_version and ansible_facts.os_family != 'Windows' and dev_container_test
 
 - name: Validate installation
   include_tasks: check-status.yml

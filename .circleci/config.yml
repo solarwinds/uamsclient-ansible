@@ -79,7 +79,7 @@ jobs:
       - image: python:bullseye
     steps:
       - checkout
-      - run: pip install ansible-lint
+      - run: pip install ansible-lint==6.6.1
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
@@ -171,7 +171,7 @@ jobs:
 
   test-install-kali:
     docker:
-      - image: kalilinux/kali-rolling
+      - image: kalilinux/kali-last-release
     steps:
       - install-ansible-deb
       - install-client
