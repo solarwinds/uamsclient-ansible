@@ -1,0 +1,26 @@
+---
+- name: Check installed uamsclient version
+  ansible.builtin.shell: '{{ command_if_uams_installed }}'
+  changed_when: false
+  ignore_errors: true
+  register: installed_version
+
+- name: Evaluate installation as needed if uamsclient is not installed
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: installed_version.stdout == ''
+
+- name: Evaluate installed uamsclient version as string
+  ansible.builtin.set_fact:
+    installed_version_str: '{{ installed_version.stdout_lines[0] }}'
+  when: not install_new_version
+
+- name: Print installed version
+  ansible.builtin.debug:
+    msg: 'Installed version: {{ available_version  }}'
+  when: not install_new_version
+
+- name: Set fact if installation/upgrade is needed
+  ansible.builtin.set_fact:
+    install_new_version: true
+  when: not install_new_version and installed_version_str is version(available_version, '<')
