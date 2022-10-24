@@ -41,7 +41,7 @@ UAMS Client role can be also used in the AWX setup. The following should be take
 1. AWX must be configured to download roles from Ansible Galaxy. At the the current time (with AWX 0.30.0) it must be enabled in Settings > Jobs (`Enable Role Download`) and also Ansible Galaxy credentials must be configured at the `organization` level. The `roles/requirements.yml` must be present in the project repository and contain required role (example below).
 2. Values for variables representing `access token`, `role` and `swo url` should be provided from AWX interface.
 3. Playbook must contain `hosts:` value matching hosts group (or individual host) defined in the AWX inventory. Playbook is not available in the AWX for `job template` creation if the proper value was not provided.
-4. Setting `Provilege escalation` in `job template` might cause failure for tasks delegated to localhost and missing `sudo` command in the execution container.
+4. Setting `Privilege escalation` in `job template` might cause failure for tasks delegated to localhost and missing `sudo` command in the execution container.
 
 ## Examples for AWX setup
 ### Playbook
