@@ -4,9 +4,9 @@
   remote_user: root
 
   environment:
-    UAMS_ACCESS_TOKEN: "<uams_access_token>"
-    UAMS_METADATA: "role:host-monitoring"
-    SWO_URL: "dc-01.cloud.solarwinds.com"
+    UAMS_ACCESS_TOKEN: "{{ uams_access_token }}"
+    UAMS_METADATA: "{{ uams_metadata }}"
+    SWO_URL: "{{ swo_url }}"
 
   roles:
     - role: "{{ lookup('env', 'HOME') }}/project/"
