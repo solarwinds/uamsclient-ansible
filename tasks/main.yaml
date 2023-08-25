@@ -3,10 +3,14 @@
 
 - name: Check OS support
   include_tasks: os-support-check.yml
+  tags:
+    - always
 
 - name: Check OS support
   include_tasks: set-pkg-manager.yml
   when: ansible_facts.os_family != 'Windows'
+  tags:
+    - always
 
 - name: Check available installation package
   include_tasks: check-available-version.yml
@@ -14,10 +18,14 @@
 - name: Check existing installation (Linux)
   include_tasks: check-existing-installation-linux.yml
   when: ansible_facts.os_family != 'Windows'
+  tags:
+    - always
 
 - name: Retrieve installation package
   include_tasks: get-pkg.yml
-  when: install_new_version and ansible_facts.os_family != 'Windows'
+  when: (install_new_version or 'uninstall' in ansible_run_tags) and ansible_facts.os_family != 'Windows'
+  tags:
+    - always
 
 - name: Install UAMS Client package
   include_tasks: install-pkg.yml
@@ -42,3 +50,15 @@
 - name: Postcheck for UAMS Client installation on Windows
   include_tasks: install-windows-check-status.yml
   when: install_new_version and ansible_facts.os_family == 'Windows'
+
+- name: Uninstall UAMS Client on Windows
+  include_tasks: uninstall-client-windows.yml
+  when: ansible_facts.os_family == 'Windows' and 'uninstall' in ansible_run_tags
+  tags:
+    - uninstall
+
+- name: Uninstall UAMS Client on Linux
+  include_tasks: uninstall-client-linux.yml
+  when: ansible_facts.os_family != 'Windows' and 'uninstall' in ansible_run_tags
+  tags:
+    - uninstall
