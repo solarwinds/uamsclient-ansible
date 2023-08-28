@@ -37,6 +37,9 @@ commands:
   install-ansible-deb:
     steps:
       - run: |
+          sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list
+          sed -i 's|security.debian.org|archive.debian.org/debian-security/|g' /etc/apt/sources.list
+          sed -i '/stretch-updates/d' /etc/apt/sources.list 
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           apt update
