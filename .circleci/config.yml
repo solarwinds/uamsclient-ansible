@@ -312,5 +312,5 @@ workflows:
               only:
                 - master
     jobs:
-      - test-install-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-focal-vm:
           galaxy: true
