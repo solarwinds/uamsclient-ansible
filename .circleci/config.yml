@@ -81,7 +81,7 @@ jobs:
       - checkout
       - run: pip install ansible-lint==6.18.0
       - run: ansible-galaxy install solarwinds.uamsclient
-      - run: ansible-lint --ignore-file .config/ansible-lint-ignore.txt
+      - run: ansible-lint --ignore-file .config/ansible-lint-ignore.txt -vvv
 
   release-to-ansible-galaxy:
     docker:
