@@ -1,1 +1,1 @@
-ci-test/playbook_github.yaml role-name[path]
+ci-test/playbook_github.yml role-name[path]
