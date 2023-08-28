@@ -11,6 +11,9 @@ commands:
   verify-install-vm:
     steps:
       - run: ps -aux | grep "uamsclient start" | grep -v grep
+  verify-uninstall:
+    steps:
+      - run: if [ ! -d "/opt/solarwinds/uamsclient" ]; then exit 1; fi
   install-client:
     parameters:
       in_container:
@@ -33,6 +36,10 @@ commands:
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }'
+  uninstall-client:
+    steps:
+      - run: |
+          ansible-playbook playbook.yaml -vvv -i hosts --tags uninstall
 
   install-ansible-deb:
     steps:
@@ -109,6 +116,8 @@ jobs:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
   test-install-ubuntu-focal-vm:
     machine:
