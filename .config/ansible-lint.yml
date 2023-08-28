@@ -2,3 +2,4 @@ skip_list:
   - command-instead-of-shell
   - yaml[line-length]
   - ignore-errors
+  - role-name[path]
