@@ -1,6 +1,5 @@
 - name: Validate inputs
   ansible.builtin.include_tasks: validate-inputs.yml
-  when: not ('uninstall' in ansible_run_tags)
 
 - name: Check OS support
   ansible.builtin.include_tasks: os-support-check.yml
