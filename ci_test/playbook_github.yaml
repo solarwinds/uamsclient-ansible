@@ -7,6 +7,7 @@
     UAMS_ACCESS_TOKEN: "{{ uams_access_token }}"
     UAMS_METADATA: "{{ uams_metadata }}"
     SWO_URL: "{{ swo_url }}"
-
+  # yamllint disable rule:role-name
   roles:
-    - role: "{{ lookup('env', 'HOME') }}/project/"  # yamllint disable-line rule:role-name
+    - role: "{{ lookup('env', 'HOME') }}/project/"
+  # yamllint enable rule:role-name
