@@ -13,7 +13,7 @@ commands:
       - run: ps -aux | grep "uamsclient start" | grep -v grep
   verify-uninstall:
     steps:
-      - run: if [ ! -d "/opt/solarwinds/uamsclient" ]; then exit 1; fi
+      - run: if [ -d "/opt/solarwinds/uamsclient" ]; then exit 1; fi
   install-client:
     parameters:
       in_container:
