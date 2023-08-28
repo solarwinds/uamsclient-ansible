@@ -39,8 +39,17 @@ commands:
   uninstall-client:
     steps:
       - run: |
-          ansible-playbook playbook.yaml -vvv -i hosts --tags uninstall
-
+          if [[ "<< parameters.galaxy >>" == "true" ]]; then
+            echo "Installing uamsclient role from Ansible Galaxy"
+            ansible-galaxy install solarwinds.uamsclient
+            test_playbook="ci_test/playbook_galaxy.yaml"
+          else
+            echo "Using uamsclient role from github"
+            test_playbook="ci_test/playbook_github.yaml"
+          fi
+          cp ${test_playbook} ./playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -vvv -i hosts -e '{ "dev_container_test": << parameters.in_container >> }' --tags uninstall
   install-ansible-deb:
     steps:
       - run: |
