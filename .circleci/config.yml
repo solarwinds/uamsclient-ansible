@@ -49,10 +49,10 @@ commands:
           if [[ "<< parameters.galaxy >>" == "true" ]]; then
             echo "Installing uamsclient role from Ansible Galaxy"
             ansible-galaxy install solarwinds.uamsclient
-            test_playbook="ci_test/playbook_galaxy.yaml"
+            test_playbook="ci_test/playbook_uninstall_galaxy.yaml"
           else
             echo "Using uamsclient role from github"
-            test_playbook="ci_test/playbook_github.yaml"
+            test_playbook="ci_test/playbook_uninstall_github.yaml"
           fi
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
