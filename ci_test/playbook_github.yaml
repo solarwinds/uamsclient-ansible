@@ -9,4 +9,4 @@
     SWO_URL: "{{ swo_url }}"
 
   roles:
-    - role: "{{ lookup('env', 'HOME') }}/project/" # skip_ansible_lint role-name
+    - role: "{{ lookup('env', 'HOME') }}/project/" # yamllint disable-line rule:role-name
