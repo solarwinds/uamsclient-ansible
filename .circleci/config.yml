@@ -125,7 +125,7 @@ jobs:
       - run: |
           ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient solarwinds uamsclient
 
-  test-install-ubuntu-focal:
+  test-install-and-uninstall-ubuntu-focal:
     docker:
       - image: ubuntu:focal
     steps:
@@ -135,7 +135,7 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
-  test-install-ubuntu-focal-vm:
+  test-install-and-uninstall-ubuntu-focal-vm:
     machine:
       image: ubuntu-2004:current
     parameters:
@@ -148,86 +148,108 @@ jobs:
           in_container: false
           galaxy: << parameters.galaxy >>
       - verify-install-vm
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-ubuntu-jammy:
+  test-install-and-uninstall-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-stretch:
+  test-install-and-uninstall-debian-stretch:
     docker:
       - image: debian:stretch
     steps:
       - install-ansible-deb-stretch
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-buster:
+  test-install-and-uninstall-debian-buster:
     docker:
       - image: debian:buster
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-bullseye:
+  test-install-and-uninstall-debian-bullseye:
     docker:
       - image: debian:bullseye
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-centos-7:
+  test-install-and-uninstall-centos-7:
     docker:
       - image: centos:centos7
     steps:
       - install-ansible-redhat
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-fedora-32:
+  test-install-and-uninstall-fedora-32:
     docker:
       - image: fedora:32
     steps:
       - install-ansible-fedora
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-fedora-36:
+  test-install-and-uninstall-fedora-36:
     docker:
       - image: fedora:36
     steps:
       - install-ansible-fedora
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-kali:
+  test-install-and-uninstall-kali:
     docker:
       - image: kalilinux/kali-last-release
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-oracle-8:
+  test-install-and-uninstall-oracle-8:
     docker:
       - image: oraclelinux:8
     steps:
       - install-ansible-oraclelinux
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-oracle-9:
+  test-install-and-uninstall-oracle-9:
     docker:
       - image: oraclelinux:9
     steps:
       - install-ansible-oraclelinux
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
 workflows:
   test-and-release-uamsclient-role:
