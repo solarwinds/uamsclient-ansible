@@ -17,7 +17,7 @@
 
 - name: Print installed version
   ansible.builtin.debug:
-    msg: 'Installed version: {{ available_version  }}'
+    msg: 'Installed version: {{ available_version }}'
   when: not install_new_version
 
 - name: Set fact if installation/upgrade is needed
