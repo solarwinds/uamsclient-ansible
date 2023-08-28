@@ -37,6 +37,13 @@ commands:
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }'
   uninstall-client:
+    parameters:
+      in_container:
+        type: boolean
+        default: true
+      galaxy:
+        type: boolean
+        default: false
     steps:
       - run: |
           if [[ "<< parameters.galaxy >>" == "true" ]]; then
