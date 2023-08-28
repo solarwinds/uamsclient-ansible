@@ -81,6 +81,8 @@ jobs:
       - checkout
       - run: pip install ansible-lint==6.18.0
       - run: ansible-galaxy install solarwinds.uamsclient
+      - run: pwd
+      - run: ls -la
       - run: ansible-lint
 
   release-to-ansible-galaxy:
