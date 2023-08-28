@@ -9,7 +9,7 @@
 - name: Download metadata.yml to check available uamsclient version
   ansible.builtin.get_url:
     url: "{{ install_pkg_url }}/metadata.yml"
-    dest: "{{ tempfile_metadata.path  }}"
+    dest: "{{ tempfile_metadata.path }}"
     mode: '0440'
     force: true
     validate_certs: false
@@ -17,7 +17,7 @@
 
 - name: Parse available uamsclient version from file
   ansible.builtin.set_fact:
-    available_version: "{{ metadata['version']|string }}"
+    available_version: "{{ metadata['version'] | string }}"
   vars:
     metadata: "{{ lookup('file', tempfile_metadata.path) | from_yaml }}"
   delegate_to: localhost
@@ -30,5 +30,5 @@
 
 - name: Print available version
   ansible.builtin.debug:
-    msg: 'Available version: {{ available_version  }}'
+    msg: 'Available version: {{ available_version }}'
   delegate_to: localhost

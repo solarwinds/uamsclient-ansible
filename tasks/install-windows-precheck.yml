@@ -28,14 +28,14 @@
   when: not install_new_version
 
 - name: Get raw installed uamsclient version
-  ansible.windows.win_command: "\"{{uamsclient_binary_path.stdout}}\" version"
+  ansible.windows.win_command: "\"{{ uamsclient_binary_path.stdout }}\" version"
   register: installed_version_raw
   changed_when: false
   when: not install_new_version
 
 - name: Parse installed uamscliect version
   ansible.builtin.set_fact:
-    installed_version: '{{ installed_version_raw.stdout | trim  }}'
+    installed_version: '{{ installed_version_raw.stdout | trim }}'
   when: not install_new_version
 
 - name: Set fact if installation/upgrade is needed
