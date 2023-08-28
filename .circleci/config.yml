@@ -283,18 +283,18 @@ workflows:
       - release-to-ansible-galaxy:
           requires:
             - ansible-lint
-            - test-install-ubuntu-focal
-            - test-install-ubuntu-focal-vm
-            - test-install-ubuntu-jammy
-            - test-install-debian-stretch
-            - test-install-debian-buster
-            - test-install-debian-bullseye
-            - test-install-centos-7
-            - test-install-fedora-32
-            - test-install-fedora-36
-            - test-install-kali
-            - test-install-oracle-8
-            - test-install-oracle-9
+            - test-install-and-uninstall-ubuntu-focal
+            - test-install-and-uninstall-ubuntu-focal-vm
+            - test-install-and-uninstall-ubuntu-jammy
+            - test-install-and-uninstall-debian-stretch
+            - test-install-and-uninstall-debian-buster
+            - test-install-and-uninstall-debian-bullseye
+            - test-install-and-uninstall-centos-7
+            - test-install-and-uninstall-fedora-32
+            - test-install-and-uninstall-fedora-36
+            - test-install-and-uninstall-kali
+            - test-install-and-uninstall-oracle-8
+            - test-install-and-uninstall-oracle-9
           context:
             - uams-ansible-galaxy
           filters:
