@@ -256,29 +256,29 @@ workflows:
     jobs:
       - ansible-lint:
           filters: *filters-test-jobs
-      - test-install-ubuntu-focal:
+      - test-install-and-uninstall-ubuntu-focal:
           filters: *filters-test-jobs
-      - test-install-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-focal-vm:
           filters: *filters-test-jobs
-      - test-install-ubuntu-jammy:
+      - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
-      - test-install-debian-stretch:
+      - test-install-and-uninstall-debian-stretch:
           filters: *filters-test-jobs
-      - test-install-debian-buster:
+      - test-install-and-uninstall-debian-buster:
           filters: *filters-test-jobs
-      - test-install-debian-bullseye:
+      - test-install-and-uninstall-debian-bullseye:
           filters: *filters-test-jobs
-      - test-install-centos-7:
+      - test-install-and-uninstall-centos-7:
           filters: *filters-test-jobs
-      - test-install-fedora-32:
+      - test-install-and-uninstall-fedora-32:
           filters: *filters-test-jobs
-      - test-install-fedora-36:
+      - test-install-and-uninstall-fedora-36:
           filters: *filters-test-jobs
-      - test-install-kali:
+      - test-install-and-uninstall-kali:
           filters: *filters-test-jobs
-      - test-install-oracle-8:
+      - test-install-and-uninstall-oracle-8:
           filters: *filters-test-jobs
-      - test-install-oracle-9:
+      - test-install-and-uninstall-oracle-9:
           filters: *filters-test-jobs
       - release-to-ansible-galaxy:
           requires:
