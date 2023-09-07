@@ -26,6 +26,21 @@ To deploy UAMS Client on hosts, add `access token`, `role` and `swo url` to your
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
 
+## Uninstallation
+
+Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role from Ansible Galaxy
+```
+ansible-galaxy install solarwinds.uamsclient
+```
+
+To uninstall UAMS Client on hosts, add `uninstall` tag when running a playbook.
+<br>Example:
+```
+ansible-playbook -i inventory playbook.yml --tags uninstall
+```
+
+Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
+
 ## Role variables
 
 | Variable | Description |

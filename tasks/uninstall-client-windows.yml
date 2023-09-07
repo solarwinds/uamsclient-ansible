@@ -1,0 +1,20 @@
+---
+- name: Get product id
+  win_shell: (get-wmiobject Win32_Product | Where-Object { $_.Name -like 'SolarWinds UAMS Client' }).IdentifyingNumber
+  register: product_id
+  tags:
+    - uninstall
+
+- name: Set prod_id
+  ansible.builtin.set_fact:
+    prod_id: "{{ product_id.stdout | trim }}"
+  tags:
+    - uninstall
+
+- name: Remove UAMS Client
+  ansible.windows.win_package:
+    arguments: DELETE_ALL_CONFIGURATION=1
+    product_id: "{{ prod_id }}"
+    state: absent
+  tags:
+    - uninstall

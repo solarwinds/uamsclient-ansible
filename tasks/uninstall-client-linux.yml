@@ -1,0 +1,28 @@
+---
+- name: Remove UAMS Client (with DNF)
+  ansible.builtin.dnf:
+    name: uamsclient
+    state: absent
+  become: true
+  when: pkg_manager == 'dnf'
+  tags:
+    - uninstall
+
+- name: Remove UAMS Client (with YUM)
+  ansible.builtin.yum:
+    name: uamsclient
+    state: absent
+  become: true
+  when: pkg_manager == 'yum'
+  tags:
+    - uninstall
+
+- name: Remove UAMS Client (with APT)
+  ansible.builtin.apt:
+    name: uamsclient
+    state: absent
+    purge: true
+  become: true
+  when: pkg_manager == 'apt'
+  tags:
+    - uninstall

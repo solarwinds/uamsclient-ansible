@@ -11,6 +11,9 @@ commands:
   verify-install-vm:
     steps:
       - run: ps -aux | grep "uamsclient start" | grep -v grep
+  verify-uninstall:
+    steps:
+      - run: if [ -d "/opt/solarwinds/uamsclient" ]; then exit 1; fi
   install-client:
     parameters:
       in_container:
@@ -33,10 +36,41 @@ commands:
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
           ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }'
-
+  uninstall-client:
+    parameters:
+      in_container:
+        type: boolean
+        default: true
+      galaxy:
+        type: boolean
+        default: false
+    steps:
+      - run: |
+          if [[ "<< parameters.galaxy >>" == "true" ]]; then
+            echo "Installing uamsclient role from Ansible Galaxy"
+            ansible-galaxy install solarwinds.uamsclient
+            test_playbook="ci_test/playbook_uninstall_galaxy.yaml"
+          else
+            echo "Using uamsclient role from github"
+            test_playbook="ci_test/playbook_uninstall_github.yaml"
+          fi
+          cp ${test_playbook} ./playbook.yaml
+          cp ci_test/inventory/localhost ./hosts
+          ansible-playbook playbook.yaml -vvv -i hosts -e '{ "dev_container_test": << parameters.in_container >> }' --tags uninstall
   install-ansible-deb:
     steps:
       - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          apt update
+          apt install python3-pip -y
+          apt install curl -y
+          pip3 install ansible
+
+  install-ansible-deb-stretch:
+    steps:
+      - run: |
+          sed -i -e 's/deb.debian.org/archive.debian.org/g' -e 's|security.debian.org|archive.debian.org/|g' -e '/stretch-updates/d' /etc/apt/sources.list
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           apt update
@@ -79,7 +113,7 @@ jobs:
       - image: python:bullseye
     steps:
       - checkout
-      - run: pip install ansible-lint==6.6.1
+      - run: pip install ansible-lint==6.18.0
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
@@ -91,15 +125,17 @@ jobs:
       - run: |
           ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient solarwinds uamsclient
 
-  test-install-ubuntu-focal:
+  test-install-and-uninstall-ubuntu-focal:
     docker:
       - image: ubuntu:focal
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-ubuntu-focal-vm:
+  test-install-and-uninstall-ubuntu-focal-vm:
     machine:
       image: ubuntu-2004:current
     parameters:
@@ -112,131 +148,153 @@ jobs:
           in_container: false
           galaxy: << parameters.galaxy >>
       - verify-install-vm
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-ubuntu-jammy:
+  test-install-and-uninstall-ubuntu-jammy:
     docker:
       - image: ubuntu:jammy
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-stretch:
+  test-install-and-uninstall-debian-stretch:
     docker:
       - image: debian:stretch
     steps:
-      - install-ansible-deb
+      - install-ansible-deb-stretch
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-buster:
+  test-install-and-uninstall-debian-buster:
     docker:
       - image: debian:buster
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-debian-bullseye:
+  test-install-and-uninstall-debian-bullseye:
     docker:
       - image: debian:bullseye
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-centos-7:
+  test-install-and-uninstall-centos-7:
     docker:
       - image: centos:centos7
     steps:
       - install-ansible-redhat
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-fedora-32:
+  test-install-and-uninstall-fedora-32:
     docker:
       - image: fedora:32
     steps:
       - install-ansible-fedora
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-fedora-36:
+  test-install-and-uninstall-fedora-36:
     docker:
       - image: fedora:36
     steps:
       - install-ansible-fedora
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-kali:
+  test-install-and-uninstall-kali:
     docker:
       - image: kalilinux/kali-last-release
     steps:
       - install-ansible-deb
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-oracle-8:
+  test-install-and-uninstall-oracle-8:
     docker:
       - image: oraclelinux:8
     steps:
       - install-ansible-oraclelinux
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
-  test-install-oracle-9:
+  test-install-and-uninstall-oracle-9:
     docker:
       - image: oraclelinux:9
     steps:
       - install-ansible-oraclelinux
       - install-client
       - verify-install-container
+      - uninstall-client
+      - verify-uninstall
 
 workflows:
   test-and-release-uamsclient-role:
     jobs:
       - ansible-lint:
           filters: *filters-test-jobs
-      - test-install-ubuntu-focal:
+      - test-install-and-uninstall-ubuntu-focal:
           filters: *filters-test-jobs
-      - test-install-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-focal-vm:
           filters: *filters-test-jobs
-      - test-install-ubuntu-jammy:
+      - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
-      - test-install-debian-stretch:
+      - test-install-and-uninstall-debian-stretch:
           filters: *filters-test-jobs
-      - test-install-debian-buster:
+      - test-install-and-uninstall-debian-buster:
           filters: *filters-test-jobs
-      - test-install-debian-bullseye:
+      - test-install-and-uninstall-debian-bullseye:
           filters: *filters-test-jobs
-      - test-install-centos-7:
+      - test-install-and-uninstall-centos-7:
           filters: *filters-test-jobs
-      - test-install-fedora-32:
+      - test-install-and-uninstall-fedora-32:
           filters: *filters-test-jobs
-      - test-install-fedora-36:
+      - test-install-and-uninstall-fedora-36:
           filters: *filters-test-jobs
-      - test-install-kali:
+      - test-install-and-uninstall-kali:
           filters: *filters-test-jobs
-      - test-install-oracle-8:
+      - test-install-and-uninstall-oracle-8:
           filters: *filters-test-jobs
-      - test-install-oracle-9:
+      - test-install-and-uninstall-oracle-9:
           filters: *filters-test-jobs
       - release-to-ansible-galaxy:
           requires:
             - ansible-lint
-            - test-install-ubuntu-focal
-            - test-install-ubuntu-focal-vm
-            - test-install-ubuntu-jammy
-            - test-install-debian-stretch
-            - test-install-debian-buster
-            - test-install-debian-bullseye
-            - test-install-centos-7
-            - test-install-fedora-32
-            - test-install-fedora-36
-            - test-install-kali
-            - test-install-oracle-8
-            - test-install-oracle-9
+            - test-install-and-uninstall-ubuntu-focal
+            - test-install-and-uninstall-ubuntu-focal-vm
+            - test-install-and-uninstall-ubuntu-jammy
+            - test-install-and-uninstall-debian-stretch
+            - test-install-and-uninstall-debian-buster
+            - test-install-and-uninstall-debian-bullseye
+            - test-install-and-uninstall-centos-7
+            - test-install-and-uninstall-fedora-32
+            - test-install-and-uninstall-fedora-36
+            - test-install-and-uninstall-kali
+            - test-install-and-uninstall-oracle-8
+            - test-install-and-uninstall-oracle-9
           context:
             - uams-ansible-galaxy
           filters:
@@ -254,5 +312,5 @@ workflows:
               only:
                 - master
     jobs:
-      - test-install-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-focal-vm:
           galaxy: true
