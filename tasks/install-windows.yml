@@ -26,6 +26,7 @@
       - "ACCESSTOKEN={{ ansible_env.UAMS_ACCESS_TOKEN }}"
       - "METADATA={{ ansible_env.UAMS_METADATA }}"
       - "SWO_URL={{ ansible_env.SWO_URL }}"
+      - "HTTPS_PROXY={{ ansible_env.UAMS_HTTPS_PROXY }}"
 
 - name: Remove installer (Windows)
   ansible.windows.win_file:

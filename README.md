@@ -17,11 +17,14 @@ ansible-galaxy install solarwinds.uamsclient
 
 To deploy UAMS Client on hosts, add `access token`, `role` and `swo url` to your playbook under the `environment` key. Values can be hardcoded but at least for `access token` it's recommended to use variable and not expose token in plain text. 
 
+You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PROXY` environment variable. Simply define this variable to point to your desired HTTPS proxy. Remember that the `UAMS_HTTPS_PROXY` environmental variable sets HTTPS proxy only for the connections established by the UAMS Client and its plugins. To use HTTPS proxy during installation set up HTTPS proxy on your machine so that ansible will be able to use it.
+
 ```
   environment:
     UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
     UAMS_METADATA: "ROLE"
     SWO_URL: "https://swo-url"
+    UAMS_HTTPS_PROXY: "https://your-proxy" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
