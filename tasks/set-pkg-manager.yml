@@ -1,9 +1,4 @@
 ---
-- name: Check if package type is rpm
-  ansible.builtin.set_fact:
-    pkg_type: 'rpm'
-  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
-
 - name: Check if package type is deb
   ansible.builtin.set_fact:
     pkg_type: 'deb'
@@ -14,11 +9,11 @@
 - name: Check if package type is rpm
   ansible.builtin.set_fact:
     pkg_type: 'rpm'
-  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
+  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux', 'Amazon', 'Rocky']
 
 - name: Fail if package type is not defined
   ansible.builtin.fail:
-    msg: Coult not determin installation package type.
+    msg: Could not determine installation package manager.
   when: pkg_type is undefined
 
 - name: Check if package manager is dnf (for rpm)
@@ -35,7 +30,7 @@
     pkg_manager: yum
     command_if_uams_installed: yum list | grep uamsclient | awk '{print $2}' | cut -f1 -d-
   when: pkg_type == 'rpm' and (
-          ansible_facts.distribution == 'OracleLinux'
+          ansible_facts.distribution in ['OracleLinux', 'Rocky', 'Amazon']
           or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int < 8)
         )
 

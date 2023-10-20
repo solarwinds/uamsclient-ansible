@@ -11,6 +11,20 @@
     - ansible_facts.distribution == 'RedHat'
     - ansible_facts.distribution_major_version|int < 7
 
+- name: Check Amazon version
+  ansible.builtin.fail:
+    msg: 'Your RedHat version is not supported. The {{ product_name }} is supported on Amazon 2 and above.'
+  when:
+    - ansible_facts.distribution == 'Amazon'
+    - ansible_facts.distribution_major_version|int < 2
+
+- name: Check Rocky version
+  ansible.builtin.fail:
+    msg: 'Your RedHat version is not supported. The {{ product_name }} is supported on Rocky 8 and above.'
+  when:
+    - ansible_facts.distribution == 'Rocky'
+    - ansible_facts.distribution_major_version|int < 8
+
 - name: Check CentOS version
   ansible.builtin.fail:
     msg: 'Your CentOS version is not supported. The {{ product_name }} is supported on Centos 7 and above.'
