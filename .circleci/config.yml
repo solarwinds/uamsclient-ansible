@@ -67,6 +67,18 @@ commands:
           apt install curl -y
           pip3 install ansible
 
+  install-ansible-deb-lunar-bookworm:
+    steps:
+      - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          export DEBIAN_FRONTEND=noninteractive
+          export TZ=Etc/UTC
+          apt update
+          apt install python3-pip -y
+          apt install curl -y
+          apt install ansible -y
+
   install-ansible-deb-stretch:
     steps:
       - run: |
@@ -135,6 +147,16 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
+  test-install-and-uninstall-ubuntu-lunar:
+    docker:
+      - image: ubuntu:lunar
+    steps:
+      - install-ansible-deb-lunar-bookworm
+      - install-client
+      - verify-install-container
+      - uninstall-client
+      - verify-uninstall
+
   test-install-and-uninstall-ubuntu-focal-vm:
     machine:
       image: ubuntu-2004:current
@@ -191,6 +213,16 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
+  test-install-and-uninstall-debian-bookworm:
+    docker:
+      - image: debian:bookworm
+    steps:
+      - install-ansible-deb-lunar-bookworm
+      - install-client
+      - verify-install-container
+      - uninstall-client
+      - verify-uninstall
+
   test-install-and-uninstall-centos-7:
     docker:
       - image: centos:centos7
@@ -214,6 +246,16 @@ jobs:
   test-install-and-uninstall-fedora-36:
     docker:
       - image: fedora:36
+    steps:
+      - install-ansible-fedora
+      - install-client
+      - verify-install-container
+      - uninstall-client
+      - verify-uninstall
+
+  test-install-and-uninstall-fedora-38:
+    docker:
+      - image: fedora:38
     steps:
       - install-ansible-fedora
       - install-client
@@ -262,17 +304,23 @@ workflows:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
+      - test-install-and-uninstall-ubuntu-lunar:
+          filters: *filters-test-jobs
       - test-install-and-uninstall-debian-stretch:
           filters: *filters-test-jobs
       - test-install-and-uninstall-debian-buster:
           filters: *filters-test-jobs
       - test-install-and-uninstall-debian-bullseye:
           filters: *filters-test-jobs
+      - test-install-and-uninstall-debian-bookworm:
+          filters: *filters-test-jobs
       - test-install-and-uninstall-centos-7:
           filters: *filters-test-jobs
       - test-install-and-uninstall-fedora-32:
           filters: *filters-test-jobs
       - test-install-and-uninstall-fedora-36:
+          filters: *filters-test-jobs
+      - test-install-and-uninstall-fedora-38:
           filters: *filters-test-jobs
       - test-install-and-uninstall-kali:
           filters: *filters-test-jobs
@@ -286,12 +334,15 @@ workflows:
             - test-install-and-uninstall-ubuntu-focal
             - test-install-and-uninstall-ubuntu-focal-vm
             - test-install-and-uninstall-ubuntu-jammy
+            - test-install-and-uninstall-ubuntu-lunar
             - test-install-and-uninstall-debian-stretch
             - test-install-and-uninstall-debian-buster
             - test-install-and-uninstall-debian-bullseye
+            - test-install-and-uninstall-debian-bookworm
             - test-install-and-uninstall-centos-7
             - test-install-and-uninstall-fedora-32
             - test-install-and-uninstall-fedora-36
+            - test-install-and-uninstall-fedora-38
             - test-install-and-uninstall-kali
             - test-install-and-uninstall-oracle-8
             - test-install-and-uninstall-oracle-9
