@@ -62,10 +62,12 @@ commands:
       - run: |
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
+          export DEBIAN_FRONTEND=noninteractive
+          export TZ=Etc/UTC
           apt update
           apt install python3-pip -y
           apt install curl -y
-          pip3 install ansible
+          apt install ansible -y
 
   install-ansible-deb-lunar-bookworm:
     steps:
@@ -151,7 +153,7 @@ jobs:
     docker:
       - image: ubuntu:lunar
     steps:
-      - install-ansible-deb-lunar-bookworm
+      - install-ansible-deb
       - install-client
       - verify-install-container
       - uninstall-client
@@ -217,7 +219,7 @@ jobs:
     docker:
       - image: debian:bookworm
     steps:
-      - install-ansible-deb-lunar-bookworm
+      - install-ansible-deb
       - install-client
       - verify-install-container
       - uninstall-client
