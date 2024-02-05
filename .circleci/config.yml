@@ -67,6 +67,17 @@ commands:
           apt install curl -y
           pip3 install ansible
 
+  install-ansible-deb-buster:
+    steps:
+      - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          apt update
+          apt install python3-pip -y
+          apt install curl -y
+          apt install ansible -y
+          pip3 install ansible-core
+
   install-ansible-deb-lunar-bookworm:
     steps:
       - run: |
@@ -198,7 +209,7 @@ jobs:
     docker:
       - image: debian:buster
     steps:
-      - install-ansible-deb
+      - install-ansible-deb-buster
       - install-client
       - verify-install-container
       - uninstall-client
