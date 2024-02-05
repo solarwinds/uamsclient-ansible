@@ -65,7 +65,7 @@ commands:
           apt update
           apt install python3-pip -y
           apt install curl -y
-          apt install ansible -y
+          pip3 install ansible
 
   install-ansible-deb-lunar-bookworm:
     steps:
@@ -83,12 +83,14 @@ commands:
     steps:
       - run: |
           sed -i -e 's/deb.debian.org/archive.debian.org/g' -e 's|security.debian.org|archive.debian.org/|g' -e '/stretch-updates/d' /etc/apt/sources.list
+          echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu xenial main' >> /etc/apt/sources.list
+          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           apt update
           apt install python3-pip -y
           apt install curl -y
-          apt install ansible -y
+          pip3 install ansible
 
   install-ansible-deb-vm:
     steps:
