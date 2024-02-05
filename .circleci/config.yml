@@ -92,7 +92,7 @@ commands:
           apt install python3 -y
           apt install python3-pip -y
           apt install curl -y
-          pip3 install ansible
+          apt install ansible -y
 
   install-ansible-deb-vm:
     steps:
