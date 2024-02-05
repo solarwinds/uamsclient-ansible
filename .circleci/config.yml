@@ -76,7 +76,7 @@ commands:
           apt install python3-pip -y
           apt install curl -y
           apt-get install ansible -y
-          pip3 install ansible-core
+          ANSIBLE_SKIP_CONFLICT_CHECK=1 pip3 install ansible-core
 
   install-ansible-deb-lunar-bookworm:
     steps:
