@@ -84,5 +84,5 @@ If `version` is omitted, the latest version shall be installed.
 ```
 roles:
   - src: solarwinds.uamsclient
-    version: 1.4.0
+    version: 1.8.0
 ```
