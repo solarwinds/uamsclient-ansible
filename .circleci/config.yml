@@ -65,7 +65,7 @@ commands:
           apt update
           apt install python3-pip -y
           apt install curl -y
-          apt install ansible
+          apt install ansible -y
 
   install-ansible-deb-lunar-bookworm:
     steps:
@@ -88,7 +88,7 @@ commands:
           apt update
           apt install python3-pip -y
           apt install curl -y
-          pip3 install ansible
+          apt install ansible -y
 
   install-ansible-deb-vm:
     steps:
