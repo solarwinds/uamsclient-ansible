@@ -89,6 +89,7 @@ commands:
           apt install python3-pip -y
           apt install curl -y
           apt install ansible -y
+          pip3 install ansible-core
 
   install-ansible-deb-vm:
     steps:
