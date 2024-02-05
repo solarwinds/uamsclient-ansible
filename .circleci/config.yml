@@ -67,6 +67,17 @@ commands:
           apt install curl -y
           pip3 install ansible
 
+  install-ansible-deb-buster:
+    steps:
+      - run: |
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          apt update
+          apt install python3-pip -y
+          apt install curl -y
+          apt-get install ansible -y
+          ANSIBLE_SKIP_CONFLICT_CHECK=1 pip3 install ansible-core
+
   install-ansible-deb-lunar-bookworm:
     steps:
       - run: |
@@ -83,12 +94,13 @@ commands:
     steps:
       - run: |
           sed -i -e 's/deb.debian.org/archive.debian.org/g' -e 's|security.debian.org|archive.debian.org/|g' -e '/stretch-updates/d' /etc/apt/sources.list
+          apt update
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
-          apt update
           apt install python3-pip -y
           apt install curl -y
-          pip3 install ansible
+          apt install ansible -y
+          pip3 install ansible-core
 
   install-ansible-deb-vm:
     steps:
@@ -135,7 +147,7 @@ jobs:
     steps:
       - install-ansible-deb
       - run: |
-          ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient solarwinds uamsclient
+          ansible-galaxy role import --token ${ANSIBLE_GALAXY_TOKEN} --branch master --role-name  solarwinds.uamsclient svc-ansible-galaxy uamsclient
 
   test-install-and-uninstall-ubuntu-focal:
     docker:
@@ -197,7 +209,7 @@ jobs:
     docker:
       - image: debian:buster
     steps:
-      - install-ansible-deb
+      - install-ansible-deb-buster
       - install-client
       - verify-install-container
       - uninstall-client
