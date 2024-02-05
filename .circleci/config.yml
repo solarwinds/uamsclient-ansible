@@ -89,6 +89,7 @@ commands:
           apt update
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
+          apt install python3 -y
           apt install python3-pip -y
           apt install curl -y
           pip3 install ansible
