@@ -1,52 +1,52 @@
 ---
-- name: Check if package type is rpm
-  ansible.builtin.set_fact:
-    pkg_type: 'rpm'
-  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
-  tags:
-    - always
-
-- name: Check if package type is deb
-  ansible.builtin.set_fact:
-    pkg_type: 'deb'
-    pkg_manager: 'apt'
-  when: ansible_facts.distribution in ['Debian', 'Ubuntu', 'Kali']
-  tags:
-    - always
-
-- name: Check if package type is rpm
-  ansible.builtin.set_fact:
-    pkg_type: 'rpm'
-  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
-  tags:
-    - always
-
-- name: Fail if package type is not defined
-  ansible.builtin.fail:
-    msg: Coult not determin installation package type.
-  when: pkg_type is undefined
-  tags:
-    - always
-
-- name: Check if package manager is dnf (for rpm)
-  ansible.builtin.set_fact:
-    pkg_manager: dnf
-  when: pkg_type == 'rpm' and (
-          ansible_facts.distribution == 'Fedora' or
-          (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int > 7)
-        )
-  tags:
-    - always
-
-- name: Check if package manager is yum (for rpm)
-  ansible.builtin.set_fact:
-    pkg_manager: yum
-  when: pkg_type == 'rpm' and (
-          ansible_facts.distribution == 'OracleLinux'
-          or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int < 8)
-        )
-  tags:
-    - always
+#- name: Check if package type is rpm
+#  ansible.builtin.set_fact:
+#    pkg_type: 'rpm'
+#  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
+#  tags:
+#    - always
+#
+#- name: Check if package type is deb
+#  ansible.builtin.set_fact:
+#    pkg_type: 'deb'
+#    pkg_manager: 'apt'
+#  when: ansible_facts.distribution in ['Debian', 'Ubuntu', 'Kali']
+#  tags:
+#    - always
+#
+#- name: Check if package type is rpm
+#  ansible.builtin.set_fact:
+#    pkg_type: 'rpm'
+#  when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux']
+#  tags:
+#    - always
+#
+#- name: Fail if package type is not defined
+#  ansible.builtin.fail:
+#    msg: Coult not determin installation package type.
+#  when: pkg_type is undefined
+#  tags:
+#    - always
+#
+#- name: Check if package manager is dnf (for rpm)
+#  ansible.builtin.set_fact:
+#    pkg_manager: dnf
+#  when: pkg_type == 'rpm' and (
+#          ansible_facts.distribution == 'Fedora' or
+#          (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int > 7)
+#        )
+#  tags:
+#    - always
+#
+#- name: Check if package manager is yum (for rpm)
+#  ansible.builtin.set_fact:
+#    pkg_manager: yum
+#  when: pkg_type == 'rpm' and (
+#          ansible_facts.distribution == 'OracleLinux'
+#          or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int < 8)
+#        )
+#  tags:
+#    - always
 
 #- include: set-pkg-manager.yml
 

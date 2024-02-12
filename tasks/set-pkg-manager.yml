@@ -5,11 +5,15 @@
     pkg_manager: 'apt'
     command_if_uams_installed: dpkg-query -l uamsclient | tail -n1 | awk '{print $3}' | cut -d- -f1
   when: ansible_facts.distribution in ['Debian', 'Ubuntu', 'Kali']
+  tags:
+    - always
 
 - name: Check if package type is rpm
   ansible.builtin.set_fact:
     pkg_type: 'rpm'
   when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux', 'Amazon', 'Rocky']
+  tags:
+    - always
 
 - name: Check if package manager is dnf (for rpm)
   ansible.builtin.set_fact:
@@ -20,6 +24,8 @@
           or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int > 7)
           or (ansible_facts.distribution in ['Amazon'] and ansible_facts.distribution_major_version | int > 2000)
         )
+  tags:
+    - always
 
 - name: Check if package manager is yum (for rpm)
   ansible.builtin.set_fact:
@@ -30,8 +36,12 @@
           or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int < 8)
           or (ansible_facts.distribution in ['Amazon'] and ansible_facts.distribution_major_version | int < 2000)
         )
+  tags:
+    - always
 
 - name: Fail if package manager is not defined
   ansible.builtin.fail:
     msg: Could not determine installation package manager.
   when: pkg_manager is undefined
+  tags:
+    - always
