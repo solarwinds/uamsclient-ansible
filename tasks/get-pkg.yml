@@ -48,7 +48,7 @@
 #  tags:
 #    - always
 
-- include: set-pkg-manager.yml
+#- include: set-pkg-manager.yml
 
 - name: Fail if package manager is not defined in getpkg
   ansible.builtin.fail:
