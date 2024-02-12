@@ -2,7 +2,7 @@
 - name: Check if OS is supported
   ansible.builtin.fail:
     msg: 'The {{ product_name }} is not supporting your OS'
-  when: ansible_os_family not in ['RedHat', 'Debian', 'Windows']
+  when: ansible_os_family not in ['RedHat', 'Debian', 'Windows', 'Rocky']
 
 - name: Check RedHat version
   ansible.builtin.fail:
