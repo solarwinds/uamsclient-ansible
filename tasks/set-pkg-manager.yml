@@ -11,18 +11,14 @@
     pkg_type: 'rpm'
   when: ansible_facts.distribution in ['RedHat', 'CentOS', 'Fedora', 'OracleLinux', 'Amazon', 'Rocky']
 
-- name: Fail if package type is not defined
-  ansible.builtin.fail:
-    msg: Could not determine installation package manager.
-  when: pkg_type is undefined
-
 - name: Check if package manager is dnf (for rpm)
   ansible.builtin.set_fact:
     pkg_manager: dnf
     command_if_uams_installed: dnf list --installed | grep uams | awk '{print $2}' | cut -f1 -d-
   when: pkg_type == 'rpm' and (
-          ansible_facts.distribution == 'Fedora' or
-          (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int > 7)
+          ansible_facts.distribution == 'Fedora'
+          or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int > 7)
+          or (ansible_facts.distribution in ['Amazon'] and ansible_facts.distribution_major_version | int > 2000)
         )
 
 - name: Check if package manager is yum (for rpm)
@@ -30,8 +26,9 @@
     pkg_manager: yum
     command_if_uams_installed: yum list | grep uamsclient | awk '{print $2}' | cut -f1 -d-
   when: pkg_type == 'rpm' and (
-          ansible_facts.distribution in ['OracleLinux', 'Rocky', 'Amazon']
+          ansible_facts.distribution in ['OracleLinux', 'Rocky']
           or (ansible_facts.distribution in ['CentOS', 'RedHat'] and ansible_facts.distribution_major_version | int < 8)
+          or (ansible_facts.distribution in ['Amazon'] and ansible_facts.distribution_major_version | int < 2000)
         )
 
 - name: Fail if package manager is not defined
