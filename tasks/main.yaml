@@ -23,9 +23,7 @@
 
 - name: Retrieve installation package
   ansible.builtin.include_tasks: get-pkg.yml
-  when: (install_new_version or 'uninstall' in ansible_run_tags) and ansible_facts.os_family != 'Windows'
-  tags:
-    - always
+  when: install_new_version and ansible_facts.os_family != 'Windows'
 
 - name: Install UAMS Client package
   ansible.builtin.include_tasks: install-pkg.yml
