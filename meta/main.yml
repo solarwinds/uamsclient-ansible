@@ -48,8 +48,7 @@ galaxy_info:
         - '2022'
     - name: OracleLinux
       versions:
-        - '8'
-        - '9'
+        - 'all'
   galaxy_tags:
     - monitoring
     - observability
