@@ -137,7 +137,7 @@ jobs:
       - image: python:bullseye
     steps:
       - checkout
-      - run: pip install ansible-lint==6.18.0
+      - run: pip install ansible-lint==24.2.0
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
