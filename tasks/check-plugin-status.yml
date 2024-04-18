@@ -1,0 +1,17 @@
+---
+- name: "Check {{ plugin }} status"
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    method: GET
+    return_content: yes
+    body_format: json
+  register: result
+  until: "result.json|default('') and result.json[plugin][instance]['status_code'] == 'STATUS_CODE_OK'"
+  retries: 2
+  delay: 2
+
+- name: Print {{ plugin }} plugin Status Code
+  debug:
+    var: result.json[plugin][instance]['status_code']
+
+
