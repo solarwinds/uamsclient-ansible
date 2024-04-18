@@ -7,8 +7,8 @@
     body_format: json
   register: result
   until: "result.json|default('') and result.json[plugin][instance]['status_code'] == 'STATUS_CODE_OK'"
-  retries: 2
-  delay: 2
+  retries: 12
+  delay: 5
 
 - name: Print {{ plugin }} plugin Status Code
   debug:
