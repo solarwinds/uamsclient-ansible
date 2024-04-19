@@ -49,6 +49,23 @@
   ansible.builtin.include_tasks: install-windows-check-status.yml
   when: install_new_version and ansible_facts.os_family == 'Windows'
 
+- name: Postcheck plugin credentials-plugin
+  ansible.builtin.include_tasks: check-plugin-status.yml
+  vars:
+    plugin: "credentials-plugin"
+    instance: ""
+  tags:
+    - plugins_check
+
+- name: Postcheck plugin uams-otel-collector-plugin
+  ansible.builtin.include_tasks: check-plugin-status.yml
+  vars:
+    plugin: "uams-otel-collector-plugin"
+    instance: "hostmetrics-monitoring"
+  when: "'host-monitoring' in ansible_env.UAMS_METADATA"
+  tags:
+    - plugins_check
+
 - name: Uninstall UAMS Client on Windows
   ansible.builtin.include_tasks: uninstall-client-windows.yml
   when: ansible_facts.os_family == 'Windows' and 'uninstall' in ansible_run_tags
