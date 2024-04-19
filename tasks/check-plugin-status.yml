@@ -6,7 +6,7 @@
     return_content: yes
     body_format: json
   register: result
-  until: "result.json|default('') and result.json[plugin][instance]['status_code'] == 'STATUS_CODE_OK'"
+  until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
   retries: 12
   delay: 5
 
