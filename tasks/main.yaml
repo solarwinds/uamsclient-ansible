@@ -54,6 +54,8 @@
   vars:
     plugin: "credentials-plugin"
     instance: ""
+  tags:
+    - plugins_check
 
 - name: Postcheck plugin uams-otel-collector-plugin
   ansible.builtin.include_tasks: check-plugin-status.yml
@@ -61,6 +63,8 @@
     plugin: "uams-otel-collector-plugin"
     instance: "hostmetrics-monitoring"
   when: "'host-monitoring' in ansible_env.UAMS_METADATA"
+  tags:
+    - plugins_check
 
 - name: Uninstall UAMS Client on Windows
   ansible.builtin.include_tasks: uninstall-client-windows.yml
