@@ -32,10 +32,8 @@
 
 - name: Unarchive a DBO headless installer
   ansible.builtin.unarchive:
-#    src: dbo-headless-installer.zip
     src: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
     dest: '{{ uams_local_pkg_path }}/headless-installer'
-# Change this to unpack downloaded archive not one from master
     remote_src: yes
   tags:
     - dbo
@@ -52,7 +50,7 @@
     uamsclientid: "{{ file_content.content | b64decode }}"
   tags:
     - dbo
-    -
+
 # TBR
 - name: Print dbAgents content
   debug:
@@ -60,28 +58,24 @@
   tags:
     - dbo
 
-- name: Template a file to /etc/file.conf
+- name: Create input file for DBO
   ansible.builtin.template:
     src: templates/dbo.j2
     dest: '{{ uams_local_pkg_path }}/input.json'
-#    owner: bin
-#    group: wheel
     mode: '0644'
   tags:
     - dbo
 
-- name: Template a file to /etc/file.conff
+- name: Create swoparams file for DBO
   ansible.builtin.template:
     src: templates/dbo_swo_params.j2
     dest: '{{ uams_local_pkg_path }}/swoparams.json'
-#    owner: bin
-#    group: wheel
     mode: '0644'
   tags:
     - dbo
 
 - name: Run the binary with parameters using command module
-  command: '{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams={{ uams_local_pkg_path }}/swoparams.json -onboard-databases={{ uams_local_pkg_path }}/input.json'
+  command: '{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams={{ uams_local_pkg_path }}/swoparams.json -onboard-databases={{ uams_local_pkg_path }}/input.json -onboarded-list-out={{ uams_local_pkg_path }}'
   register: result_command
   tags:
     - dbo
@@ -91,3 +85,9 @@
     var: result_command
   tags:
     - dbo
+
+- name: Cleaning up headless installer zip file
+  ansible.builtin.file:
+    path: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
+    state: absent
+  when: uams_remove_installer

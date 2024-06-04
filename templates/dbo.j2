@@ -2,16 +2,16 @@
   {
     "agentID": "{{ uamsclientid }}",
     "dbAgents": [
-      {% for dbAgent in dbAgents %}
+      {% for dbo_plugin in dbo_plugins %}
       {
-        "databaseType": "{{ dbAgent.databaseType }}",
-        "name": "{{ dbAgent.name }}",
-        "host": "{{ dbAgent.host }}",
-        "port": "{{ dbAgent.port }}",
-        "user": "{{ dbAgent.user }}",
-        "password": "{{ dbAgent.password }}",
-        "packetCaptureEnabled": {{ dbAgent.packetCaptureEnabled | default(false) | lower }},
-        "metricsCaptureMethod": "{{ dbAgent.metricsCaptureMethod | default('') }}"
+        "databaseType": "{{ dbo_plugin.databaseType }}",
+        "name": "{{ dbo_plugin.name }}",
+        "host": "{{ dbo_plugin.host }}",
+        "port": "{{ dbo_plugin.port }}",
+        "user": "{{ dbo_plugin.user }}",
+        "password": "{{ dbo_plugin.password }}",
+        "packetCaptureEnabled": {{ dbo_plugin.packetCaptureEnabled | default(false) | lower }},
+        "metricsCaptureMethod": "{{ dbo_plugin.metricsCaptureMethod | default('') }}"
       }{% if not loop.last %},{% endif %}
       {% endfor %}
     ]
