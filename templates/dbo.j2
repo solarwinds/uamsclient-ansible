@@ -10,10 +10,8 @@
         "port": "{{ dbAgent.port }}",
         "user": "{{ dbAgent.user }}",
         "password": "{{ dbAgent.password }}",
-        "packetCaptureEnabled": {{ dbAgent.packetCaptureEnabled | lower }},
-        {% if dbAgent.metricsCaptureMethod is defined %}
-        "metricsCaptureMethod": "{{ dbAgent.metricsCaptureMethod }}",
-        {% endif %}
+        "packetCaptureEnabled": {{ dbAgent.packetCaptureEnabled | default(false) | lower }},
+        "metricsCaptureMethod": "{{ dbAgent.metricsCaptureMethod | default('') }}"
       }{% if not loop.last %},{% endif %}
       {% endfor %}
     ]
