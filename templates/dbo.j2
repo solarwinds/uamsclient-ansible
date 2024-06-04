@@ -12,7 +12,7 @@
         "password": "{{ dbAgent.password }}",
         "packetCaptureEnabled": {{ dbAgent.packetCaptureEnabled | lower }},
         {% if dbAgent.metricsCaptureMethod is defined %}
-        "metricsCaptureMethod": "{{ dbAgent.metricsCaptureMethod }}"
+        "metricsCaptureMethod": "{{ dbAgent.metricsCaptureMethod }}",
         {% endif %}
       }{% if not loop.last %},{% endif %}
       {% endfor %}

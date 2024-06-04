@@ -40,13 +40,19 @@
   tags:
     - dbo
 
-- name: Load uamsclient ID
+- name: Load uamsclient ID file
   ansible.builtin.slurp:
     src: /opt/solarwinds/uamsclient/var/uamsclientid
-  register: uamsclientid
+  register: file_content
   tags:
     - dbo
 
+- name: Decode uamsclient ID
+  set_fact:
+    uamsclientid: "{{ file_content.content | b64decode }}"
+  tags:
+    - dbo
+    -
 # TBR
 - name: Print dbAgents content
   debug:
@@ -64,4 +70,24 @@
   tags:
     - dbo
 
+- name: Template a file to /etc/file.conff
+  ansible.builtin.template:
+    src: templates/dbo_swo_params.j2
+    dest: '{{ uams_local_pkg_path }}/swoparams.json'
+#    owner: bin
+#    group: wheel
+    mode: '0644'
+  tags:
+    - dbo
 
+- name: Run the binary with parameters using command module
+  command: '{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams {{ uams_local_pkg_path }}/swoparams.json -onboard-databases {{ uams_local_pkg_path }}/input.json'
+  register: result_command
+  tags:
+    - dbo
+
+- name: Display the result from command module
+  debug:
+    var: result_command
+  tags:
+    - dbo
