@@ -1,0 +1,45 @@
+---
+# TBR
+- name: Print dbAgents content
+  debug:
+    var: dbAgents
+
+- name: Create destination directory
+  ansible.builtin.file:
+    path: '{{ uams_local_pkg_path }}'
+    mode: '0755'
+    state: directory
+
+- name: Download installation package
+  ansible.builtin.get_url:
+    url: '{{ dbo_headless_installer_url }}'
+    dest: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
+    mode: '440'
+
+- name: Unarchive a DBO headless installer
+  ansible.builtin.unarchive:
+#    src: dbo-headless-installer.zip
+    src: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
+    dest: '{{ uams_local_pkg_path }}/headless-installer'
+# Change this to unpack downloaded archive not one from master
+#    remote_src: yes
+
+- name: Load uamsclient ID
+  ansible.builtin.slurp:
+    src: /opt/solarwinds/uamsclient/var/uamsclientid
+  register: uamsclientid
+
+# TBR
+- name: Print dbAgents content
+  debug:
+    var: uamsclientid
+
+- name: Template a file to /etc/file.conf
+  ansible.builtin.template:
+    src: templates/dbo.j2
+    dest: '{{ uams_local_pkg_path }}/input.json'
+#    owner: bin
+#    group: wheel
+    mode: '0644'
+
+

@@ -77,3 +77,9 @@
   when: ansible_facts.os_family != 'Windows' and 'uninstall' in ansible_run_tags
   tags:
     - uninstall
+
+- name: Deploy database monitoring
+  ansible.builtin.include_tasks: dbo.yml
+  when: ansible_facts.os_family != 'Windows' and 'dbo' in ansible_run_tags
+  tags:
+    - dbo

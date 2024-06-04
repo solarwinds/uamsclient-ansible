@@ -4,4 +4,5 @@ install_new_version: false
 
 product_name: 'SolarWinds UAMS Client'
 install_pkg_url: 'https://agent-binaries.cloud.solarwinds.com/uams/latest'
+dbo_headless_installer_url: 'https://ssp-dev-global-agent-binaries.s3.amazonaws.com/dbo-headless-installer/latest/dbo-headless-installer.zip'
 dev_container_test: false
