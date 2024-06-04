@@ -1,5 +1,7 @@
 - name: Validate inputs
   ansible.builtin.include_tasks: validate-inputs.yml
+  tags:
+    - always
 
 - name: Check OS support
   ansible.builtin.include_tasks: os-support-check.yml

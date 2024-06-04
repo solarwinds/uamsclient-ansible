@@ -14,7 +14,7 @@
   tags:
     - dbo
 
-- name: Download installation package
+- name: Download DBO headless installer package
   ansible.builtin.get_url:
     url: '{{ dbo_headless_installer_url }}'
     dest: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
@@ -75,7 +75,7 @@
     - dbo
 
 - name: Run the binary with parameters using command module
-  command: '{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams={{ uams_local_pkg_path }}/swoparams.json -onboard-databases={{ uams_local_pkg_path }}/input.json -onboarded-list-out={{ uams_local_pkg_path }}'
+  command: '{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams={{ uams_local_pkg_path }}/swoparams.json -onboard-databases={{ uams_local_pkg_path }}/input.json -onboarded-list-out={{ uams_local_pkg_path }}/output.json'
   register: result_command
   tags:
     - dbo
