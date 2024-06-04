@@ -22,6 +22,14 @@
   tags:
     - dbo
 
+- name: Create destination directory for headless installer
+  ansible.builtin.file:
+    path: '{{ uams_local_pkg_path }}/headless-installer'
+    mode: '0755'
+    state: directory
+  tags:
+    - dbo
+
 - name: Unarchive a DBO headless installer
   ansible.builtin.unarchive:
 #    src: dbo-headless-installer.zip
