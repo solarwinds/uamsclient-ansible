@@ -1,8 +1,8 @@
 ---
 # TBR
-- name: Print dbAgents content
+- name: Print dbo_plugins content
   debug:
-    var: dbAgents
+    var: dbo_plugins
   tags:
     - dbo
 
