@@ -86,6 +86,51 @@
   tags:
     - dbo
 
+- name: Include variable file
+  include_vars:
+    file: dbo_mapping.yml
+  tags:
+    - dbo
+
+- name: Read output of headless installer
+  slurp:
+    src: '{{ uams_local_pkg_path }}/output.json'
+  register: output
+  tags:
+    - dbo
+
+- name: Parse JSON content
+  set_fact:
+    output_json: "{{ output.content | b64decode | from_json }}"
+  tags:
+    - dbo
+
+- name: Display output
+  debug:
+    var: output_json
+  tags:
+    - dbo
+
+- name: Display mapping
+  debug:
+    var: dbo_mapping
+  tags:
+    - dbo
+
+
+- name: Extract keys from JSON data
+  set_fact:
+    entities: "{{ output_json | json_query('[].key') }}"
+
+- name: Display operations
+  debug:
+    msg: "Processing key {{ item }}"
+  loop: "{{ json_keys }}"
+  tags:
+    - dbo
+
+
+
 - name: Cleaning up headless installer zip file
   ansible.builtin.file:
     path: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
