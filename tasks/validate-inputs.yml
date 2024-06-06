@@ -11,7 +11,7 @@
 
 - name: Validate 'dbo_plugins' variable
   ansible.builtin.fail:
-    msg: Environment variable 'dbo_plugins' with databases data is not set.
+    msg: Variable 'dbo_plugins' with databases data is not set.
   when: dbo_plugins is not defined
   tags:
     - dbo
