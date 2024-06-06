@@ -125,7 +125,7 @@
 - name: Display operations
   debug:
     msg: "Processing key {{ item }}"
-  loop: "{{ json_keys }}"
+  loop: "{{ entities }}"
   tags:
     - dbo
 
