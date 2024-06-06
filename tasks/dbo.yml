@@ -107,7 +107,7 @@
 
 - name: Display output
   debug:
-    var: output_json
+    var: output_json¬
   tags:
     - dbo
 
@@ -120,7 +120,7 @@
 
 - name: Extract keys from JSON data
   set_fact:
-    entities: "{{ output_json | json_query('[].key') }}"
+    entities: "{{ output_json | json_query('[].key') | map('regex_replace', '^e-', '') | list }}"
 
 - name: Display operations
   debug:
