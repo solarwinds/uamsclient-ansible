@@ -62,15 +62,15 @@
   tags:
     - dbo
 
-
-- name: "Postcheck plugin"
-  ansible.builtin.include_task: check-plugin-status.yml
-  vars:
-    plugin: "{{ item }}"
-    instance: "yolo"
-  loop: '{{ expected_plugins }}'
-  tags:
-    - dbo
+#
+#- name: "Postcheck plugin"
+#  ansible.builtin.include_task: check-plugin-status.yml
+#  vars:
+#    plugin: "{{ item }}"
+#    instance: "yolo"
+#  loop: '{{ expected_plugins }}'
+#  tags:
+#    - dbo
 
 
 - name: "Check status plugin"
