@@ -1,0 +1,61 @@
+---
+- name: Include variable file
+  include_vars:
+    file: dbo_mapping.yml
+  tags:
+    - dbo
+
+- name: PRINT output
+  debug:
+    var: "dbo_plugin"
+  tags:
+    - dbo
+
+- name: Expected plugins
+  set_fact:
+    expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
+
+- name: PRINT expected plugins
+  debug:
+    var: "expected_plugins"
+  tags:
+    - dbo
+
+- name: Read output of headless installer
+  slurp:
+    src: '{{ uams_local_pkg_path }}/output.json'
+  register: output
+  tags:
+    - dbo
+
+- name: Parse JSON content
+  set_fact:
+    entities: "{{ output.content | b64decode | from_json | dict2items }}"
+  tags:
+    - dbo
+
+- name: PRINT entities
+  debug:
+    var: entities
+  tags:
+    - dbo
+
+- name: Nested disply
+  debug:
+    msg: "Processing key {{ item[1]['key'] | trim('e-') }}, {{ item[0] }}"
+  with_nested:
+    - '{{ expected_plugins }}'
+    - '{{ entities }}'
+  tags:
+    - dbo
+
+- name: Postcheck plugin
+  ansible.builtin.include_tasks: check-plugin-status.yml
+  vars:
+    plugin: "{{ item[0] }}"
+    instance: "{{ item[1]['key'] }}"
+  with_nested:
+    - '{{ expected_plugins }}'
+    - '{{ entities }}'
+  tags:
+    - dbo
