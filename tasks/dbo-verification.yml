@@ -42,41 +42,19 @@
   tags:
     - dbo
 
-- name: Nested disply
+- name: DBO Plugins to be verified
   debug:
-    msg: "Processing key {{ item[1]['key'] | trim('e-') }}, {{ item[0] }}"
+    msg: "Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}"
   with_nested:
     - '{{ expected_plugins }}'
     - '{{ entities }}'
   tags:
     - dbo
 
-- name: "Postcheck plugin {{ item[0], item[1]['key'] }}"
-  ansible.builtin.include_tasks: check-plugin-status.yml
+- name: "Check DBO plugins status"
   vars:
     plugin: "{{ item[0] }}"
-    instance: "{{ item[1]['key'] }}"
-  with_nested:
-    - '{{ expected_plugins }}'
-    - '{{ entities }}'
-  tags:
-    - dbo
-
-#
-#- name: "Postcheck plugin"
-#  ansible.builtin.include_task: check-plugin-status.yml
-#  vars:
-#    plugin: "{{ item }}"
-#    instance: "yolo"
-#  loop: '{{ expected_plugins }}'
-#  tags:
-#    - dbo
-
-
-- name: "Check status plugin {{ item[0] }}"
-  vars:
-    plugin: "{{ item[0] }}"
-    instance: "yolo"
+    instance: "{{ item[1]['key'] | trim('e-') }}"
   ansible.builtin.uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
     method: GET
@@ -84,8 +62,8 @@
     body_format: json
   register: result
   until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
-  retries: 3
-  delay: 3
+  retries: 2
+  delay: 1
   with_nested:
     - '{{ expected_plugins }}'
     - '{{ entities }}'
