@@ -73,9 +73,9 @@
     - dbo
 
 
-- name: "Check status: {{ plugin }}"
+- name: "Check status plugin"
   vars:
-    plugin: "{{ item }}"
+    plugin: "{{ item[0] }}"
     instance: "yolo"
   ansible.builtin.uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
