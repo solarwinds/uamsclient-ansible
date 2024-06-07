@@ -64,7 +64,7 @@
 
 
 - name: "Postcheck plugin {{ item }}"
-  ansible.builtin.include_tasks: check-plugin-status.yml
+  ansible.builtin.include_task: check-plugin-status.yml
   vars:
     plugin: "{{ item }}"
     instance: "yolo"
