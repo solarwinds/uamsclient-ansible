@@ -51,7 +51,7 @@
   tags:
     - dbo
 
-- name: 'Postcheck plugin {{ item[0], item[1]["key"] }}'
+- name: "Postcheck plugin {{ item[0], item[1]['key'] }}"
   ansible.builtin.include_tasks: check-plugin-status.yml
   vars:
     plugin: "{{ item[0] }}"
@@ -59,5 +59,15 @@
   with_nested:
     - '{{ expected_plugins }}'
     - '{{ entities }}'
+  tags:
+    - dbo
+
+
+- name: "Postcheck plugin {{ item }}"
+  ansible.builtin.include_tasks: check-plugin-status.yml
+  vars:
+    plugin: "{{ item }}"
+    instance: "yolo"
+  loop: '{{ expected_plugins }}'
   tags:
     - dbo
