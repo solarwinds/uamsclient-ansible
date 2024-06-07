@@ -73,7 +73,7 @@
 #    - dbo
 
 
-- name: "Check status plugin"
+- name: "Check status plugin {{ item[0] }}"
   vars:
     plugin: "{{ item[0] }}"
     instance: "yolo"
@@ -84,8 +84,8 @@
     body_format: json
   register: result
   until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
-  retries: 12
-  delay: 5
+  retries: 3
+  delay: 3
   with_nested:
     - '{{ expected_plugins }}'
     - '{{ entities }}'
