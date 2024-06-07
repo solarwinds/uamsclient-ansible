@@ -9,9 +9,9 @@
     msg: Environment variable 'UAMS_SWO_URL' is not set.
   when: ansible_env.SWO_URL == ""
 
-- name: Validate 'dbo_plugins' variable
+- name: Validate 'dbo_plugin' variable
   ansible.builtin.fail:
-    msg: Variable 'dbo_plugins' with databases data is not set.
-  when: dbo_plugins is not defined
+    msg: Variable 'dbo_plugin' with database data is not set.
+  when: dbo_plugin is not defined
   tags:
     - dbo

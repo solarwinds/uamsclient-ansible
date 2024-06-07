@@ -1,11 +1,4 @@
 ---
-# TBR
-- name: Print dbo_plugins content
-  debug:
-    var: dbo_plugins
-  tags:
-    - dbo
-
 - name: Create destination directory
   ansible.builtin.file:
     path: '{{ uams_local_pkg_path }}'

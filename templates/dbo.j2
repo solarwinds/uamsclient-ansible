@@ -2,7 +2,6 @@
   {
     "agentID": "{{ uamsclientid }}",
     "dbAgents": [
-      {% for dbo_plugin in dbo_plugins %}
       {
         "databaseType": "{{ dbo_plugin.databaseType }}",
         "name": "{{ dbo_plugin.name }}",
@@ -12,8 +11,7 @@
         "password": "{{ dbo_plugin.password }}",
         "packetCaptureEnabled": {{ dbo_plugin.packetCaptureEnabled | default(false) | lower }},
         "metricsCaptureMethod": "{{ dbo_plugin.metricsCaptureMethod | default('') }}"
-      }{% if not loop.last %},{% endif %}
-      {% endfor %}
+      }
     ]
   }
 ]
