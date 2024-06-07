@@ -51,7 +51,7 @@
   tags:
     - dbo
 
-- name: Postcheck plugin
+- name: 'Postcheck plugin {{ expected_plugins }}'
   ansible.builtin.include_tasks: check-plugin-status.yml
   vars:
     plugin: "{{ item[0] }}"
