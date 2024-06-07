@@ -63,11 +63,31 @@
     - dbo
 
 
-- name: "Postcheck plugin {{ item }}"
+- name: "Postcheck plugin"
   ansible.builtin.include_task: check-plugin-status.yml
   vars:
     plugin: "{{ item }}"
     instance: "yolo"
   loop: '{{ expected_plugins }}'
+  tags:
+    - dbo
+
+
+- name: "Check status: {{ plugin }}"
+  vars:
+    plugin: "{{ item }}"
+    instance: "yolo"
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    method: GET
+    return_content: true
+    body_format: json
+  register: result
+  until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
+  retries: 12
+  delay: 5
+  with_nested:
+    - '{{ expected_plugins }}'
+    - '{{ entities }}'
   tags:
     - dbo
