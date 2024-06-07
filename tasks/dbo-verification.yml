@@ -14,6 +14,8 @@
 - name: Expected plugins
   set_fact:
     expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
+  tags:
+    - dbo
 
 - name: PRINT expected plugins
   debug:
