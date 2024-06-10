@@ -1,12 +1,12 @@
 ---
 - name: Include variable file
   ansible.builtin.include_vars:
-    file: dbo_mapping.yml
+    file: defaults/dbo_mapping.yml
   tags:
     - dbo
 
 - name: PRINT output
-  debug:
+  ansible.builtin.debug:
     var: dbo_plugin
   tags:
     - dbo
