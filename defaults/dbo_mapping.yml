@@ -2,15 +2,12 @@
 dbo_mapping:
   mysql:
     - dbo-mysql-metrics
-    - dbo-mysql-query
   mongo:
     - dbo-mongo-metrics
-    - dbo-mongo-query
   mssql:
     - dbo-mssql-metrics
   pgsql:
     - dbo-pgsql-metrics
-    - dbo-pgsql-query
   redis:
     - dbo-redis-metrics
     - dbo-redis-query
