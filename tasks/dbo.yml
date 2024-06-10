@@ -23,6 +23,11 @@
   tags:
     - dbo
 
+- name: Install gzip
+  package:
+    name: gzip
+    state: present
+
 - name: Unarchive a DBO headless installer
   ansible.builtin.unarchive:
     src: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
