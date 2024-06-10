@@ -23,10 +23,11 @@
   tags:
     - dbo
 
-- name: Install gzip
+- name: Install unzip
   package:
     name: unzip
     state: present
+  become: true
   tags:
     - dbo
 
