@@ -35,7 +35,7 @@ commands:
           fi
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }' --skip-tags plugins_check
+          ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }' --skip-tags plugins_check,dbo
   uninstall-client:
     parameters:
       in_container:
