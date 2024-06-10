@@ -44,6 +44,57 @@ ansible-playbook -i inventory playbook.yml --tags uninstall
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
 
+# Adding DBO Plugin to UAMS Client
+
+## Overview
+
+This Ansible role installs and configures the DBO plugin for the UAMS Client. To install the DBO plugin, you need to run the following command:
+
+```sh
+ansible-playbook -i inventory playbook.yml --tags dbo
+```
+
+This will execute the tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files.
+Ensure your inventory and/or secrets are properly configured before running the playbook.
+
+## Configuration
+
+To use the DBO plugin, you must define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables:
+
+```yaml
+dbo_plugin:
+  - databaseType: "mongo"
+    name: "mongodb profiler on dev-amd64-mu listening on 10.0.2.2:27018"
+    host: "10.0.2.2"
+    port: "27018"
+    user: "myUser"
+    password: "<password>"
+    packetCaptureEnabled: false
+    metricsCaptureMethod: "profiler"
+```
+
+### Ways to Provide Variables
+
+1. Inventory File: you can define the `dbo_plugin` variable directly in your inventory file.
+2. Group or Host Variables
+3. Ansible Vault
+
+For sensitive information such as passwords, it is recommended to use Ansible Vault to encrypt your variables. You can create an encrypted file for your secrets:
+
+
+Encrypt this file using the following command:
+
+```sh
+ansible-vault encrypt path/to/secrets.yml
+```
+
+Then reference it in your playbook or inventory file:
+
+```yaml
+vars_files:
+  - path/to/secrets.yml
+```
+
 ## Role variables
 
 | Variable | Description |

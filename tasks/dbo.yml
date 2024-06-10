@@ -44,8 +44,7 @@
   tags:
     - dbo
 
-# TBR
-- name: Print dbAgents content
+- name: Detected UAMS Client ID
   debug:
     var: uamsclientid
   tags:
@@ -83,7 +82,6 @@
   ansible.builtin.include_tasks: dbo-verification.yml
   tags:
     - dbo
-
 
 - name: Cleaning up headless installer zip file
   ansible.builtin.file:
