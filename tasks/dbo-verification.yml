@@ -5,19 +5,13 @@
   tags:
     - dbo
 
-- name: PRINT output
-  ansible.builtin.debug:
-    var: dbo_plugin
-  tags:
-    - dbo
-
 - name: Expected plugins
   ansible.builtin.set_fact:
     expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
   tags:
     - dbo
 
-- name: PRINT expected plugins
+- name: Expected plugins
   ansible.builtin.debug:
     var: expected_plugins
   tags:
@@ -36,7 +30,7 @@
   tags:
     - dbo
 
-- name: PRINT entities
+- name: Created entities
   ansible.builtin.debug:
     var: entities
   tags:
@@ -62,8 +56,8 @@
     body_format: json
   register: result
   until: result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'
-  retries: 2
-  delay: 1
+  retries: 5
+  delay: 12
   with_nested:
     - "{{ expected_plugins }}"
     - "{{ entities }}"
