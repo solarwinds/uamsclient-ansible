@@ -27,6 +27,8 @@
   package:
     name: gzip
     state: present
+  tags:
+    - dbo
 
 - name: Unarchive a DBO headless installer
   ansible.builtin.unarchive:
@@ -93,3 +95,5 @@
     path: '{{ uams_local_pkg_path }}/dbo-headless-installer.zip'
     state: absent
   when: uams_remove_installer
+  tags:
+    - dbo
