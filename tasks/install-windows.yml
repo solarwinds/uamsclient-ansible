@@ -1,35 +1,35 @@
 ---
 - name: Evaluate destination path for the installer (Windows)
   ansible.builtin.set_fact:
-    uams_local_pkg_path_windows: '{{ ansible_env.TEMP }}'
+    uams_local_pkg_path_windows: "{{ ansible_env.TEMP }}"
   when: uams_local_pkg_path_windows is not defined
 
-- name: "Display destination path for the installer (Windows)"
+- name: Display destination path for the installer (Windows)
   ansible.builtin.debug:
     msg: "{{ uams_local_pkg_path_windows }}"
 
 - name: Create destination path for the installer (Windows)
   ansible.windows.win_file:
-    path: '{{ uams_local_pkg_path_windows }}'
+    path: "{{ uams_local_pkg_path_windows }}"
     state: directory
 
 - name: Download installation package (Windows)
   ansible.windows.win_get_url:
-    url: '{{ install_pkg_url }}/uamsclient.msi'
-    dest: '{{ uams_local_pkg_path_windows }}\uamsclient.msi'
+    url: "{{ install_pkg_url }}/uamsclient.msi"
+    dest: "{{ uams_local_pkg_path_windows }}\\uamsclient.msi"
 
 - name: Install UAMS Client with MSI installer (Windows)
   ansible.windows.win_package:
-    path: '{{ uams_local_pkg_path_windows }}\uamsclient.msi'
+    path: "{{ uams_local_pkg_path_windows }}\\uamsclient.msi"
     state: present
     arguments:
-      - "ACCESSTOKEN={{ ansible_env.UAMS_ACCESS_TOKEN }}"
-      - "METADATA={{ ansible_env.UAMS_METADATA }}"
-      - "SWO_URL={{ ansible_env.SWO_URL }}"
-      - "HTTPS_PROXY={{ ansible_env.UAMS_HTTPS_PROXY }}"
+      - ACCESSTOKEN={{ ansible_env.UAMS_ACCESS_TOKEN }}
+      - METADATA={{ ansible_env.UAMS_METADATA }}
+      - SWO_URL={{ ansible_env.SWO_URL }}
+      - HTTPS_PROXY={{ ansible_env.UAMS_HTTPS_PROXY }}
 
 - name: Remove installer (Windows)
   ansible.windows.win_file:
-    path: '{{ uams_local_pkg_path_windows }}\uamsclient.msi'
+    path: "{{ uams_local_pkg_path_windows }}\\uamsclient.msi"
     state: absent
   when: uams_remove_installer

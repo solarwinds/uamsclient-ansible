@@ -7,7 +7,7 @@
 
 - name: PRINT output
   debug:
-    var: "dbo_plugin"
+    var: dbo_plugin
   tags:
     - dbo
 
@@ -19,13 +19,13 @@
 
 - name: PRINT expected plugins
   debug:
-    var: "expected_plugins"
+    var: expected_plugins
   tags:
     - dbo
 
 - name: Read output of headless installer
   slurp:
-    src: '{{ uams_local_pkg_path }}/output.json'
+    src: "{{ uams_local_pkg_path }}/output.json"
   register: output
   tags:
     - dbo
@@ -44,28 +44,28 @@
 
 - name: DBO Plugins to be verified
   debug:
-    msg: "Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}"
+    msg: Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}
   with_nested:
-    - '{{ expected_plugins }}'
-    - '{{ entities }}'
+    - "{{ expected_plugins }}"
+    - "{{ entities }}"
   tags:
     - dbo
 
-- name: "Check DBO plugins status"
+- name: Check DBO plugins status
   vars:
     plugin: "{{ item[0] }}"
     instance: "{{ item[1]['key'] | trim('e-') }}"
   ansible.builtin.uri:
-    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    url: http://127.0.0.1:2113/info/plugins?format=json
     method: GET
     return_content: true
     body_format: json
   register: result
-  until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
+  until: result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'
   retries: 2
   delay: 1
   with_nested:
-    - '{{ expected_plugins }}'
-    - '{{ entities }}'
+    - "{{ expected_plugins }}"
+    - "{{ entities }}"
   tags:
     - dbo

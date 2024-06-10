@@ -10,7 +10,7 @@
   ansible.builtin.get_url:
     url: "{{ install_pkg_url }}/metadata.yml"
     dest: "{{ tempfile_metadata.path }}"
-    mode: '0440'
+    mode: "0440"
     force: true
     validate_certs: false
   delegate_to: localhost
@@ -30,5 +30,5 @@
 
 - name: Print available version
   ansible.builtin.debug:
-    msg: 'Available version: {{ available_version }}'
+    msg: "Available version: {{ available_version }}"
   delegate_to: localhost
