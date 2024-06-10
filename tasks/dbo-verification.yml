@@ -1,6 +1,6 @@
 ---
 - name: Include variable file
-  include_vars:
+  ansible.builtin.include_vars:
     file: dbo_mapping.yml
   tags:
     - dbo
@@ -12,38 +12,38 @@
     - dbo
 
 - name: Expected plugins
-  set_fact:
+  ansible.builtin.set_fact:
     expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
   tags:
     - dbo
 
 - name: PRINT expected plugins
-  debug:
+  ansible.builtin.debug:
     var: expected_plugins
   tags:
     - dbo
 
 - name: Read output of headless installer
-  slurp:
+  ansible.builtin.slurp:
     src: "{{ uams_local_pkg_path }}/output.json"
   register: output
   tags:
     - dbo
 
 - name: Parse JSON content
-  set_fact:
+  ansible.builtin.set_fact:
     entities: "{{ output.content | b64decode | from_json | dict2items }}"
   tags:
     - dbo
 
 - name: PRINT entities
-  debug:
+  ansible.builtin.debug:
     var: entities
   tags:
     - dbo
 
 - name: DBO Plugins to be verified
-  debug:
+  ansible.builtin.debug:
     msg: Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}
   with_nested:
     - "{{ expected_plugins }}"
