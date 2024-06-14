@@ -60,8 +60,9 @@ Ensure your inventory and/or secrets are properly configured before running the 
 ## Configuration
 
 To use the DBO plugin, you must define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables:
-
+Additionally, you must provide a token with full access to have access to the API to install DBO plugins
 ```yaml
+uams_full_access_token: "<full_access_token>"
 dbo_plugin:
   - databaseType: "mongo"
     name: "mongodb profiler on dev-amd64-mu listening on 10.0.2.2:27018"
@@ -75,7 +76,7 @@ dbo_plugin:
 
 ### Ways to Provide Variables
 
-1. Inventory File: you can define the `dbo_plugin` variable directly in your inventory file.
+1. Inventory File: you can define the `dbo_plugin` and `uams_full_access_token` variable directly in your inventory file.
 2. Group or Host Variables
 3. Ansible Vault
 
