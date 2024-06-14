@@ -1,0 +1,13 @@
+---
+dbo_mapping:
+  mysql:
+    - dbo-mysql-metrics
+  mongo:
+    - dbo-mongo-metrics
+  mssql:
+    - dbo-mssql-metrics
+  pgsql:
+    - dbo-pgsql-metrics
+  redis:
+    - dbo-redis-metrics
+    - dbo-redis-query

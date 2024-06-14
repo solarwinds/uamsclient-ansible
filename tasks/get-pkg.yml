@@ -8,12 +8,12 @@
 
 - name: Create destination directory
   ansible.builtin.file:
-    path: '{{ uams_local_pkg_path }}'
-    mode: '0755'
+    path: "{{ uams_local_pkg_path }}"
+    mode: "0755"
     state: directory
 
 - name: Download installation package
   ansible.builtin.get_url:
-    url: '{{ install_pkg_url }}/uamsclient.{{ pkg_type }}'
-    dest: '{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}'
-    mode: '440'
+    url: "{{ install_pkg_url }}/uamsclient.{{ pkg_type }}"
+    dest: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
+    mode: "440"

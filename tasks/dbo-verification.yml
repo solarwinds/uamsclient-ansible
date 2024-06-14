@@ -1,0 +1,65 @@
+---
+- name: Include variable file
+  ansible.builtin.include_vars:
+    file: defaults/dbo_mapping.yml
+  tags:
+    - dbo
+
+- name: Expected plugins
+  ansible.builtin.set_fact:
+    expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
+  tags:
+    - dbo
+
+- name: Expected plugins
+  ansible.builtin.debug:
+    var: expected_plugins
+  tags:
+    - dbo
+
+- name: Read output of headless installer
+  ansible.builtin.slurp:
+    src: "{{ uams_local_pkg_path }}/output.json"
+  register: output
+  tags:
+    - dbo
+
+- name: Parse JSON content
+  ansible.builtin.set_fact:
+    entities: "{{ output.content | b64decode | from_json | dict2items }}"
+  tags:
+    - dbo
+
+- name: Created entities
+  ansible.builtin.debug:
+    var: entities
+  tags:
+    - dbo
+
+- name: DBO Plugins to be verified
+  ansible.builtin.debug:
+    msg: Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}
+  with_nested:
+    - "{{ expected_plugins }}"
+    - "{{ entities }}"
+  tags:
+    - dbo
+
+- name: Check DBO plugins status
+  vars:
+    plugin: "{{ item[0] }}"
+    instance: "{{ item[1]['key'] | trim('e-') }}"
+  ansible.builtin.uri:
+    url: http://127.0.0.1:2113/info/plugins?format=json
+    method: GET
+    return_content: true
+    body_format: json
+  register: result
+  until: result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'
+  retries: 5
+  delay: 12
+  with_nested:
+    - "{{ expected_plugins }}"
+    - "{{ entities }}"
+  tags:
+    - dbo

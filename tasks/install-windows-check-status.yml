@@ -7,9 +7,9 @@
 
 - name: Evaluate UAMS Client installed fact (Windows)
   ansible.builtin.set_fact:
-    client_installed: '{{ client_installed_result.stdout | trim }}'
+    client_installed: "{{ client_installed_result.stdout | trim }}"
 
 - name: Verify installation result (Windows)
   ansible.builtin.fail:
-    msg: "UAMS Client service is not installed."
+    msg: UAMS Client service is not installed.
   when: client_installed == ""
