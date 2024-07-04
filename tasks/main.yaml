@@ -1,5 +1,8 @@
+---
 - name: Validate inputs
   ansible.builtin.include_tasks: validate-inputs.yml
+  tags:
+    - always
 
 - name: Check OS support
   ansible.builtin.include_tasks: os-support-check.yml
@@ -52,7 +55,7 @@
 - name: Postcheck plugin credentials-plugin
   ansible.builtin.include_tasks: check-plugin-status.yml
   vars:
-    plugin: "credentials-plugin"
+    plugin: credentials-plugin
     instance: ""
   tags:
     - plugins_check
@@ -60,8 +63,8 @@
 - name: Postcheck plugin uams-otel-collector-plugin
   ansible.builtin.include_tasks: check-plugin-status.yml
   vars:
-    plugin: "uams-otel-collector-plugin"
-    instance: "hostmetrics-monitoring"
+    plugin: uams-otel-collector-plugin
+    instance: hostmetrics-monitoring
   when: "'host-monitoring' in ansible_env.UAMS_METADATA"
   tags:
     - plugins_check
@@ -77,3 +80,9 @@
   when: ansible_facts.os_family != 'Windows' and 'uninstall' in ansible_run_tags
   tags:
     - uninstall
+
+- name: Deploy database monitoring
+  ansible.builtin.include_tasks: dbo.yml
+  when: ansible_facts.os_family != 'Windows' and 'dbo' in ansible_run_tags
+  tags:
+    - dbo

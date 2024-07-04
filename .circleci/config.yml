@@ -1,3 +1,4 @@
+---
 version: 2.1
 
 filters: &filters-test-jobs
@@ -35,7 +36,7 @@ commands:
           fi
           cp ${test_playbook} ./playbook.yaml
           cp ci_test/inventory/localhost ./hosts
-          ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }' --skip-tags plugins_check
+          ansible-playbook playbook.yaml -vvv -i hosts -e install_pkg_url='https://agent-binaries.global.dev-ssp.solarwinds.com/uams/latest' -e uams_access_token=dummytoken -e uams_metadata="role:host-monitoring" -e swo_url="dc-01.cloud.solarwinds.com" -e '{ "dev_container_test": << parameters.in_container >> }' --skip-tags plugins_check,dbo
   uninstall-client:
     parameters:
       in_container:
@@ -60,9 +61,10 @@ commands:
   install-ansible-deb:
     steps:
       - run: |
+          export DEBIAN_FRONTEND=noninteractive
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
-          apt update
+          apt update && apt-get upgrade
           apt install python3-pip -y
           apt install curl -y
           pip3 install ansible
@@ -115,6 +117,9 @@ commands:
   install-ansible-redhat:
     steps:
       - run: |
+          sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+          sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+          sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
           yum -y install epel-release
           yum -y install ansible
 

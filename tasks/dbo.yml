@@ -1,0 +1,102 @@
+---
+- name: Create destination directory
+  ansible.builtin.file:
+    path: "{{ uams_local_pkg_path }}"
+    mode: "0755"
+    state: directory
+  tags:
+    - dbo
+
+- name: Download DBO headless installer package
+  ansible.builtin.get_url:
+    url: "{{ dbo_headless_installer_url }}"
+    dest: "{{ uams_local_pkg_path }}/dbo-headless-installer.zip"
+    mode: "440"
+  tags:
+    - dbo
+
+- name: Create destination directory for headless installer
+  ansible.builtin.file:
+    path: "{{ uams_local_pkg_path }}/headless-installer"
+    mode: "0755"
+    state: directory
+  tags:
+    - dbo
+
+- name: Install unzip
+  ansible.builtin.package:
+    name: unzip
+    state: present
+  become: true
+  tags:
+    - dbo
+
+- name: Unarchive a DBO headless installer
+  ansible.builtin.unarchive:
+    src: "{{ uams_local_pkg_path }}/dbo-headless-installer.zip"
+    dest: "{{ uams_local_pkg_path }}/headless-installer"
+    remote_src: true
+  tags:
+    - dbo
+
+- name: Load uamsclient ID file
+  ansible.builtin.slurp:
+    src: /opt/solarwinds/uamsclient/var/uamsclientid
+  register: file_content
+  tags:
+    - dbo
+
+- name: Decode uamsclient ID
+  ansible.builtin.set_fact:
+    uamsclientid: "{{ file_content.content | b64decode }}"
+  tags:
+    - dbo
+
+- name: Detected UAMS Client ID
+  ansible.builtin.debug:
+    var: uamsclientid
+  tags:
+    - dbo
+
+- name: Create input file for DBO
+  ansible.builtin.template:
+    src: templates/dbo.j2
+    dest: "{{ uams_local_pkg_path }}/input.json"
+    mode: "0644"
+  tags:
+    - dbo
+
+- name: Create swoparams file for DBO
+  ansible.builtin.template:
+    src: templates/dbo_swo_params.j2
+    dest: "{{ uams_local_pkg_path }}/swoparams.json"
+    mode: "0644"
+  tags:
+    - dbo
+
+- name: Run the binary with parameters using command module
+  ansible.builtin.command: "{{ uams_local_pkg_path }}/headless-installer/bin/linux-amd64/dbo-headless-installer -swoparams={{ uams_local_pkg_path }}/swoparams.json -onboard-databases={{
+    uams_local_pkg_path }}/input.json -onboarded-list-out={{ uams_local_pkg_path }}/output.json"
+  register: result_command
+  changed_when: false
+  tags:
+    - dbo
+
+- name: Display the result from command module
+  ansible.builtin.debug:
+    var: result_command
+  tags:
+    - dbo
+
+- name: DBO plugins verification
+  ansible.builtin.include_tasks: dbo-verification.yml
+  tags:
+    - dbo
+
+- name: Cleaning up headless installer zip file
+  ansible.builtin.file:
+    path: "{{ uams_local_pkg_path }}/dbo-headless-installer.zip"
+    state: absent
+  when: uams_remove_installer
+  tags:
+    - dbo
