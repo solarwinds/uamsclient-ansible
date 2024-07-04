@@ -61,6 +61,7 @@ commands:
   install-ansible-deb:
     steps:
       - run: |
+          export DEBIAN_FRONTEND=noninteractive
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           apt update
@@ -116,6 +117,9 @@ commands:
   install-ansible-redhat:
     steps:
       - run: |
+          sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
+          sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
+          sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
           yum -y install epel-release
           yum -y install ansible
 
