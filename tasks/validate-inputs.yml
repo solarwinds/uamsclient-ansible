@@ -13,12 +13,10 @@
   ansible.builtin.fail:
     msg: Variable 'dbo_plugin' with database data is not set.
   when: dbo_plugin is not defined
-  tags:
-    - dbo
+  tags: dbo
 
 - name: Validate 'uams_full_access_token' variable
   ansible.builtin.fail:
     msg: Variable 'uams_full_access_token'  is not set.
   when: uams_full_access_token is not defined
-  tags:
-    - dbo
+  tags: dbo
