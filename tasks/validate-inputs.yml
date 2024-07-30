@@ -18,5 +18,5 @@
 - name: Validate 'uams_full_access_token' variable
   ansible.builtin.fail:
     msg: Variable 'uams_full_access_token'  is not set.
-  when: uams_full_access_token is not defined 'dbo' in ansible_run_tags
+  when: uams_full_access_token is not defined and 'dbo' in ansible_run_tags
   tags: dbo
