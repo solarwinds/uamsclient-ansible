@@ -25,9 +25,27 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     UAMS_METADATA: "ROLE"
     SWO_URL: "https://swo-url"
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
+    UAMS_OVERRIDE_HOSTNAME: "overided hostname" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
+
+### Override hostname
+This is a customer client hostname that can be set using `UAMS_OVERRIDE_HOSTNAME`. It is required if you want to set a specific agent hostname.
+You can assign value to this variable using variables from inventory file. See example below.
+
+```
+# Inventory file
+
+[test_servers]
+192.168.0.123 ansible_user=user override_hostname=web_server1
+192.168.0.124 ansible_user=user override_hostname=web_server2
+
+# Playbook file
+
+  environment:
+    UAMS_OVERRIDE_HOSTNAME: "DEV_{{ override_hostname }}"
+```
 
 ## Uninstallation
 
