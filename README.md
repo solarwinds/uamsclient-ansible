@@ -40,7 +40,8 @@ You can assign value to this variable using variables from inventory file. See e
 [test_servers]
 192.168.0.123 ansible_user=user override_hostname=web_server1
 192.168.0.124 ansible_user=user override_hostname=web_server2
-
+```
+```
 # Playbook file
 
   environment:
