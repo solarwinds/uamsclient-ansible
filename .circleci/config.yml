@@ -64,7 +64,7 @@ commands:
           export DEBIAN_FRONTEND=noninteractive
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
-          apt update && apt-get upgrade
+          apt update -y && apt-get upgrade -y
           apt install python3-pip -y
           apt install curl -y
           pip3 install ansible
@@ -117,9 +117,8 @@ commands:
   install-ansible-redhat:
     steps:
       - run: |
-          sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
-          sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
-          sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+          sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+          sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
           yum -y install epel-release
           yum -y install ansible
 
