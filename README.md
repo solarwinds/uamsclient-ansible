@@ -25,13 +25,13 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     UAMS_METADATA: "ROLE"
     SWO_URL: "https://swo-url"
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
-    UAMS_OVERRIDE_HOSTNAME: "overided hostname" # optional
+    UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
 
 ### Override hostname
-This is a customer client hostname that can be set using `UAMS_OVERRIDE_HOSTNAME`. It is required if you want to set a specific agent hostname.
+Optional environment variable `UAMS_OVERRIDE_HOSTNAME` is used to set a custom Agent name. By default, Agent name is set to the hostname.
 You can assign value to this variable using variables from inventory file. See example below.
 
 ```
