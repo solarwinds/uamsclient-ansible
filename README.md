@@ -26,6 +26,8 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     SWO_URL: "https://swo-url"
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
     UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
+    UAMS_MANAGED_LOCALLY: "true" # optional
+: "custom_hostname" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
@@ -33,6 +35,14 @@ Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy
 ### Override hostname
 Optional environment variable `UAMS_OVERRIDE_HOSTNAME` is used to set a custom Agent name. By default, Agent name is set to the hostname.
 You can assign value to this variable using variables from inventory file. See example below.
+
+### Managed locally
+Optional environment variable `UAMS_MANAGED_LOCALLY` is used to set Agent as managed locally by configuration file. 
+Is designed to allow configuration of the UAMS Agent locally, without necessity of adding integrations manually from SWO page.
+
+If the UAMS Agent gets installed as a locally managed agent then it will wait for the local configuration file to be accessible. The default local configuration locations are:
+- Linux - `/opt/solarwinds/uamsclient/var/local_config.yaml`
+- Windows - `C:\ProgramData\SolarWinds\UAMSClient\local_config.yaml`
 
 ```
 # Inventory file

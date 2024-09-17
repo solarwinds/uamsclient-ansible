@@ -1,0 +1,14 @@
+---
+
+- name: Create local_config.yaml file for Linux systems
+  ansible.builtin.copy:
+    src: templates/managed_locally.j2
+    dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
+  when: ansible_facts['os_family'] == "Linux"
+  become: yes  # Required for elevated privileges in Linux
+
+- name: Create local_config.yaml for Windows systems
+  ansible.builtin.win_copy:
+    src: templates/managed_locally.j2
+    dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
+  when: ansible_facts['os_family'] == "Windows"
