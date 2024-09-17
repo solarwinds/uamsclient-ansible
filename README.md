@@ -27,7 +27,6 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
     UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
     UAMS_MANAGED_LOCALLY: "true" # optional
-: "custom_hostname" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).

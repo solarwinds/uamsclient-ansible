@@ -60,7 +60,7 @@
 #  tags:
 #    - plugins_check
 
-- name: Deploy database monitoring
+- name: Include tasks to deploy managed locally Agent
   ansible.builtin.include_tasks: managed_locally.yml
   when: "'true' in ansible_env.UAMS_MANAGED_LOCALLY"
   tags:
