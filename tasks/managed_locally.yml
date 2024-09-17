@@ -32,6 +32,27 @@
 #    src: "/opt/solarwinds/uamsclient/var/local_config.yaml"
 #  register: file_content
 #
-#- name: Print the file content
-#  debug:
-#    msg: "{{ file_content.content | b64decode }}"
+
+
+- name: Set the variable managed_locally based on the environment variable
+  set_fact:
+    managed_locally: "{{ 'true' in ansible_env.UAMS_MANAGED_LOCALLY | default('false') }}"
+
+- name: Print when the system is managed locally
+  debug:
+    msg: "The system is managed locally."
+  when: managed_locally
+
+- name: Print when the system is not managed locally
+  debug:
+    msg: "The system is NOT managed locally."
+  when: not managed_locally
+
+- name: Task that runs only if managed locally
+  debug:
+    msg: "This task runs because the system is managed locally."
+  when: managed_locally
+
+- name: Print the file content
+  debug:
+    msg: "{{ managed_locally }}"
