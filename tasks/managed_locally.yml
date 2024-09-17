@@ -1,14 +1,36 @@
 ---
+#- name: Create local_config.yaml file for Linux systems
+#  ansible.builtin.copy:
+#    src: templates/managed_locally.j2
+#    dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
+#  when: ansible_facts['system'] == "Linux"
+#  become: yes  # Required for elevated privileges in Linux
+#
+#- name: Create local_config.yaml for Windows systems
+#  ansible.builtin.win_copy:
+#    src: templates/managed_locally.j2
+#    dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
+#  when: ansible_facts['system'] == "Windows"
 
 - name: Create local_config.yaml file for Linux systems
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: templates/managed_locally.j2
     dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
-  when: ansible_facts['os_family'] == "Linux"
-  become: yes  # Required for elevated privileges in Linux
+    mode: "0644"
+  when: ansible_facts['system'] == "Linux"
 
-- name: Create local_config.yaml for Windows systems
-  ansible.builtin.win_copy:
+- name: Create local_config.yaml file for Windows systems
+  ansible.builtin.template:
     src: templates/managed_locally.j2
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
-  when: ansible_facts['os_family'] == "Windows"
+    mode: "0644"
+  when: ansible_facts['system'] == "Windows"
+
+#- name: Read the file content
+#  slurp:
+#    src: "/opt/solarwinds/uamsclient/var/local_config.yaml"
+#  register: file_content
+#
+#- name: Print the file content
+#  debug:
+#    msg: "{{ file_content.content | b64decode }}"

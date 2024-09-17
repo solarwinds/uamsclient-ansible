@@ -2,12 +2,51 @@
 integrations:
   mysql:
     - name: off-host-mysql
-      host: {{ mysql_host }}
+      host: host
       port: 3306
       user: user
       {% raw %}
       password: "{{.creds.env.MYSQL_DB_PASWORD}}"
       {% endraw %}
+      packet-capture-enabled: false
+  otel/hostmetrics:
+    - name: host-monitoring
+
+
+# Example configuration file used with managed locally Agent
+integrations:
+  mysql:
+    - name: off-host-mysql
+      host: host
+      port: 3306
+      user: user
+{% raw %}
+      password: "{{.creds.env.MYSQL_DB_PASWORD}}"
+{% endraw %}
+      packet-capture-enabled: false
+  otel/hostmetrics:
+    - name: host-monitoring
+
+# Example configuration file used with managed locally Agent
+integrations:
+  mysql:
+    - name: off-host-mysql
+      host: host
+      port: 3306
+      user: user
+      {% raw %}password: "{{.creds.env.MYSQL_DB_PASWORD}}"{% endraw %}
+      packet-capture-enabled: false
+  otel/hostmetrics:
+    - name: host-monitoring
+
+# Example configuration file used with managed locally Agent
+integrations:
+  mysql:
+    - name: off-host-mysql
+      host: host
+      port: 3306
+      user: user
+      password: {% raw %}"{{.creds.env.MYSQL_DB_PASWORD}}"{% endraw %}
       packet-capture-enabled: false
   otel/hostmetrics:
     - name: host-monitoring

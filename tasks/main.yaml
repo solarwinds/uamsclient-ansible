@@ -60,9 +60,9 @@
 #  tags:
 #    - plugins_check
 
-- name: Include tasks to deploy managed locally Agent
+- name: XXXXXX Include tasks to deploy managed locally Agent
   ansible.builtin.include_tasks: managed_locally.yml
-  when: "'true' in ansible_env.UAMS_MANAGED_LOCALLY"
+  when: "'true' in ansible_env.UAMS_MANAGED_LOCALLY | default('false')"
   tags:
     - managed_locally
 
