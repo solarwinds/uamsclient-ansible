@@ -7,7 +7,7 @@ integrations:
       user: user
 {%- raw %}
       password: "{{.creds.env.MYSQL_DB_PASWORD}}"
-{%- endraw %}
+{% endraw %}
       packet-capture-enabled: false
   otel/hostmetrics:
     - name: host-monitoring

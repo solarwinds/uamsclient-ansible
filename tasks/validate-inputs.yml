@@ -20,3 +20,11 @@
     msg: Variable 'uams_full_access_token'  is not set.
   when: uams_full_access_token is not defined and 'dbo' in ansible_run_tags
   tags: dbo
+
+- name: Set the variable managed_locally based on the environment variable
+  set_fact:
+    managed_locally: "{{ 'true' in (ansible_env.UAMS_MANAGED_LOCALLY | default('false')) }}"
+
+- name: Type of installed Agent
+  debug:
+    msg: "Agent managed locally: {{ managed_locally }}."

@@ -1,17 +1,4 @@
 ---
-#- name: Create local_config.yaml file for Linux systems
-#  ansible.builtin.copy:
-#    src: templates/managed_locally.j2
-#    dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
-#  when: ansible_facts['system'] == "Linux"
-#  become: yes  # Required for elevated privileges in Linux
-#
-#- name: Create local_config.yaml for Windows systems
-#  ansible.builtin.win_copy:
-#    src: templates/managed_locally.j2
-#    dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
-#  when: ansible_facts['system'] == "Windows"
-
 - name: Create local_config.yaml file for Linux systems
   ansible.builtin.template:
     src: templates/managed_locally.j2
@@ -26,33 +13,3 @@
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
     mode: "0644"
   when: ansible_facts['system'] == "Windows"
-
-#- name: Read the file content
-#  slurp:
-#    src: "/opt/solarwinds/uamsclient/var/local_config.yaml"
-#  register: file_content
-#
-
-
-- name: Set the variable managed_locally based on the environment variable
-  set_fact:
-    managed_locally: "{{ 'true' in ansible_env.UAMS_MANAGED_LOCALLY | default('false') }}"
-
-- name: Print when the system is managed locally
-  debug:
-    msg: "The system is managed locally."
-  when: managed_locally
-
-- name: Print when the system is not managed locally
-  debug:
-    msg: "The system is NOT managed locally."
-  when: not managed_locally
-
-- name: Task that runs only if managed locally
-  debug:
-    msg: "This task runs because the system is managed locally."
-  when: managed_locally
-
-- name: Print the file content
-  debug:
-    msg: "{{ managed_locally }}"
