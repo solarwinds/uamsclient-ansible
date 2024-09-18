@@ -1,7 +1,15 @@
 ---
+- name: "Set local config template path to user-provided one or use default"
+  ansible.builtin.set_fact:
+    template_path: "{{ local_config_template | default('templates/template_local_config.yaml.j2') }}"
+
+- name: Local configuration file path
+  ansible.builtin.debug:
+    msg: "Local configuration file path: {{ template_path }}"
+
 - name: Create local_config.yaml file for Linux systems
   ansible.builtin.template:
-    src: templates/managed_locally.j2
+    src: "{{ template_path }}"
     dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
     mode: "0644"
   when: ansible_facts['system'] == "Linux"
@@ -9,7 +17,7 @@
 
 - name: Create local_config.yaml file for Windows systems
   ansible.builtin.template:
-    src: templates/managed_locally.j2
+    src: "{{ template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
     mode: "0644"
   when: ansible_facts['system'] == "Windows"
