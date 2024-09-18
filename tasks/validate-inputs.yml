@@ -22,9 +22,9 @@
   tags: dbo
 
 - name: Set the variable managed_locally based on the environment variable
-  set_fact:
+  ansible.builtin.set_fact:
     managed_locally: "{{ 'true' in (ansible_env.UAMS_MANAGED_LOCALLY | default('false')) }}"
 
 - name: Type of installed Agent
-  debug:
+  ansible.builtin.debug:
     msg: "Agent managed locally: {{ managed_locally }}."
