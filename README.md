@@ -55,7 +55,7 @@ You can assign value to this variable using variables from inventory file. See e
 Optional environment variable `UAMS_MANAGED_LOCALLY` is used to set Agent as managed locally by configuration file. 
 Is designed to allow configuration of the UAMS Agent locally, without necessity of adding integrations manually from SWO page.
 
-If the UAMS Agent gets installed as a **managed locally** agent then it will wait for the local configuration file to be accessible. The default local configuration locations are:
+If the UAMS Agent gets installed as a **locally managed** agent then it will wait for the local configuration file to be accessible. The default local configuration locations are:
 - Linux - `/opt/solarwinds/uamsclient/var/local_config.yaml`
 - Windows - `C:\ProgramData\SolarWinds\UAMSClient\local_config.yaml`
 
