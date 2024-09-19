@@ -51,7 +51,7 @@ You can assign value to this variable using variables from inventory file. See e
 ```
 
 
-### Managed locally Agents
+### Locally managed Agents
 Optional environment variable `UAMS_MANAGED_LOCALLY` is used to set Agent as managed locally by configuration file. 
 Is designed to allow configuration of the UAMS Agent locally, without necessity of adding integrations manually from SWO page.
 
