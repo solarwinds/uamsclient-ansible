@@ -52,20 +52,16 @@
   ansible.builtin.include_tasks: install-windows-check-status.yml
   when: install_new_version and ansible_facts.os_family == 'Windows'
 
-- name: Postcheck plugin credentials-plugin
-  ansible.builtin.include_tasks: check-plugin-status.yml
-  vars:
-    plugin: credentials-plugin
-    instance: ""
-  tags:
-    - plugins_check
+- name: Include tasks to deploy managed locally Agent
+  ansible.builtin.include_tasks: managed_locally.yml
+  when: managed_locally
 
 - name: Postcheck plugin uams-otel-collector-plugin
   ansible.builtin.include_tasks: check-plugin-status.yml
   vars:
     plugin: uams-otel-collector-plugin
     instance: hostmetrics-monitoring
-  when: "'host-monitoring' in ansible_env.UAMS_METADATA"
+  when: "'host-monitoring' in ansible_env.UAMS_METADATA and not managed_locally"
   tags:
     - plugins_check
 

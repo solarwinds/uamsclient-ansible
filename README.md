@@ -26,6 +26,7 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     SWO_URL: "https://swo-url"
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
     UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
+    UAMS_MANAGED_LOCALLY: "true" # optional
 ```
 
 Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
@@ -33,6 +34,7 @@ Please find [example playbook that we use in CI testing](ci_test/playbook_galaxy
 ### Override hostname
 Optional environment variable `UAMS_OVERRIDE_HOSTNAME` is used to set a custom Agent name. By default, Agent name is set to the hostname.
 You can assign value to this variable using variables from inventory file. See example below.
+
 
 ```
 # Inventory file
@@ -47,6 +49,43 @@ You can assign value to this variable using variables from inventory file. See e
   environment:
     UAMS_OVERRIDE_HOSTNAME: "DEV_{{ override_hostname }}"
 ```
+
+
+### Locally managed Agents
+An optional environment variable `UAMS_MANAGED_LOCALLY` is used to set the UAMS Agent as a locally managed by a configuration file. 
+Is designed to allow configuration of the UAMS Agent locally, without necessity of adding integrations manually from SWO page.
+
+If the UAMS Agent gets installed as a **locally managed** agent then it will wait for the local configuration file to be accessible. The default local configuration locations are:
+- Linux - `/opt/solarwinds/uamsclient/var/local_config.yaml`
+- Windows - `C:\ProgramData\SolarWinds\UAMSClient\local_config.yaml`
+
+Ansible will automatically copy the file to the needed location. 
+The default template of the local config file is located at `templates/template_local_config.yaml.j2`.
+You can specify the **path** to your own template by setting the `local_config_template` variable in the playbook.
+
+```
+# Playbook file to install Agent configured by local configuration file
+---
+- name: Install UAMS client
+  # Exisiting hosts group from inventory
+  hosts: uams-hosts
+
+  environment:
+    UAMS_ACCESS_TOKEN: "{{ uams_access_token  }}"
+    UAMS_METADATA: "{{ uams_metadata  }}"
+    SWO_URL: "{{ swo_url }}"
+    UAMS_MANAGED_LOCALLY: "true"
+
+  roles:
+    - role: solarwinds.uamsclient
+  vars:
+    local_config_template: template.j2
+```
+In this case the `template.j2` file from the current directory will be used as the local config template.
+
+You can use jinja2 syntax to fill the template with appropriate variables.
+To learn more about building the appropriate local config, check out the official documentation
+
 
 ## Uninstallation
 

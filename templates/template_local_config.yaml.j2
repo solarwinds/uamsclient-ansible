@@ -1,0 +1,13 @@
+# Example configuration file used with managed locally Agent
+integrations:
+  otel/hostmetrics:
+    - name: host-monitoring
+  mysql:
+    - name: off-host-mysql
+      host: {{ mysql_host }}
+      port: 3306
+      user: {{ mysql_user }}
+{%- raw %}
+      password: "{{.creds.env.MYSQL_DB_PASWORD}}"
+{% endraw %}
+      packet-capture-enabled: false
