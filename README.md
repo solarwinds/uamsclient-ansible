@@ -60,7 +60,7 @@ If the UAMS Agent gets installed as a **locally managed** agent then it will wai
 - Windows - `C:\ProgramData\SolarWinds\UAMSClient\local_config.yaml`
 
 Ansible will automatically copy the file to the needed location. 
-The default template of local config file is located at `templates/template_local_config.yaml.j2`.
+The default template of the local config file is located at `templates/template_local_config.yaml.j2`.
 You can specify the **path** to your own template by setting the `local_config_template` variable in the playbook.
 
 ```
