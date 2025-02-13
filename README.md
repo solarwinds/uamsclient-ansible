@@ -113,7 +113,7 @@ This Ansible role installs and configures the DBO plugin for the UAMS Client. To
 ansible-playbook -i inventory playbook.yml --tags dbo
 ```
 
-This will execute the tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook.
+This will execute the tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook. This option uses API calls to SWO to do the job. **This option is available for remote managed agents (not locally mangaged).**
 
 ## Configuration
 
