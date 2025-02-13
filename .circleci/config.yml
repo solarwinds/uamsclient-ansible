@@ -69,6 +69,17 @@ commands:
           apt install curl -y
           pip3 install ansible
 
+  install-ansible-kali:
+    steps:
+      - run: |
+          export DEBIAN_FRONTEND=noninteractive
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          apt update -y && apt-get upgrade -y
+          apt install python3-pip -y
+          apt install curl -y
+          apt install ansible
+
   install-ansible-deb-buster:
     steps:
       - run: |
@@ -283,7 +294,7 @@ jobs:
     docker:
       - image: kalilinux/kali-last-release
     steps:
-      - install-ansible-deb
+      - install-ansible-kali
       - install-client
       - verify-install-container
       - uninstall-client
