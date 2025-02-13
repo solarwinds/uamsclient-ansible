@@ -165,7 +165,7 @@ jobs:
 
   test-install-and-uninstall-ubuntu-lunar:
     docker:
-      - image: ubuntu:lunar
+      - image: ubuntu:plucky
     steps:
       - install-ansible-deb-lunar-bookworm
       - install-client
