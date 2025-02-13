@@ -80,7 +80,7 @@ commands:
           apt-get install ansible -y
           ANSIBLE_SKIP_CONFLICT_CHECK=1 pip3 install ansible-core
 
-  install-ansible-deb-lunar-bookworm:
+  install-ansible-deb-plucky-bookworm:
     steps:
       - run: |
           export LANG=C.UTF-8
@@ -163,11 +163,11 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
-  test-install-and-uninstall-ubuntu-lunar:
+  test-install-and-uninstall-ubuntu-plucky:
     docker:
       - image: ubuntu:plucky
     steps:
-      - install-ansible-deb-lunar-bookworm
+      - install-ansible-deb-plucky-bookworm
       - install-client
       - verify-install-container
       - uninstall-client
@@ -320,7 +320,7 @@ workflows:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
-      - test-install-and-uninstall-ubuntu-lunar:
+      - test-install-and-uninstall-ubuntu-plucky:
           filters: *filters-test-jobs
       - test-install-and-uninstall-debian-stretch:
           filters: *filters-test-jobs
@@ -350,7 +350,7 @@ workflows:
             - test-install-and-uninstall-ubuntu-focal
             - test-install-and-uninstall-ubuntu-focal-vm
             - test-install-and-uninstall-ubuntu-jammy
-            - test-install-and-uninstall-ubuntu-lunar
+            - test-install-and-uninstall-ubuntu-plucky
             - test-install-and-uninstall-debian-stretch
             - test-install-and-uninstall-debian-buster
             - test-install-and-uninstall-debian-bullseye
