@@ -233,7 +233,7 @@ jobs:
     docker:
       - image: debian:bookworm
     steps:
-      - install-ansible-deb-lunar-bookworm
+      - install-ansible-deb-plucky-bookworm
       - install-client
       - verify-install-container
       - uninstall-client
