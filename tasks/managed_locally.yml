@@ -1,4 +1,5 @@
 ---
+# Managing local_config.yaml
 - name: "Set local config template path to user-provided one or use default"
   ansible.builtin.set_fact:
     template_path: "{{ local_config_template | default('templates/template_local_config.yaml.j2') }}"
@@ -11,7 +12,9 @@
   ansible.builtin.template:
     src: "{{ template_path }}"
     dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
-    mode: "0644"
+    owner: swagent
+    group: swagent
+    mode: "0660"
   when: ansible_facts['system'] == "Linux"
   become: true
 
@@ -19,5 +22,31 @@
   ansible.builtin.template:
     src: "{{ template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
-    mode: "0644"
+    mode: "0660"
+  when: ansible_facts['system'] == "Windows"
+
+# Managing credentials_config.yaml
+- name: "Set credentials config template path to user-provided one or use default"
+  ansible.builtin.set_fact:
+    credentials_template_path: "{{ credentials_config_template | default('templates/credentials_config.yaml.j2') }}"
+
+- name: Credentials configuration file path
+  ansible.builtin.debug:
+    msg: "Credentials configuration file path: {{ credentials_template_path }}"
+
+- name: Create credentials_config.yaml file for Linux systems
+  ansible.builtin.template:
+    src: "{{ credentials_template_path }}"
+    dest: "/opt/solarwinds/uamsclient/var/credentials_config.yaml"
+    owner: swagent
+    group: swagent
+    mode: "0660"
+  when: ansible_facts['system'] == "Linux"
+  become: true
+
+- name: Create credentials_config.yaml file for Windows systems
+  ansible.builtin.template:
+    src: "{{ credentials_template_path }}"
+    dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\credentials_config.yaml"
+    mode: "0660"
   when: ansible_facts['system'] == "Windows"
