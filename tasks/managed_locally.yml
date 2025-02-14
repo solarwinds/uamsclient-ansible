@@ -14,7 +14,7 @@
     dest: "/opt/solarwinds/uamsclient/var/local_config.yaml"
     owner: swagent
     group: swagent
-    mode: '0644'
+    mode: "0660"
   when: ansible_facts['system'] == "Linux"
   become: true
 
@@ -22,7 +22,7 @@
   ansible.builtin.template:
     src: "{{ template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
-    mode: "0644"
+    mode: "0660"
   when: ansible_facts['system'] == "Windows"
 
 # Managing credentials_config.yaml
@@ -40,7 +40,7 @@
     dest: "/opt/solarwinds/uamsclient/var/credentials_config.yaml"
     owner: swagent
     group: swagent
-    mode: '0400'
+    mode: "0660"
   when: ansible_facts['system'] == "Linux"
   become: true
 
@@ -48,5 +48,5 @@
   ansible.builtin.template:
     src: "{{ credentials_template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\credentials_config.yaml"
-    mode: "0400"
+    mode: "0660"
   when: ansible_facts['system'] == "Windows"
