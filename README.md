@@ -90,7 +90,6 @@ You can use Jinja2 syntax to fill the template with appropriate variables. To le
 
 More information about local configuration is available in the [SolarWinds Observability documentation](https://documentation.solarwinds.com/en/success_center/observability/default.htm#cshid=app-agent-local-config).
 
-
 ## Uninstallation
 
 Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role from Ansible Galaxy
