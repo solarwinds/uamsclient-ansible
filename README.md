@@ -86,7 +86,7 @@ You can specify the **path** to your own templates by setting the `local_config_
 ```
 In this case, the `template.j2` file from the current directory will be used as the local config template, and the `credentials_template.j2` file will be used as the credentials config.
 
-You can use Jinja2 syntax to fill the template with appropriate variables. To learn more about building the appropriate local config, check out the official documentation.
+You can use Jinja2 syntax to fill the template with appropriate variables. To learn more about building the appropriate local config and credentials config, check out the **[SolarWinds Observability documentation](https://documentation.solarwinds.com/en/success_center/observability/default.htm#cshid=app-agent-local-config)**. You can find information about deploying different plugins, integrations, and supported credential providers.
 
 ## Uninstallation
 
