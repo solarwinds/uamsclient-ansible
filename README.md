@@ -29,7 +29,7 @@ You have the option to set an HTTPS proxy through the use of the `UAMS_HTTPS_PRO
     UAMS_MANAGED_LOCALLY: "true" # optional
 ```
 
-Please find [an example playbook that we use in CI testing](ci_test/playbook_galaxy.yaml).
+Please find [an example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
 
 ### Override hostname
 An optional environment variable `UAMS_OVERRIDE_HOSTNAME` is used to set a custom Agent name. By default, the Agent name is set to the hostname. You can assign a value to this variable using variables from the inventory file. See the example below.
@@ -118,9 +118,9 @@ This will execute the tasks associated with the `dbo` tag, installing and config
 ## Configuration
 
 To use the DBO plugin, you must define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables:
-Additionally, you must provide a token with full access to have access to the API to install DBO plugins.
+Additionally, you must provide a token with API access token to have access to the API to install DBO plugins.
 ```yaml
-uams_full_access_token: "<full_access_token>"
+api_access_token: "<api_access_token>"
 dbo_plugin:
   - databaseType: "mongo"
     name: "mongodb profiler on dev-amd64-mu listening on 10.0.2.2:27018"
@@ -132,9 +132,11 @@ dbo_plugin:
     metricsCaptureMethod: "profiler"
 ```
 
+Please check the [official documemtation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create)  to get instruction how to obtain API access token
+
 ### Ways to Provide Variables
 
-1. Inventory File: you can define the `dbo_plugin` and `uams_full_access_token` variables directly in your inventory file.
+1. Inventory File: you can define the `dbo_plugin` and `api_access_token` variables directly in your inventory file.
 2. Group or Host Variables
 3. Ansible Vault
 
