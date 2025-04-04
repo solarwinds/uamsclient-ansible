@@ -18,12 +18,12 @@ ansible-galaxy install solarwinds.uamsclient
 To deploy the UAMS Client on hosts, add the `access token`, `role`, and `swo url` to your playbook under the `environment` key. Values can be hardcoded, but for `access token`, it is recommended to use a variable to avoid exposing the token in plain text.
 
 You can set an HTTPS proxy using the `UAMS_HTTPS_PROXY` environment variable. This variable configures the HTTPS proxy for connections established by the UAMS Client and its plugins. To use an HTTPS proxy during installation, configure the HTTPS proxy on your machine so that Ansible can use it.
-
+If you set `UAMS_METADATA` to "role:host-monitoring", the UAMS Client will be installed with host monitoring. To skip installing the `uams-otel-collector-plugin`, leave this environment variable empty.
 ```
   environment:
     UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
-    UAMS_METADATA: "ROLE"
-    SWO_URL: "https://swo-url"
+    UAMS_METADATA: "role:host-monitoring"
+    SWO_URL: "xx-yy.cloud.solarwinds.com"
     UAMS_HTTPS_PROXY: "https://your-proxy" # optional
     UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
     UAMS_MANAGED_LOCALLY: "true" # optional
@@ -107,17 +107,14 @@ Refer to [an example playbook that we use in CI testing](https://github.com/sola
 
 ## Overview
 
-This Ansible role installs and configures the DBO plugin for the UAMS Client. To install the DBO plugin, run the following command:
+The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client. 
+Before proceeding, ensure that the UAMS Client is already installed on the target hosts. 
 
-```sh
-ansible-playbook -i inventory playbook.yml --tags dbo
-```
+Use the provided playbook to define the necessary variables and execute the installation and configuration of the DBO plugin.
 
-This executes tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook. This option uses API calls to SWO and is available only for remote-managed agents (not locally managed).
+### Preparing a Configuration File
 
-## Configuration
-
-To use the DBO plugin, define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables:
+To install and configure the DBO plugin, define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables.
 Additionally, you must provide an API access token to install DBO plugins.
 ```yaml
 api_access_token: "<api_access_token>"
@@ -131,16 +128,26 @@ dbo_plugin:
     packetCaptureEnabled: false
     metricsCaptureMethod: "profiler"
 ```
-
 Please refer to the [official documentation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create) for instructions on obtaining an API access token.
+
+### Installing the DBO Plugin
+
+To install the DBO plugin, execute the following command:
+
+```sh
+ansible-playbook -i inventory playbook.yml --tags dbo
+```
+
+This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook. 
+This option uses API calls to SWO and is only available for **remote-managed agents (not locally managed)**.
 
 ### Ways to Provide Variables
 
-1. Inventory File: Define the `dbo_plugin` and `api_access_token` variables directly in your inventory file.
-2. Group or Host Variables
-3. Ansible Vault
+1. **Inventory File**: Define the `dbo_plugin` and `api_access_token` variables directly in your inventory file.
+2. **Group or Host Variables**
+3. **Ansible Vault**
 
-For sensitive information such as passwords, it is recommended to use Ansible Vault to encrypt your variables. You can create an encrypted file for your secrets:
+For sensitive information such as passwords, it is recommended to use Ansible Vault to encrypt your variables. You can create an encrypted file for your secrets.
 
 Encrypt the file using the following command:
 
@@ -157,11 +164,11 @@ vars_files:
 
 ## Role Variables
 
-| Variable | Description |
-| -------------------- | --------------------------------------------------------------- |
-| `uams_local_pkg_path` | Override the location where the installation package is stored (default: /tmp/uams) |
+| Variable                  | Description                                                                 |
+|---------------------------|-----------------------------------------------------------------------------|
+| `uams_local_pkg_path`     | Override the location where the installation package is stored (default: /tmp/uams) |
 | `uams_local_pkg_path_windows` | Override the location where the installation package is stored on Windows (default: value of TEMP env variable) |
-| `uams_remove_installer` | Whether the installation package should be removed (default: true) |
+| `uams_remove_installer`   | Whether the installation package should be removed (default: true) |
 
 # AWX
 
