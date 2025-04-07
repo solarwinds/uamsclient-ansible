@@ -61,7 +61,7 @@ Ansible automatically copies both files (`credentials_config.yaml` and `local_co
 
 Default templates for these files are located at:
 - `local_config.yaml`: `templates/template_local_config.yaml.j2`
-- `credentials_config.yaml`: `templates/credentials_config.yaml.j2`
+- `credentials_config.yaml`: `templates/template_credentials_config.yaml.j2`
 
 You can specify custom template paths by setting the `local_config_template` and/or `credentials_config_template` variables in the playbook.
 
@@ -105,14 +105,12 @@ Refer to [an example playbook that we use in CI testing](https://github.com/sola
 
 # Adding the DBO Plugin to the UAMS Client
 
-## Overview
-
 The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client. 
 Before proceeding, ensure that the UAMS Client is already installed on the target hosts. 
 
 Use the provided playbook to define the necessary variables and execute the installation and configuration of the DBO plugin.
 
-### Preparing a Configuration File
+## Preparing a Configuration File
 
 To install and configure the DBO plugin, define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables.
 Additionally, you must provide an API access token to install DBO plugins.
@@ -130,7 +128,7 @@ dbo_plugin:
 ```
 Please refer to the [official documentation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create) for instructions on obtaining an API access token.
 
-### Installing the DBO Plugin
+## Installing the DBO Plugin
 
 To install the DBO plugin, execute the following command:
 
@@ -141,7 +139,7 @@ ansible-playbook -i inventory playbook.yml --tags dbo
 This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook. 
 This option uses API calls to SWO and is only available for **remote-managed agents (not locally managed)**.
 
-### Ways to Provide Variables
+## Ways to Provide Variables
 
 1. **Inventory File**: Define the `dbo_plugin` and `api_access_token` variables directly in your inventory file.
 2. **Group or Host Variables**
@@ -162,7 +160,7 @@ vars_files:
   - path/to/secrets.yml
 ```
 
-## Role Variables
+# Role Variables
 
 | Variable                  | Description                                                                 |
 |---------------------------|-----------------------------------------------------------------------------|
@@ -180,6 +178,9 @@ The UAMS Client role can also be used in an AWX setup. Consider the following:
 4. Setting `Privilege escalation` in the `job template` might cause failure for tasks delegated to localhost due to the missing `sudo` command in the execution container.
 
 ## Examples for AWX Setup
+
+Below are examples to help you configure and use the UAMS Client role in an AWX setup. These examples demonstrate how to define variables, create job templates, and manage inventories effectively.
+
 ### Playbook
 ```
 ---
