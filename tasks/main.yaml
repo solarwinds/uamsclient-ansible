@@ -61,7 +61,7 @@
   vars:
     plugin: uams-otel-collector-plugin
     instance: hostmetrics-monitoring
-  when: "'host-monitoring' in ansible_env.UAMS_METADATA | default(" ") and not managed_locally"
+  when: "'host-monitoring' in ansible_env.UAMS_METADATA | default(' ') and not managed_locally"
   tags:
     - plugins_check
 
