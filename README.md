@@ -28,6 +28,7 @@ If you set `UAMS_METADATA` to "role:host-monitoring", the UAMS Client will be in
     UAMS_OVERRIDE_HOSTNAME: "custom_hostname" # optional
     UAMS_MANAGED_LOCALLY: "true" # optional
 ```
+### Examples
 
 Below is an example playbook to install the UAMS Client with host monitoring. This playbook uses `localhost` as the target. Replace `YOUR_SWO_ACCESS_TOKEN` with your actual SolarWinds Observability access token.
 
