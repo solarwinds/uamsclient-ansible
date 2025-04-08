@@ -15,11 +15,11 @@ Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role
 ansible-galaxy install solarwinds.uamsclient
 ```
 
-To deploy the UAMS Client on hosts, add the `access token`, `role`, and `swo url` to your playbook under the `environment` key. Values can be hardcoded, but for `access token`, it is recommended to use a variable to avoid exposing the token in plain text.
+To deploy the UAMS Client on hosts, add the `UAMS_ACCESS_TOKEN`, `UAMS_METADATA`, and `SWO_URL` to your playbook under the `environment` key. Values can be hardcoded, but for `UAMS_ACCESS_TOKEN`, it is recommended to use a variable to avoid exposing the token in plain text.
 
 You can set an HTTPS proxy using the `UAMS_HTTPS_PROXY` environment variable. This variable configures the HTTPS proxy for connections established by the UAMS Client and its plugins. To use an HTTPS proxy during installation, configure the HTTPS proxy on your machine so that Ansible can use it.
 If you set `UAMS_METADATA` to "role:host-monitoring", the UAMS Client will be installed with host monitoring. To skip installing the `uams-otel-collector-plugin`, leave this environment variable empty.
-```
+```yaml
   environment:
     UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
     UAMS_METADATA: "role:host-monitoring"
@@ -29,7 +29,22 @@ If you set `UAMS_METADATA` to "role:host-monitoring", the UAMS Client will be in
     UAMS_MANAGED_LOCALLY: "true" # optional
 ```
 
-Please find [an example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
+Below is an example playbook to install the UAMS Client with host monitoring. This playbook uses `localhost` as the target. Replace `YOUR_SWO_ACCESS_TOKEN` with your actual SolarWinds Observability access token.
+
+```yaml
+---
+- name: Install UAMS Client on localhost
+  hosts: localhost
+  remote_user: root
+  environment:
+    SWO_URL: "na-01.cloud.solarwinds.com"
+    UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
+    UAMS_METADATA: "role:host-monitoring"
+  roles:
+    - role: solarwinds.uamsclient
+```
+
+Please find [another example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
 
 ### Override Hostname
 The optional environment variable `UAMS_OVERRIDE_HOSTNAME` allows you to set a custom Agent name. By default, the Agent name is set to the hostname. You can assign a value to this variable using inventory file variables. See the example below:
@@ -41,7 +56,7 @@ The optional environment variable `UAMS_OVERRIDE_HOSTNAME` allows you to set a c
 192.168.0.123 ansible_user=user override_hostname=web_server1
 192.168.0.124 ansible_user=user override_hostname=web_server2
 ```
-```
+```yaml
 # Playbook file
 
   environment:
@@ -65,7 +80,7 @@ Default templates for these files are located at:
 
 You can specify custom template paths by setting the `local_config_template` and/or `credentials_config_template` variables in the playbook.
 
-```
+```yaml
 # Playbook file to install Agent configured by a local configuration file
 ---
 - name: Install UAMS client
@@ -184,7 +199,7 @@ The UAMS Client role can also be used in an AWX setup. Consider the following:
 Below are examples to help you configure and use the UAMS Client role in an AWX setup. These examples demonstrate how to define variables, create job templates, and manage inventories effectively.
 
 ### Playbook
-```
+```yaml
 ---
 - name: Install UAMS client
   # Existing hosts group from inventory
@@ -202,7 +217,7 @@ Below are examples to help you configure and use the UAMS Client role in an AWX 
 
 If `version` is omitted, the latest version will be installed.
 
-```
+```yaml
 roles:
   - src: solarwinds.uamsclient
     version: 1.8.0
