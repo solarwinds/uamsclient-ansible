@@ -81,10 +81,12 @@ You can specify custom template paths by setting the `local_config_template` and
   roles:
     - role: solarwinds.uamsclient
   vars:
-    local_config_template: local_config.j2
-    credentials_config_template: credentials_template.j2
+    local_config_template: local_config.yaml.j2
+    credentials_config_template: credentials_config.yaml.j2
 ```
-In this case, the `local_config.j2` file from the current directory is used as the local config template, and the `credentials_template.j2` file is used as the credentials config.
+In this case, the `local_config.j2` file from the current directory is used as the local configuration template, and the `credentials_template.j2` file is used as the credentials configuration template. 
+
+When specifying template files, ensure that the paths are correctly defined and consider the directory precedence used by Ansible when searching for files.
 
 You can use Jinja2 syntax to populate the template with appropriate variables. For more information on building the local config and credentials config, refer to the **[SolarWinds Observability documentation](https://documentation.solarwinds.com/en/success_center/observability/default.htm#cshid=app-agent-local-config)**. This documentation includes details on deploying plugins, integrations, and supported credential providers.
 
