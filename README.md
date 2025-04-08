@@ -71,11 +71,11 @@ When installed as a **locally managed** agent, the UAMS Agent waits for the loca
 - Linux: `/opt/solarwinds/uamsclient/var/local_config.yaml`
 - Windows: `C:\ProgramData\SolarWinds\UAMSClient\local_config.yaml`
 
-An additional optional configuration file, `credentials_config.yaml`, can define credential providers. This file works alongside `local_config.yaml` to retrieve credentials from defined providers.
+You can optionally use a `credentials_config.yaml` file to define credential providers. This file complements `local_config.yaml` by retrieving credentials from the specified providers. Both files are stored in the same directory.
 
 Ansible automatically copies both files (`credentials_config.yaml` and `local_config.yaml`) to the required locations.
 
-Default templates for these files are located at:
+The default templates used by Ansible for these files are located in the **templates directory of the solarwinds.uamsclient role** at:
 - `local_config.yaml`: `templates/template_local_config.yaml.j2`
 - `credentials_config.yaml`: `templates/template_credentials_config.yaml.j2`
 
