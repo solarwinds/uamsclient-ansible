@@ -65,6 +65,21 @@
   tags:
     - plugins_check
 
+- name: "UAMS API result TESTING"
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    method: GET
+    return_content: true
+    body_format: json
+  register: result_uams_api
+  when: managed_locally
+
+- name: "Debug display UAMS API result"
+  ansible.builtin.debug:
+    msg: "UAMS API RESULT: {{ credentials_template_path }}"
+
+
+
 - name: Uninstall UAMS Client on Windows
   ansible.builtin.include_tasks: uninstall-client-windows.yml
   when: ansible_facts.os_family == 'Windows' and 'uninstall' in ansible_run_tags
