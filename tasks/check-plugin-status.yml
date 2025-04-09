@@ -6,10 +6,10 @@
     return_content: true
     body_format: json
   register: result
-  until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
+  until: "result.json[plugin][instance]['status']|default('') == 'INSTANCE_STATUS_CODE_OK'"
   retries: 12
   delay: 5
 
 - name: "Print plugin Status Code: {{ plugin }}"
   ansible.builtin.debug:
-    var: result.json[plugin][instance]['status_code']
+    var: result.json[plugin][instance]['status']

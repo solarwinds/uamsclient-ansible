@@ -28,7 +28,7 @@
 # Managing credentials_config.yaml
 - name: "Set credentials config template path to user-provided one or use default"
   ansible.builtin.set_fact:
-    credentials_template_path: "{{ credentials_config_template | default('templates/credentials_config.yaml.j2') }}"
+    credentials_template_path: "{{ credentials_config_template | default('templates/template_credentials_config.yaml.j2') }}"
 
 - name: Credentials configuration file path
   ansible.builtin.debug:
