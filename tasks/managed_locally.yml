@@ -50,3 +50,67 @@
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\credentials_config.yaml"
     mode: "0660"
   when: ansible_facts['system'] == "Windows"
+
+
+- name: Get content of remote local config file Linux
+  ansible.builtin.slurp:
+    src: /opt/solarwinds/uamsclient/var/local_config.yaml
+  register: remote_local_config
+  when: ansible_facts['system'] == "Linux"
+  become: yes
+
+- name: Get content of remote local config file Windows
+  ansible.builtin.slurp:
+    src: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
+  register: remote_local_config
+  when: ansible_facts['system'] == "Windows"
+  become: yes
+
+- name: Interpret remote file content as yaml
+  ansible.builtin.set_fact:
+    remote_yaml: "{{ remote_local_config.content | b64decode | from_yaml }}"
+
+- name: set fact for number of integrations
+  ansible.builtin.set_fact:
+    number_of_integrations: "{{ remote_yaml['integrations'] | default({}) | dict2items | map(attribute='key') | list | unique | length }}"
+
+- name: Print yaml number of integrations
+  ansible.builtin.debug:
+    var: number_of_integrations
+
+- name: Wait until app responds with proper number of integrations
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    status_code: 200
+  register: result
+  retries: 10
+  delay: 5
+  until: result.json.keys() | unique | length >= number_of_integrations | int
+
+- name: "UAMS API result"
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    method: GET
+    return_content: true
+    body_format: json
+  register: result_uams_api
+
+- name: Postcheck plugins
+  ansible.builtin.include_tasks: check-plugin-status.yml
+  vars:
+    plugin: "{{ item.pl }}"
+    instance: "{{ item.inst }}"
+  loop: >-
+    {%- set results = [] -%}
+    {%- for plugin, data in result_uams_api.json.items() -%}
+    {%- for instance in data -%}
+    {%- set _ = results.append({
+      "pl": plugin,
+      "inst": instance,
+    }) %}
+    {%- endfor -%}
+    {%- endfor -%}
+    {{ results }}
+  when: result_uams_api is defined
+
+
