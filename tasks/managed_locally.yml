@@ -57,20 +57,20 @@
     src: /opt/solarwinds/uamsclient/var/local_config.yaml
   register: remote_local_config
   when: ansible_facts['system'] == "Linux"
-  become: yes
+  become: true
 
 - name: Get content of remote local config file Windows
   ansible.builtin.slurp:
     src: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
   register: remote_local_config
   when: ansible_facts['system'] == "Windows"
-  become: yes
+  become: true
 
 - name: Interpret remote file content as yaml
   ansible.builtin.set_fact:
     remote_yaml: "{{ remote_local_config.content | b64decode | from_yaml }}"
 
-- name: set fact for number of integrations
+- name: Set fact for number of integrations
   ansible.builtin.set_fact:
     number_of_integrations: "{{ remote_yaml['integrations'] | default({}) | dict2items | map(attribute='key') | list | unique | length }}"
 
@@ -112,5 +112,3 @@
     {%- endfor -%}
     {{ results }}
   when: result_uams_api is defined
-
-
