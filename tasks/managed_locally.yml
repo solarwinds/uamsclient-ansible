@@ -55,16 +55,20 @@
 - name: Get content of remote local config file Linux
   ansible.builtin.slurp:
     src: /opt/solarwinds/uamsclient/var/local_config.yaml
-  register: remote_local_config
+  register: remote_local_config_linux
   when: ansible_facts['system'] == "Linux"
   become: true
 
 - name: Get content of remote local config file Windows
   ansible.builtin.slurp:
     src: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
-  register: remote_local_config
+  register: remote_local_config_windows
   when: ansible_facts['system'] == "Windows"
   become: true
+
+- name: Set unified remote_local_config for further use
+  ansible.builtin.set_fact:
+    remote_local_config: "{{ remote_local_config_linux if ansible_facts['system'] == 'Linux' else remote_local_config_windows }}"
 
 - name: Interpret remote file content as yaml
   ansible.builtin.set_fact:
