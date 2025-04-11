@@ -51,7 +51,6 @@
     mode: "0660"
   when: ansible_facts['system'] == "Windows"
 
-
 - name: Get content of remote local config file Linux
   ansible.builtin.slurp:
     src: /opt/solarwinds/uamsclient/var/local_config.yaml
