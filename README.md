@@ -121,6 +121,27 @@ ansible-playbook -i inventory playbook.yml --tags uninstall
 
 Refer to [an example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
 
+## Restarting UAMS Agent
+
+You can use this Ansible ad-hoc command to restart the `uamsclient` service on remote hosts defined in the inventory. It is a quick and efficient way to manage services without writing a full playbook.
+It could be useful in cases when configuration changes. This is example command for Linux hosts.
+
+```bash
+ansible test_servers -i hosts -b -m ansible.builtin.systemd -a "name=uamsclient state=restarted"
+```
+
+Parameters Breakdown:
+
+| Parameter | Description |
+|----------|-------------|
+| `ansible` | The Ansible CLI tool used to run tasks ad-hoc (without a playbook). |
+| `test_servers` | The target **host group** defined in the `hosts` inventory file. All hosts in this group will be affected. |
+| `-i hosts` | Specifies the **inventory file** (`hosts`) that defines the hosts and groups Ansible will manage. |
+| `-b` | Stands for "**become**", which escalates privileges using `sudo` (required for system service control). |
+| `-m ansible.builtin.systemd` | Specifies the Ansible **module** to use — here, `systemd`, which manages system services on Linux systems using `systemctl`. |
+| `-a "name=uamsclient state=restarted"` | The **arguments** passed to the `systemd` module: <br>• `name=uamsclient` — the name of the service to control <br>• `state=restarted` — ensures the service is restarted regardless of its current state. |
+
+
 # Adding the DBO Plugin to the UAMS Client
 
 The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client. 
