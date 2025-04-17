@@ -55,7 +55,7 @@
     return_content: true
     body_format: json
   register: result
-  until: result.json[plugin][instance]['status']|default('') == 'INSTANCE_STATUS_CODE_OK'
+  until: result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'
   retries: 5
   delay: 12
   with_nested:
