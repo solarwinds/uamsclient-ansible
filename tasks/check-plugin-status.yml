@@ -1,5 +1,5 @@
 ---
-- name: "Check status: {{ plugin }}"
+- name: "Check status: {{ plugin }} (Linux)"
   ansible.builtin.uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
     method: GET
@@ -9,13 +9,13 @@
   until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
   retries: 12
   delay: 5
+  when: ansible_facts.os_family != 'Windows'
 
 - name: "Check status: {{ plugin }} (Windows)"
   ansible.windows.win_uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
     method: GET
     return_content: true
-    body_format: json
   register: result
   until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
   retries: 12
