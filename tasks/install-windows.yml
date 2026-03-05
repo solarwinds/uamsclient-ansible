@@ -28,6 +28,26 @@
       - SWO_URL={{ ansible_env.SWO_URL }}
       - HTTPS_PROXY={{ ansible_env.UAMS_HTTPS_PROXY }}
 
+- name: Build MSI arguments
+  ansible.builtin.set_fact:
+    msi_arguments: >-
+      {{
+        [
+          "ACCESSTOKEN=" + ansible_env.UAMS_ACCESS_TOKEN,
+          "SWO_URL=" + ansible_env.SWO_URL,
+          "METADATA=" + (ansible_env.UAMS_METADATA | default('')),
+          "HTTPS_PROXY=" + (ansible_env.UAMS_HTTPS_PROXY | default(''))
+        ]
+        | select('match', '.+=.+')
+        | list
+      }}
+
+- name: Install UAMS Client with MSI installer (Windows)
+  ansible.windows.win_package:
+    path: "{{ uams_local_pkg_path_windows }}\\uamsclient.msi"
+    state: present
+    arguments: "{{ msi_arguments }}"
+
 - name: Remove installer (Windows)
   ansible.windows.win_file:
     path: "{{ uams_local_pkg_path_windows }}\\uamsclient.msi"
