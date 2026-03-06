@@ -11,7 +11,7 @@
   delay: 5
   when: ansible_facts.os_family != 'Windows'
 
-- name: "Check status: {{ plugin }} (Windows)"
+- name: "Check status (Windows): {{ plugin }}"
   ansible.windows.win_uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
     method: GET
