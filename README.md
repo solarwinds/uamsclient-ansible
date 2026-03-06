@@ -100,7 +100,7 @@ You can specify custom template paths by setting the `local_config_template` and
     local_config_template: local_config.yaml.j2
     credentials_config_template: credentials_config.yaml.j2
 ```
-In this case, the `local_config.j2` file from the current directory is used as the local configuration template, and the `credentials_template.j2` file is used as the credentials configuration template. 
+In this case, the `local_config.j2` file from the current directory is used as the local configuration template, and the `credentials_template.j2` file is used as the credentials configuration template.
 
 When specifying template files, ensure that the paths are correctly defined and consider the directory precedence used by Ansible when searching for files.
 
@@ -144,8 +144,8 @@ Parameters Breakdown:
 
 # Adding the DBO Plugin to the UAMS Client
 
-The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client. 
-Before proceeding, ensure that the UAMS Client is already installed on the target hosts. 
+The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client.
+Before proceeding, ensure that the UAMS Client is already installed on the target hosts.
 
 Use the provided playbook to define the necessary variables and execute the installation and configuration of the DBO plugin.
 
@@ -175,7 +175,7 @@ To install the DBO plugin, execute the following command:
 ansible-playbook -i inventory playbook.yml --tags dbo
 ```
 
-This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook. 
+This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook.
 This option uses API calls to SWO and is only available for **remote-managed agents (not locally managed)**.
 
 ## Ways to Provide Variables

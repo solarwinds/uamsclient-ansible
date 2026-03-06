@@ -1,7 +1,7 @@
 ---
 - name: Evaluate destination path for the installer (Windows)
   ansible.builtin.set_fact:
-    uams_local_pkg_path_windows: "{{ ansible_env.TEMP }}"
+    uams_local_pkg_path_windows: "{{ ansible_facts.env.TEMP }}"
   when: uams_local_pkg_path_windows is not defined
 
 - name: Display destination path for the installer (Windows)
@@ -23,10 +23,10 @@
     msi_arguments: >-
       {{
         [
-          "ACCESSTOKEN=" + ansible_env.UAMS_ACCESS_TOKEN,
-          "SWO_URL=" + ansible_env.SWO_URL,
-          "METADATA=" + (ansible_env['UAMS_METADATA'] | default('')),
-          "HTTPS_PROXY=" + (ansible_env['UAMS_HTTPS_PROXY'] | default(''))
+          "ACCESSTOKEN=" + ansible_facts.env.UAMS_ACCESS_TOKEN,
+          "SWO_URL=" + ansible_facts.env.SWO_URL,
+          "METADATA=" + (ansible_facts.env['UAMS_METADATA'] | default('')),
+          "HTTPS_PROXY=" + (ansible_facts.env['UAMS_HTTPS_PROXY'] | default(''))
         ]
         | select('match', '.+=.+')
         | list
