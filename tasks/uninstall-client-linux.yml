@@ -9,7 +9,7 @@
     - uninstall
 
 - name: Remove UAMS Client (with YUM)
-  ansible.builtin.dnf:
+  ansible.legacy.yum:
     name: uamsclient
     state: absent
   become: true

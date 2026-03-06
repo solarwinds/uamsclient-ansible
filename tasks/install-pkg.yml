@@ -7,7 +7,7 @@
   when: pkg_manager == 'dnf'
 
 - name: Install UAMS Client package (with YUM)
-  ansible.builtin.dnf:
+  ansible.legacy.yum:
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
