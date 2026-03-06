@@ -1,6 +1,6 @@
 ---
 - name: Check installed uamsclient version
-  ansible.builtin.shell: "{{ command_if_uams_installed }}"
+  ansible.builtin.shell: "{{ command_if_uams_installed }}" # noqa: command-instead-of-shell
   changed_when: false
   ignore_errors: true
   register: installed_version

@@ -8,17 +8,12 @@
   when: pkg_manager == 'dnf'
 
 - name: Install UAMS Client package (with YUM)
-  ansible.legacy.yum:
+  ansible.legacy.yum: # noqa: fqcn[action-core]
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
   failed_when: false
   register: install_result
-  when: pkg_manager == 'yum'
-
-- name: Show install result (with YUM)
-  ansible.builtin.debug:
-    var: install_result
   when: pkg_manager == 'yum'
 
 - name: Install UAMS Client package (with APT)

@@ -142,6 +142,7 @@ jobs:
     steps:
       - checkout
       - run: pip install ansible-core ansible-lint
+      - run: ansible-galaxy collection install ansible.windows
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
