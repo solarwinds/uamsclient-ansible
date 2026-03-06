@@ -13,6 +13,12 @@
     disable_gpg_check: true
   become: true
   failed_when: false
+  register: install_result
+  when: pkg_manager == 'yum'
+
+- name: Show install result (with YUM)
+  ansible.builtin.debug:
+    var: install_result
   when: pkg_manager == 'yum'
 
 - name: Install UAMS Client package (with APT)
