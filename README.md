@@ -164,7 +164,7 @@ To install and configure the DBO plugin, define the necessary variables in your 
 Additionally, you must provide an API access token to install DBO plugins.
 ```yaml
 api_access_token: "<api_access_token>"
-dbo_plugins:
+dbo_plugin:
   - databaseType: "mongo"
     name: "mongodb profiler on dev-amd64-mu listening on 10.0.2.2:27018"
     host: "10.0.2.2"
