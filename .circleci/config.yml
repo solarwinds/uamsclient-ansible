@@ -174,7 +174,7 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
-  test-install-and-uninstall-ubuntu-focal-vm:
+  test-install-and-uninstall-ubuntu-jammy-vm:
     machine:
       image: ubuntu-2204:current
     parameters:
@@ -307,7 +307,7 @@ workflows:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-focal:
           filters: *filters-test-jobs
-      - test-install-and-uninstall-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-jammy-vm:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
@@ -337,7 +337,7 @@ workflows:
           requires:
             - ansible-lint
             - test-install-and-uninstall-ubuntu-focal
-            - test-install-and-uninstall-ubuntu-focal-vm
+            - test-install-and-uninstall-ubuntu-jammy-vm
             - test-install-and-uninstall-ubuntu-jammy
             - test-install-and-uninstall-ubuntu-plucky
             - test-install-and-uninstall-debian-stretch
@@ -368,5 +368,5 @@ workflows:
               only:
                 - master
     jobs:
-      - test-install-and-uninstall-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-jammy-vm:
           galaxy: true
