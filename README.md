@@ -8,6 +8,12 @@ The Ansible UAMS Client Role installs and configures the UAMS Client.
 ```
 ansible-galaxy collection install ansible.windows
 ```
+- When using Windows hosts, the `pywinrm` library is required on the controller host:
+```
+pip install pywinrm
+```
+- When using Windows hosts, WinRM must be configured on each target Windows host. This includes creating a WinRM HTTPS listener on port 5986 and opening the corresponding firewall rule. Refer to the [Ansible WinRM documentation](https://docs.ansible.com/projects/ansible/latest/os_guide/windows_winrm.html) for setup instructions.
+
 ## Installation
 
 Install the [UAMS Client](https://galaxy.ansible.com/solarwinds/uamsclient) role from Ansible Galaxy:
@@ -18,6 +24,7 @@ ansible-galaxy install solarwinds.uamsclient
 To deploy the UAMS Client on hosts, add the `UAMS_ACCESS_TOKEN`, `UAMS_METADATA`, and `SWO_URL` to your playbook under the `environment` key. Values can be hardcoded, but for `UAMS_ACCESS_TOKEN`, it is recommended to use a variable to avoid exposing the token in plain text.
 
 You can set an HTTPS proxy using the `UAMS_HTTPS_PROXY` environment variable. This variable configures the HTTPS proxy for connections established by the UAMS Client and its plugins. To use an HTTPS proxy during installation, configure the HTTPS proxy on your machine so that Ansible can use it.
+
 If you set `UAMS_METADATA` to "role:host-monitoring", the UAMS Client will be installed with host monitoring. To skip installing the `uams-otel-collector-plugin`, leave this environment variable empty.
 ```yaml
   environment:
@@ -45,7 +52,9 @@ Below is an example playbook to install the UAMS Client with host monitoring. Th
     - role: solarwinds.uamsclient
 ```
 
-Please find [another example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
+For an example of installing the UAMS Client on remote Windows hosts, see the [Windows EC2 example playbook](https://github.com/solarwinds/uamsclient-ansible/blob/master/examples/windows_ec2_remote) and its associated files.
+
+See also the [example playbook used in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
 
 ### Override Hostname
 The optional environment variable `UAMS_OVERRIDE_HOSTNAME` allows you to set a custom Agent name. By default, the Agent name is set to the hostname. You can assign a value to this variable using inventory file variables. See the example below:
@@ -119,12 +128,12 @@ To uninstall the UAMS Client on hosts, add the `uninstall` tag when running a pl
 ansible-playbook -i inventory playbook.yml --tags uninstall
 ```
 
-Refer to [an example playbook that we use in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
+Refer to the [example playbook used in CI testing](https://github.com/solarwinds/uamsclient-ansible/blob/master/ci_test/playbook_galaxy.yaml).
 
 ## Restarting UAMS Agent
 
 You can use this Ansible ad-hoc command to restart the `uamsclient` service on remote hosts defined in the inventory. It is a quick and efficient way to manage services without writing a full playbook.
-It could be useful in cases when configuration changes. This is example command for Linux hosts.
+It can be useful when configuration changes are made. This is an example command for Linux hosts.
 
 ```bash
 ansible test_servers -i hosts -b -m ansible.builtin.systemd -a "name=uamsclient state=restarted"
@@ -165,7 +174,7 @@ dbo_plugin:
     packetCaptureEnabled: false
     metricsCaptureMethod: "profiler"
 ```
-Please refer to the [official documentation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create) for instructions on obtaining an API access token.
+For instructions on obtaining an API access token, see the [official documentation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create).
 
 ## Installing the DBO Plugin
 

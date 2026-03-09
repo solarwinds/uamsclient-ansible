@@ -6,7 +6,7 @@
     return_content: true
     body_format: json
   register: result
-  until: "result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
+  until: "result.json[plugin][instance]['status_code'] | default('') == 'STATUS_CODE_OK'"
   retries: 12
   delay: 5
   when: ansible_facts.os_family != 'Windows'
@@ -17,7 +17,7 @@
     method: GET
     return_content: true
   register: result_windows
-  until: "(result_windows.content | from_json)[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'"
+  until: "(result_windows.content | from_json)[plugin][instance]['status_code'] | default('') == 'STATUS_CODE_OK'"
   retries: 12
   delay: 5
   when: ansible_facts.os_family == 'Windows'

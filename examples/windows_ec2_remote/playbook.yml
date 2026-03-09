@@ -1,0 +1,12 @@
+---
+- name: Install UAMS Client on Windows
+  hosts: windows_hosts
+  gather_facts: true
+  connection: winrm
+
+  environment:
+    UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
+    SWO_URL: "xx-yy.cloud.solarwinds.com"
+    UAMS_METADATA: "role:host-monitoring"
+  roles:
+    - role: solarwinds.uamsclient
