@@ -102,7 +102,7 @@
   register: result_windows
   retries: 10
   delay: 5
-  until: (result_windows.content | from_json).keys() | unique | length >= number_of_integrations | int
+  until: (result_windows.content | default('{}') | from_json).keys() | unique | length >= number_of_integrations | int
   when: ansible_facts.os_family == 'Windows'
 
 - name: "UAMS API result"

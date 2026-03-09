@@ -17,7 +17,7 @@
     method: GET
     return_content: true
   register: result_windows
-  until: "(result_windows.content | from_json)[plugin][instance]['status_code'] | default('') == 'STATUS_CODE_OK'"
+  until: "(result_windows.content | default('{}') | from_json)[plugin][instance]['status_code'] | default('') == 'STATUS_CODE_OK'"
   retries: 12
   delay: 5
   when: ansible_facts.os_family == 'Windows'
@@ -29,5 +29,5 @@
 
 - name: "Print plugin Status Code (Windows): {{ plugin }}"
   ansible.builtin.debug:
-    msg: "{{ (result_windows.content | from_json)[plugin][instance]['status_code'] }}"
+    msg: "{{ (result_windows.content | default('{}') | from_json)[plugin][instance]['status_code'] }}"
   when: ansible_facts.os_family == 'Windows'

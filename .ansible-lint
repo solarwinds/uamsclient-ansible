@@ -2,3 +2,4 @@ exclude_paths:
   - ci_test/
   - .config/
   - .circleci/
+  - examples/

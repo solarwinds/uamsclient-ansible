@@ -1,0 +1,11 @@
+---
+- name: Install UAMS Client on Ubuntu
+  hosts: ubuntu_hosts
+  gather_facts: true
+
+  environment:
+    UAMS_ACCESS_TOKEN: "YOUR_SWO_ACCESS_TOKEN"
+    SWO_URL: "xx-yy.cloud.solarwinds.com"
+    UAMS_METADATA: "role:host-monitoring"
+  roles:
+    - role: solarwinds.uamsclient

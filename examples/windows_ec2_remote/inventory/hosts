@@ -1,5 +1,5 @@
 [windows_hosts]
-ec2-3-94-204-93.compute-1.amazonaws.com
+your-ec2-hostname.compute-1.amazonaws.com
 
 [windows_hosts:vars]
 ansible_user=Administrator
