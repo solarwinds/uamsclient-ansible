@@ -1,6 +1,6 @@
 ---
 - name: Get product id
-  win_shell: (get-wmiobject Win32_Product | Where-Object { $_.Name -like 'SolarWinds UAMS Client' }).IdentifyingNumber
+  ansible.windows.win_shell: (get-wmiobject Win32_Product | Where-Object { $_.Name -like 'SolarWinds UAMS Client' }).IdentifyingNumber
   register: product_id
   tags:
     - uninstall

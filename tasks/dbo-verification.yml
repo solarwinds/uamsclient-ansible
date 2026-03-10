@@ -5,15 +5,21 @@
   tags:
     - dbo
 
-- name: Expected plugins
+- name: Set expected unique plugins
   ansible.builtin.set_fact:
-    expected_plugins: "{{ dbo_mapping[dbo_plugin['databaseType']] }}"
+    expected_plugins_unique: "{{ dbo_plugins | map(attribute='databaseType') | map('extract', dbo_mapping) | flatten | unique | list }}"
   tags:
     - dbo
 
-- name: Expected plugins
+- name: Set expected plugins
+  ansible.builtin.set_fact:
+    expected_plugins: "{{ dbo_plugins | map(attribute='databaseType') | map('extract', dbo_mapping) | flatten | list }}"
+  tags:
+    - dbo
+
+- name: Debug expected plugins
   ansible.builtin.debug:
-    var: expected_plugins
+    msg: "expected_plugins_unique={{ expected_plugins_unique }}, expected_plugins={{ expected_plugins }}"
   tags:
     - dbo
 
@@ -24,42 +30,65 @@
   tags:
     - dbo
 
-- name: Parse JSON content
+- name: Parse entity keys from headless installer output
   ansible.builtin.set_fact:
-    entities: "{{ output.content | b64decode | from_json | dict2items }}"
+    entities: "{{ (output.content | b64decode | from_json).keys() | map('regex_replace', '^e-', '') | list }}"
   tags:
     - dbo
 
-- name: Created entities
+- name: Debug entities
   ansible.builtin.debug:
     var: entities
   tags:
     - dbo
 
-- name: DBO Plugins to be verified
-  ansible.builtin.debug:
-    msg: Plugin name {{ item[0] }}, instance {{ item[1]['key'] | trim('e-') }}
-  with_nested:
-    - "{{ expected_plugins }}"
-    - "{{ entities }}"
-  tags:
-    - dbo
-
-- name: Check DBO plugins status
-  vars:
-    plugin: "{{ item[0] }}"
-    instance: "{{ item[1]['key'] | trim('e-') }}"
+# 1. Fetch all current plugins from endpoint and save the result
+# 2. Filter response keeping only plugin keys present in expected_plugins
+# 3. Iterate through each plugin key (each contains a map of instance keys)
+# 4. For instances matching entities, verify status_code == STATUS_CODE_OK
+- name: Fetch all plugins and verify DBO plugins statuses
   ansible.builtin.uri:
     url: http://127.0.0.1:2113/info/plugins?format=json
     method: GET
     return_content: true
     body_format: json
-  register: result
-  until: result.json[plugin][instance]['status_code']|default('') == 'STATUS_CODE_OK'
+  register: plugins_result
   retries: 5
   delay: 12
-  with_nested:
-    - "{{ expected_plugins }}"
-    - "{{ entities }}"
+  until: >-
+    (plugins_result.json | default({}) | dict2items
+      | selectattr('key', 'in', expected_plugins_unique)
+      | map(attribute='value')
+      | map('dict2items')
+      | flatten
+      | selectattr('key', 'in', entities)
+      | rejectattr('value.status_code', 'equalto', 'STATUS_CODE_OK')
+      | list | length) == 0
+    and
+    (plugins_result.json | default({}) | dict2items
+      | selectattr('key', 'in', expected_plugins_unique)
+      | map(attribute='value')
+      | map('dict2items')
+      | flatten
+      | selectattr('key', 'in', entities)
+      | list | length) >= (expected_plugins | length)
+  tags:
+    - dbo
+
+- name: Filter response to expected plugins
+  ansible.builtin.set_fact:
+    filtered_plugins: >-
+      {{
+        plugins_result.json
+        | dict2items
+        | selectattr('key', 'in', expected_plugins_unique)
+        | items2dict
+      }}
+  tags:
+    - dbo
+
+- name: Display verified DBO plugins statuses
+  ansible.builtin.debug:
+    var: filtered_plugins
   tags:
     - dbo

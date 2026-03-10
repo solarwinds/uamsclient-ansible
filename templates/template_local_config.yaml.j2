@@ -2,6 +2,7 @@
 integrations:
   otel/hostmetrics:
     - name: host-monitoring
+{% if mysql_host is defined %}
   dbo/mysql:
     - name: off-host-mysql
       host: {{ mysql_host }}
@@ -12,3 +13,4 @@ integrations:
           provider: aws-secrets-manager
           secret-name: {{ secret_name }}
       packet-capture-enabled: false
+{% endif %}

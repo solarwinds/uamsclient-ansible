@@ -23,7 +23,6 @@ galaxy_info:
     - name: Debian
       versions:
         - stretch
-        - buster
         - bullseye
         - bookworm
     - name: EL
@@ -46,6 +45,7 @@ galaxy_info:
         - "2016"
         - "2019"
         - "2022"
+        - "2025"
     - name: OracleLinux
       versions:
         - all

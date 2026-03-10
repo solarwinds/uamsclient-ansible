@@ -4,22 +4,23 @@
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
-  ignore_errors: true
+  failed_when: false
   when: pkg_manager == 'dnf'
 
 - name: Install UAMS Client package (with YUM)
-  ansible.builtin.yum:
+  ansible.legacy.yum: # noqa: fqcn[action-core]
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
-  ignore_errors: true
+  failed_when: false
+  register: install_result
   when: pkg_manager == 'yum'
 
 - name: Install UAMS Client package (with APT)
   ansible.builtin.apt:
     deb: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
   become: true
-  ignore_errors: true
+  failed_when: false
   when: pkg_manager == 'apt'
 
 - name: Remove installation package

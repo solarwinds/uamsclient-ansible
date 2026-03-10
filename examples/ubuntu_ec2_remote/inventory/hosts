@@ -1,0 +1,5 @@
+[ubuntu_hosts]
+your-ec2-hostname.compute-1.amazonaws.com
+
+[ubuntu_hosts:vars]
+ansible_user=ubuntu

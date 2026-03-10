@@ -15,7 +15,7 @@
     owner: swagent
     group: swagent
     mode: "0660"
-  when: ansible_facts['system'] == "Linux"
+  when: ansible_facts.os_family != "Windows"
   become: true
 
 - name: Create local_config.yaml file for Windows systems
@@ -23,7 +23,7 @@
     src: "{{ template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
     mode: "0660"
-  when: ansible_facts['system'] == "Windows"
+  when: ansible_facts.os_family == "Windows"
 
 # Managing credentials_config.yaml
 - name: "Set credentials config template path to user-provided one or use default"
@@ -41,7 +41,7 @@
     owner: swagent
     group: swagent
     mode: "0660"
-  when: ansible_facts['system'] == "Linux"
+  when: ansible_facts.os_family != "Windows"
   become: true
 
 - name: Create credentials_config.yaml file for Windows systems
@@ -49,29 +49,30 @@
     src: "{{ credentials_template_path }}"
     dest: "C:\\ProgramData\\SolarWinds\\UAMSClient\\credentials_config.yaml"
     mode: "0660"
-  when: ansible_facts['system'] == "Windows"
+  when: ansible_facts.os_family == "Windows"
 
-- name: Get content of remote local config file Linux
+- name: Get remote config file (Linux)
   ansible.builtin.slurp:
     src: /opt/solarwinds/uamsclient/var/local_config.yaml
   register: remote_local_config_linux
-  when: ansible_facts['system'] == "Linux"
   become: true
+  when: ansible_facts.os_family != "Windows"
 
-- name: Get content of remote local config file Windows
+- name: Get remote config file (Windows)
   ansible.builtin.slurp:
     src: "C:\\ProgramData\\SolarWinds\\UAMSClient\\local_config.yaml"
   register: remote_local_config_windows
-  when: ansible_facts['system'] == "Windows"
-  become: true
+  when: ansible_facts.os_family == "Windows"
 
-- name: Set unified remote_local_config for further use
+- name: Interpret remote file content as yaml (Linux)
   ansible.builtin.set_fact:
-    remote_local_config: "{{ remote_local_config_linux if ansible_facts['system'] == 'Linux' else remote_local_config_windows }}"
+    remote_yaml: "{{ remote_local_config_linux.content | b64decode | from_yaml }}"
+  when: ansible_facts.os_family != "Windows"
 
-- name: Interpret remote file content as yaml
+- name: Interpret remote file content as yaml (Windows)
   ansible.builtin.set_fact:
-    remote_yaml: "{{ remote_local_config.content | b64decode | from_yaml }}"
+    remote_yaml: "{{ remote_local_config_windows.content | b64decode | from_yaml }}"
+  when: ansible_facts.os_family == "Windows"
 
 - name: Set fact for number of integrations
   ansible.builtin.set_fact:
@@ -85,10 +86,24 @@
   ansible.builtin.uri:
     url: "http://127.0.0.1:2113/info/plugins?format=json"
     status_code: 200
+    return_content: true
+    body_format: json
   register: result
   retries: 10
   delay: 5
   until: result.json.keys() | unique | length >= number_of_integrations | int
+  when: ansible_facts.os_family != 'Windows'
+
+- name: Wait until app responds with proper number of integrations (Windows)
+  ansible.windows.win_uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    status_code: 200
+    return_content: true
+  register: result_windows
+  retries: 10
+  delay: 5
+  until: (result_windows.content | default('{}') | from_json).keys() | unique | length >= number_of_integrations | int
+  when: ansible_facts.os_family == 'Windows'
 
 - name: "UAMS API result"
   ansible.builtin.uri:
@@ -97,6 +112,15 @@
     return_content: true
     body_format: json
   register: result_uams_api
+  when: ansible_facts.os_family != 'Windows'
+
+- name: "UAMS API result (Windows)"
+  ansible.windows.win_uri:
+    url: "http://127.0.0.1:2113/info/plugins?format=json"
+    method: GET
+    return_content: true
+  register: result_uams_api_windows
+  when: ansible_facts.os_family == 'Windows'
 
 - name: Postcheck plugins
   ansible.builtin.include_tasks: check-plugin-status.yml
@@ -105,7 +129,8 @@
     instance: "{{ item.inst }}"
   loop: >-
     {%- set results = [] -%}
-    {%- for plugin, data in result_uams_api.json.items() -%}
+    {%- set api_data = result_uams_api.json if ansible_facts.os_family != 'Windows' else (result_uams_api_windows.content | from_json) -%}
+    {%- for plugin, data in api_data.items() -%}
     {%- for instance in data -%}
     {%- set _ = results.append({
       "pl": plugin,
@@ -114,4 +139,4 @@
     {%- endfor -%}
     {%- endfor -%}
     {{ results }}
-  when: result_uams_api is defined
+  when: result_uams_api is defined or result_uams_api_windows is defined

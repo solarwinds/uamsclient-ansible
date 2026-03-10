@@ -2,17 +2,17 @@
 - name: Validate 'UAMS_ACCESS_TOKEN' environment variable
   ansible.builtin.fail:
     msg: Environment variable 'UAMS_ACCESS_TOKEN' is not set.
-  when: ansible_env.UAMS_ACCESS_TOKEN == ""
+  when: ansible_facts.env.UAMS_ACCESS_TOKEN == ""
 
 - name: Validate 'SWO_URL' environment variable
   ansible.builtin.fail:
     msg: Environment variable 'UAMS_SWO_URL' is not set.
-  when: ansible_env.SWO_URL == ""
+  when: ansible_facts.env.SWO_URL == ""
 
-- name: Validate 'dbo_plugin' variable
+- name: Validate 'dbo_plugins' variable
   ansible.builtin.fail:
-    msg: Variable 'dbo_plugin' with database data is not set.
-  when: dbo_plugin is not defined and 'dbo' in ansible_run_tags
+    msg: Variable 'dbo_plugins' with database data is not set.
+  when: dbo_plugins is not defined and 'dbo' in ansible_run_tags
   tags: dbo
 
 - name: Validate 'api_access_token' variable
@@ -23,7 +23,7 @@
 
 - name: Set the variable managed_locally based on the environment variable
   ansible.builtin.set_fact:
-    managed_locally: "{{ 'true' in (ansible_env.UAMS_MANAGED_LOCALLY | default('false')) }}"
+    managed_locally: "{{ 'true' in (ansible_facts.env.UAMS_MANAGED_LOCALLY | default('false')) }}"
 
 - name: Type of installed Agent
   ansible.builtin.debug:

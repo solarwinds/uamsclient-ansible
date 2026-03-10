@@ -80,17 +80,6 @@ commands:
           apt install curl -y
           apt install ansible -y
 
-  install-ansible-deb-buster:
-    steps:
-      - run: |
-          export LANG=C.UTF-8
-          export LC_ALL=C.UTF-8
-          apt update
-          apt install python3-pip -y
-          apt install curl -y
-          apt-get install ansible -y
-          ANSIBLE_SKIP_CONFLICT_CHECK=1 pip3 install ansible-core
-
   install-ansible-deb-plucky-bookworm:
     steps:
       - run: |
@@ -123,7 +112,7 @@ commands:
           sudo apt update
           sudo apt install python3-pip -y
           sudo apt install curl -y
-          pip3 install ansible
+          pip3 install 'ansible-core>=2.16,<2.17'
 
   install-ansible-redhat:
     steps:
@@ -152,7 +141,8 @@ jobs:
       - image: python:bullseye
     steps:
       - checkout
-      - run: pip install ansible-lint==24.2.0
+      - run: pip install ansible-core ansible-lint
+      - run: ansible-galaxy collection install ansible.windows
       - run: ansible-galaxy install solarwinds.uamsclient
       - run: ansible-lint
 
@@ -184,9 +174,9 @@ jobs:
       - uninstall-client
       - verify-uninstall
 
-  test-install-and-uninstall-ubuntu-focal-vm:
+  test-install-and-uninstall-ubuntu-jammy-vm:
     machine:
-      image: ubuntu-2004:current
+      image: ubuntu-2204:current
     parameters:
       galaxy:
         type: boolean
@@ -215,16 +205,6 @@ jobs:
       - image: debian:stretch
     steps:
       - install-ansible-deb-stretch
-      - install-client
-      - verify-install-container
-      - uninstall-client
-      - verify-uninstall
-
-  test-install-and-uninstall-debian-buster:
-    docker:
-      - image: debian:buster
-    steps:
-      - install-ansible-deb-buster
       - install-client
       - verify-install-container
       - uninstall-client
@@ -327,15 +307,13 @@ workflows:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-focal:
           filters: *filters-test-jobs
-      - test-install-and-uninstall-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-jammy-vm:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-jammy:
           filters: *filters-test-jobs
       - test-install-and-uninstall-ubuntu-plucky:
           filters: *filters-test-jobs
       - test-install-and-uninstall-debian-stretch:
-          filters: *filters-test-jobs
-      - test-install-and-uninstall-debian-buster:
           filters: *filters-test-jobs
       - test-install-and-uninstall-debian-bullseye:
           filters: *filters-test-jobs
@@ -359,11 +337,11 @@ workflows:
           requires:
             - ansible-lint
             - test-install-and-uninstall-ubuntu-focal
-            - test-install-and-uninstall-ubuntu-focal-vm
+            - test-install-and-uninstall-ubuntu-jammy-vm
             - test-install-and-uninstall-ubuntu-jammy
             - test-install-and-uninstall-ubuntu-plucky
             - test-install-and-uninstall-debian-stretch
-            - test-install-and-uninstall-debian-buster
+
             - test-install-and-uninstall-debian-bullseye
             - test-install-and-uninstall-debian-bookworm
             - test-install-and-uninstall-centos-7
@@ -390,5 +368,5 @@ workflows:
               only:
                 - master
     jobs:
-      - test-install-and-uninstall-ubuntu-focal-vm:
+      - test-install-and-uninstall-ubuntu-jammy-vm:
           galaxy: true
