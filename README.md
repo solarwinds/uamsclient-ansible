@@ -151,20 +151,20 @@ Parameters Breakdown:
 | `-a "name=uamsclient state=restarted"` | The **arguments** passed to the `systemd` module: <br>• `name=uamsclient` — the name of the service to control <br>• `state=restarted` — ensures the service is restarted regardless of its current state. |
 
 
-# Adding the DBO Plugin to the UAMS Client
+# Adding the DBO Plugins to the UAMS Client
 
-The Ansible role simplifies the process of installing and configuring the DBO plugin for the UAMS Client.
+The Ansible role simplifies the process of installing and configuring the DBO plugins for the UAMS Client.
 Before proceeding, ensure that the UAMS Client is already installed on the target hosts.
 
-Use the provided playbook to define the necessary variables and execute the installation and configuration of the DBO plugin.
+Use the provided playbook to define the necessary variables and execute the installation and configuration of the DBO plugins.
 
 ## Preparing a Configuration File
 
-To install and configure the DBO plugin, define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables.
+To install and configure the DBO plugins, define the necessary variables in your Ansible inventory or secrets file. Below is the format for these variables.
 Additionally, you must provide an API access token to install DBO plugins.
 ```yaml
 api_access_token: "<api_access_token>"
-dbo_plugin:
+dbo_plugins:
   - databaseType: "mongo"
     name: "mongodb profiler on dev-amd64-mu listening on 10.0.2.2:27018"
     host: "10.0.2.2"
@@ -176,20 +176,20 @@ dbo_plugin:
 ```
 For instructions on obtaining an API access token, see the [official documentation](https://documentation.solarwinds.com/en/success_center/observability/content/settings/api-tokens.htm?cshid=app-add-token-tag#Create).
 
-## Installing the DBO Plugin
+## Installing the DBO Plugins
 
-To install the DBO plugin, execute the following command:
+To install the DBO plugins, execute the following command:
 
 ```sh
 ansible-playbook -i inventory playbook.yml --tags dbo
 ```
 
-This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugin as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook.
+This command runs tasks associated with the `dbo` tag, installing and configuring the DBO plugins as specified in your inventory or variables files. Ensure your inventory and/or secrets are properly configured before running the playbook.
 This option uses API calls to SWO and is only available for **remote-managed agents (not locally managed)**.
 
 ## Ways to Provide Variables
 
-1. **Inventory File**: Define the `dbo_plugin` and `api_access_token` variables directly in your inventory file.
+1. **Inventory File**: Define the `dbo_plugins` and `api_access_token` variables directly in your inventory file.
 2. **Group or Host Variables**
 3. **Ansible Vault**
 

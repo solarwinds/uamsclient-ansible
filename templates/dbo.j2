@@ -2,7 +2,7 @@
   {
     "agentID": "{{ uamsclientid }}",
     "dbAgents": [
-      {% for db in dbo_plugin %}
+      {% for db in dbo_plugins %}
       {
         "databaseType": "{{ db.databaseType }}",
         "name": "{{ db.name }}",
