@@ -78,7 +78,7 @@ commands:
           apt update -y && apt-get upgrade -y
           apt install python3-pip -y
           apt install curl -y
-          pip3 install 'ansible-core>=2.16,<2.17'
+          apt install ansible -y
 
   install-ansible-deb-plucky-bookworm:
     steps:
@@ -90,7 +90,7 @@ commands:
           apt update
           apt install python3-pip -y
           apt install curl -y
-          pip3 install 'ansible-core>=2.16,<2.17'
+          apt install ansible -y
 
   install-ansible-deb-stretch:
     steps:
@@ -125,7 +125,7 @@ commands:
   install-ansible-fedora:
     steps:
       - run: |
-          pip3 install 'ansible-core>=2.16,<2.17'
+          dnf -y install ansible
 
   install-ansible-oraclelinux:
     steps:
@@ -133,7 +133,7 @@ commands:
       - run: |
           release=$(cat /etc/oracle-release | cut -d' ' -f5 | cut -d. -f1)
           yum -y install "oracle-epel-release-el$release"
-          pip3 install 'ansible-core>=2.16,<2.17'
+          yum -y install ansible
 
 jobs:
   ansible-lint:
