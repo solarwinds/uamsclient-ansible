@@ -28,6 +28,10 @@
   ansible.builtin.include_tasks: get-pkg.yml
   when: install_new_version and ansible_facts.os_family != 'Windows'
 
+- name: Update UAMS environment variables
+  ansible.builtin.include_tasks: build-uams-env-variables.yml
+  when: install_new_version
+
 - name: Install UAMS Client package
   ansible.builtin.include_tasks: install-pkg.yml
   when: install_new_version and ansible_facts.os_family != 'Windows' and not dev_container_test
