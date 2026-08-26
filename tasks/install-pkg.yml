@@ -4,6 +4,7 @@
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
+  environment: "{{ uams_environment }}"
   when: pkg_manager == 'dnf'
 
 - name: Install UAMS Client package (with YUM)
@@ -11,18 +12,21 @@
     name: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
     disable_gpg_check: true
   become: true
+  environment: "{{ uams_environment }}"
   when: pkg_manager == 'yum'
 
 - name: Install UAMS Client package (with APT)
   ansible.builtin.apt:
     deb: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
   become: true
+  environment: "{{ uams_environment }}"
   when: pkg_manager == 'apt' and not dev_container_test
 
 - name: Install UAMS Client package (with APT)
   ansible.builtin.apt:
     deb: "{{ uams_local_pkg_path }}/uamsclient.{{ pkg_type }}"
   become: true
+  environment: "{{ uams_environment }}"
   failed_when: false
   when: pkg_manager == 'apt' and dev_container_test
 

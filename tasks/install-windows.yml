@@ -23,12 +23,12 @@
     msi_arguments: >-
       {{
         [
-          "ACCESSTOKEN=" + ansible_facts.env.UAMS_ACCESS_TOKEN,
-          "SWO_URL=" + ansible_facts.env.SWO_URL,
-          "METADATA=" + (ansible_facts.env['UAMS_METADATA'] | default('')),
-          "HTTPS_PROXY=" + (ansible_facts.env['UAMS_HTTPS_PROXY'] | default('')),
-          "OVERRIDE_HOSTNAME=" + (ansible_facts.env['UAMS_OVERRIDE_HOSTNAME'] | default('')),
-          "MANAGED_LOCALLY=" + (ansible_facts.env['UAMS_MANAGED_LOCALLY'] | default(''))
+          "ACCESSTOKEN=" + uams_environment.UAMS_ACCESS_TOKEN,
+          "SWO_URL=" + uams_environment.SWO_URL,
+          "METADATA=" + uams_environment.UAMS_METADATA,
+          "HTTPS_PROXY=" + (uams_environment['UAMS_HTTPS_PROXY'] | default('')),
+          "OVERRIDE_HOSTNAME=" + (uams_environment['UAMS_OVERRIDE_HOSTNAME'] | default('')),
+          "MANAGED_LOCALLY=" + (uams_environment['UAMS_MANAGED_LOCALLY'] | default(''))
         ]
         | select('match', '.+=.+')
         | list

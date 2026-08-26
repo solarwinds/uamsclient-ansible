@@ -1,0 +1,14 @@
+---
+- name: Build extended UAMS_METADATA
+  ansible.builtin.set_fact:
+    uams_metadata_full: >-
+      {%- set existing = (ansible_facts.env['UAMS_METADATA'] | default('')) | trim -%}
+      {%- if existing != '' -%}
+      {{ existing }},provisioner:ansible
+      {%- else -%}
+      provisioner:ansible
+      {%- endif -%}
+
+- name: Build final UAMS environment variables
+  ansible.builtin.set_fact:
+    uams_environment: "{{ ansible_facts.env | combine({'UAMS_METADATA': uams_metadata_full}) }}"
