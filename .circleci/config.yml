@@ -104,6 +104,18 @@ commands:
           apt install ansible -y
           pip3 install ansible-core
 
+  install-ansible-deb-bullseye:
+    steps:
+      - run: |
+          sed -i -e 's/deb.debian.org/archive.debian.org/g' -e 's|security.debian.org|archive.debian.org/|g' -e '/bullseye-updates/d' /etc/apt/sources.list
+          apt update
+          export DEBIAN_FRONTEND=noninteractive
+          export LANG=C.UTF-8
+          export LC_ALL=C.UTF-8
+          apt install python3-pip -y
+          apt install curl -y
+          pip3 install ansible
+
   install-ansible-deb-vm:
     steps:
       - run: |
@@ -214,7 +226,7 @@ jobs:
     docker:
       - image: debian:bullseye
     steps:
-      - install-ansible-deb
+      - install-ansible-deb-bullseye
       - install-client
       - verify-install-container
       - uninstall-client
