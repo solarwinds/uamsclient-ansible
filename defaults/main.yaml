@@ -7,3 +7,11 @@ product_name: SolarWinds UAMS Client
 install_pkg_url: https://agent-binaries.cloud.solarwinds.com/uams/latest
 dbo_headless_installer_url: https://ssp-prod-global-agent-binaries.s3.amazonaws.com/dbo-headless-installer/latest/dbo-headless-installer.zip
 dev_container_test: false
+
+agent_requirements_docs_url: https://documentation.solarwinds.com/en/success_center/observability/content/system_requirements/agent_requirements.htm
+unsupported_os_msg: >-
+  The {{ product_name }} does not support your operating system. Supported operating systems are
+  defined in the official documentation: {{ agent_requirements_docs_url }}
+unsupported_os_version_msg: >-
+  This operating system version is not supported. Supported operating system versions are defined
+  in the official documentation: {{ agent_requirements_docs_url }}
